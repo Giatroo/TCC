@@ -30,3 +30,6 @@ Monografia/mkidxhead.ist
 Monografia/hyperxindy.xdy
 Monografia/missfont.log
 Monografia/pre-compilados/*exemplo.pdf
+Projeto/SARC_dataset/*
+Projeto/__pycache__/*
+Projeto/.vscode/*

@@ -1,0 +1,4 @@
+{
+    "dataset_path": "./SARC_dataset/",
+    "dataset_url": "https://nlp.cs.princeton.edu/SARC/2.0/main/"
+}
