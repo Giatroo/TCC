@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 from ctypes import util
 from typing import Any
@@ -17,18 +18,26 @@ def read_balanced_data(train: bool = True) -> DataFrame:
     train : bool, optional
         If it's train or test, by default True
 
+    Raises
+    ------
+    FileNotFoundError
+        if the dataset doesn't exist in the expected path (indicated in the
+        global variables json file).
+
+
     Returns
     -------
     DataFrame
         The read dataframe.
     """
-    GLOBAL_VARS = utils.get_global_vars()
+    dataset_path = utils.get_global_vars()["dataset_path"]
     train_test_str = "train" if train else "test"
-    df = pd.read_csv(
-        f"{GLOBAL_VARS['dataset_path']}/{train_test_str}-balanced.csv",
-        sep="|",
-        header=None,
-    )
+    file_path = f"{dataset_path}/{train_test_str}-balanced.csv"
+
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"File '{file_path}' not found.")
+
+    df = pd.read_csv(file_path, sep="|", header=None)
     df = df.rename(columns={0: "discution", 1: "targets", 2: "labels"})
     return df
 
@@ -46,14 +55,14 @@ def filter_rows_with_more_than_one_post(df: DataFrame) -> DataFrame:
     DataFrame
         The filtered dataframe.
     """
-    return df[df["discution"].str.split(" ").apply(len) <= 1].reset_index(
-        drop=True
-    )
+    filtered_df = df[df["discution"].str.split(" ").apply(len) == 1]
+    filtered_df = filtered_df.reset_index(drop=True)
+    return filtered_df
 
 
 def load_comments_json():
-    GLOBAL_VARS = utils.get_global_vars()
-    comments = json.load(open(f'{GLOBAL_VARS["dataset_path"]}/comments.json'))
+    dataset_path = utils.get_global_vars()["dataset_path"]
+    comments = json.load(open(f"{dataset_path}/comments.json"))
     return comments
 
 
@@ -95,6 +104,17 @@ def get_target_comment_info(
     return target_comment_info
 
 
+def get_n_instances_from_df(df: DataFrame, num_instances: int) -> DataFrame:
+    print(f"Unhashing first {num_instances} rows...")
+    sub_df = df.iloc[:num_instances]
+    return sub_df
+
+
+def save_unhashed_df_to_path(df: DataFrame, path: str):
+    print(f"Saving to '{path}'...")
+    df.to_csv(path, index=False)
+
+
 def translate_line(row: Series, comments: dict[str, Any]) -> Series:
     top_comment = row[0]
     target_comment1 = row[1].split()[0]
@@ -102,6 +122,8 @@ def translate_line(row: Series, comments: dict[str, Any]) -> Series:
     top_comment_info = get_top_comment_info(top_comment, comments)
     target_comment1_info = get_target_comment_info(target_comment1, comments)
     target_comment2_info = get_target_comment_info(target_comment2, comments)
+    target_label1 = row[2].split()[0]
+    target_label2 = row[2].split()[1]
     subreddit = comments[top_comment]["subreddit"]
 
     line_dict = dict()
@@ -112,16 +134,19 @@ def translate_line(row: Series, comments: dict[str, Any]) -> Series:
         for key, info in info_dict.items():
             line_dict[f"{name}_{key}"] = info
     line_dict["subreddit"] = subreddit
+    line_dict["answer1_label"] = target_label1
+    line_dict["answer2_label"] = target_label2
     line_series = pd.Series(line_dict)
     return line_series
 
 
 def main():
-    GLOBAL_VARS = utils.get_global_vars()
+    dataset_path = utils.get_global_vars()["dataset_path"]
 
     if len(sys.argv) == 1:
-        print("Usage: python dataset_dehasher.py <num_instances>")
+        print("Usage: python dataset_unhasher.py <num_instances>")
         exit(-1)
+
     try:
         num_instances = int(sys.argv[1])
     except ValueError:
@@ -133,19 +158,16 @@ def main():
 
     for train_bool, train_str in zip([True, False], ["train", "test"]):
         print("-" * 40 + "\n")
+
         print(f"Reading balanced {train_str} data...")
         df = read_balanced_data(train=train_bool)
         df = filter_rows_with_more_than_one_post(df)
-        print(f"Dehashing first {num_instances} rows...")
-        df = df.iloc[:num_instances, :].apply(
-            translate_line, axis=1, args=(comments,)
-        )
-        print(df)
-        print(f"Saving to '{train_str}'...")
-        df.to_csv(
-            f"{GLOBAL_VARS['dataset_path']}/balanced_{train_str}_df.csv",
-            index=False,
-        )
+
+        sub_df = get_n_instances_from_df(df, num_instances)
+        sub_df = sub_df.apply(translate_line, axis=1, args=(comments,))
+
+        file_path = f"{dataset_path}balanced_unhashed_{train_str}_df.csv"
+        save_unhashed_df_to_path(sub_df, file_path)
 
 
 if __name__ == "__main__":
