@@ -1,0 +1,28 @@
+:root {
+  /* default OneDark colors */
+  --black: #282c34;
+  --red: #e06c75;
+  --green: #98c379;
+  --yellow: #e5c07b;
+  --blue: #61afef;
+  --magenta: #c678dd;
+  --cyan: #56b6c2;
+  --white: #abb2bf;
+}
+
+body {
+  background-color: var(--black);
+  font-family: "Nunito", sans-serif;
+}
+
+h1 {
+  color: var(--red);
+}
+
+p {
+  color: var(--white);
+}
+
+a {
+  color: var(--blue);
+}
