@@ -2,7 +2,7 @@ import json
 import os
 import sys
 from ctypes import util
-from typing import Any
+from typing import Any, Dict, List
 
 import pandas as pd
 from pandas import DataFrame, Series
@@ -15,8 +15,8 @@ def read_balanced_data(train: bool = True) -> DataFrame:
 
     Parameters
     ----------
-    train : bool, optional
-        If it's train or test, by default True
+    train : bool, default=True
+        If it's train or test.
 
     Raises
     ------
@@ -61,88 +61,145 @@ def filter_rows_with_more_than_one_post(df: DataFrame) -> DataFrame:
 
 
 def load_comments_json():
+    """Loads the JSON file that maps each hashed value into a dictionary with
+    attributes 'text', 'author', 'score', 'ups', 'downs', 'date',
+    'created_utc',  and 'subreddit'.
+
+    Returns
+    -------
+    Dict[str, Dict[str, Any]]
+        A dictionary with the hashed values as keys and a dictionary with the
+        comment attributes as values.
+    """
     dataset_path = utils.get_global_vars()["dataset_path"]
     comments = json.load(open(f"{dataset_path}/comments.json"))
     return comments
 
 
-def get_top_comment_info(
-    top_comment: str, comments: dict[str, Any]
-) -> dict[str, Any]:
-    keys_of_interest = [
-        "text",
-        "author",
-        #'subreddit',
-        "score",
-        #'ups',
-        #'downs',
-        #'date',
-        #'created_utc'
-    ]
-    top_comment_info = utils.get_keys_of_interest_from_dict(
-        comments[top_comment], keys_of_interest
-    )
-    return top_comment_info
-
-
-def get_target_comment_info(
-    target_comment: str, comments: dict[str, Any]
-) -> dict[str, Any]:
-    keys_of_interest = [
-        "text",
-        "author",
-        #'subreddit',
-        "score",
-        #'ups',
-        #'downs',
-        #'date',
-        #'created_utc'
-    ]
-    target_comment_info = utils.get_keys_of_interest_from_dict(
-        comments[target_comment], keys_of_interest
-    )
-    return target_comment_info
-
-
 def get_n_instances_from_df(df: DataFrame, num_instances: int) -> DataFrame:
-    print(f"Unhashing first {num_instances} rows...")
+    """Receives a dataframe and a number of instances to return.
+
+    Returns the first num_instances rows of the dataframe (different strategies
+    could be used instead).
+
+    Parameters
+    ----------
+    df : DataFrame
+        Any dataframe
+    num_instances : int
+        The number of lines to return.
+
+    Returns
+    -------
+    DataFrame
+        A dataframe with only num_instances rows.
+    """
     sub_df = df.iloc[:num_instances]
     return sub_df
 
 
 def save_unhashed_df_to_path(df: DataFrame, path: str):
-    print(f"Saving to '{path}'...")
-    df.to_csv(path, index=False)
+    """Receives a dataframe and a path to save it.
+
+    Saves it to the path using a csv format (but different strategies could be
+    used).
+
+    Parameters
+    ----------
+    df : DataFrame
+        A dataframe to save.
+    path : str
+        The path to save (without the file extension).
+    """
+    df.to_csv(f"{path}.csv", index=False)
 
 
-def translate_line(row: Series, comments: dict[str, Any]) -> Series:
-    top_comment = row[0]
-    target_comment1 = row[1].split()[0]
-    target_comment2 = row[1].split()[1]
-    top_comment_info = get_top_comment_info(top_comment, comments)
-    target_comment1_info = get_target_comment_info(target_comment1, comments)
-    target_comment2_info = get_target_comment_info(target_comment2, comments)
-    target_label1 = row[2].split()[0]
-    target_label2 = row[2].split()[1]
-    subreddit = comments[top_comment]["subreddit"]
+def translate_row(
+    row: Series,
+    comments: Dict[str, Dict[str, Any]],
+    keys_of_interest: List[str],
+) -> Series:
+    """Receives a row Series with keys 'discution', 'targets', and 'labels', a
+    dictionary that maps each hashed value into the comment attributes, and a
+    list of keys of interest to return from the comment dictionary.
 
-    line_dict = dict()
-    info_list = [top_comment_info, target_comment1_info, target_comment2_info]
-    name_list = ["comment", "answer1", "answer2"]
+    The function returns a new row with the discution and targets attributes
+    instead of the hashed values. Only the attributes in the keys of interest
+    list are kept.
 
-    for info_dict, name in zip(info_list, name_list):
-        for key, info in info_dict.items():
-            line_dict[f"{name}_{key}"] = info
-    line_dict["subreddit"] = subreddit
-    line_dict["answer1_label"] = target_label1
-    line_dict["answer2_label"] = target_label2
-    line_series = pd.Series(line_dict)
-    return line_series
+    Parameters
+    ----------
+    row : Series
+        A series with keys 'discution', 'targets', and 'labels'. The value of
+        'discution' is a single hash value, the value of 'targets' is a string
+        with two hash values, and the value of 'labels' is either the string
+        '1 0' or '0 1'.
+    comments : Dict[str, Dict[str, Any]]
+        A dictionary in which the keys are the hash values present in the row
+        and the value is another dictionary containing the comment attributes.
+        The attributes are 'text', 'author', 'score', 'ups', 'downs', 'date',
+        'created_utc', and 'subreddit'.
+    keys_of_interest : List[str]
+        A list of keys retrieve for each comment (the discution and the
+        targets).
+
+    Returns
+    -------
+    new_row : Series
+        Returns a new row with the keys 'comment_*', 'target1_*', 'target2_*',
+        'target1_label', and 'target2_label', where the '*' means all the keys
+        present in the keys_of_interest list. Also, if 'subreddit' is in
+        keys_of_interest, it returns only a 'subreddit' key instead of
+        'comment_subreddit', 'target1_subreddit', and 'target2_subreddit'
+        (since the subreddit is always the same).
+    """
+    # Defining if we'll get the subreddit key
+    get_subreddit = "subreddit" in keys_of_interest
+    if get_subreddit:
+        keys_of_interest.remove("subreddit")
+
+    # Getting the info for the discution comment
+    discution_hash = row["discution"]
+    discution_info = utils.filter_dict_by_keys(
+        comments[discution_hash], keys_of_interest
+    )
+    new_row_dict = {
+        f"comment_{key}": value for key, value in discution_info.items()
+    }
+
+    # Getting the info for the targets comments
+    target_hashs = row["targets"].split()
+    for i, target_hash in enumerate(target_hashs):
+        target_info = utils.filter_dict_by_keys(
+            comments[target_hash], keys_of_interest
+        )
+        for key, value in target_info.items():
+            new_row_dict[f"answer{i+1}_{key}"] = value
+
+    # Getting the subreddit info
+    if get_subreddit:
+        new_row_dict["subreddit"] = comments[discution_hash]["subreddit"]
+
+    # Getting the labels info
+    labels = row["labels"].split()
+    new_row_dict["answer1_label"] = labels[0]
+    new_row_dict["answer2_label"] = labels[1]
+
+    # Defining the new row as a Series
+    new_row = pd.Series(new_row_dict)
+    return new_row
 
 
 def main():
-    dataset_path = utils.get_global_vars()["dataset_path"]
+    """The main function.
 
+    It's called when we call the module as a script.
+
+    It must receive an integer as argument, which is the number of instances to
+    unhash from the dataset. Also the dataset path must be already downloaded
+    in the right folder (which is the folder defined in the global variables).
+
+    """
     if len(sys.argv) == 1:
         print("Usage: python dataset_unhasher.py <num_instances>")
         exit(-1)
@@ -151,9 +208,14 @@ def main():
         num_instances = int(sys.argv[1])
     except ValueError:
         print("Please provide an integer number of instances.")
-        exit()
+        exit(-1)
 
-    print("Loading comments json...")
+    dataset_path = utils.get_global_vars()["dataset_path"]
+    keys_of_interest = [
+        "text",
+    ]
+
+    print("Loading comments json... This might take a while...")
     comments = load_comments_json()
 
     for train_bool, train_str in zip([True, False], ["train", "test"]):
@@ -163,10 +225,14 @@ def main():
         df = read_balanced_data(train=train_bool)
         df = filter_rows_with_more_than_one_post(df)
 
+        print(f"Unhashing first {num_instances} rows...")
         sub_df = get_n_instances_from_df(df, num_instances)
-        sub_df = sub_df.apply(translate_line, axis=1, args=(comments,))
+        sub_df = sub_df.apply(
+            translate_row, axis=1, args=(comments, keys_of_interest)
+        )
 
-        file_path = f"{dataset_path}balanced_unhashed_{train_str}_df.csv"
+        file_path = f"{dataset_path}balanced_unhashed_{train_str}_df"
+        print(f"Saving to '{file_path}'...")
         save_unhashed_df_to_path(sub_df, file_path)
 
 
