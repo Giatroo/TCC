@@ -1,6 +1,7 @@
 """This module has global utilities for the project."""
 import json
-from typing import Any, List
+import typing
+from typing import Any, Dict, List
 
 DEFAULT_GLOBAL_VARS_PATH = "global_vars.json"
 
@@ -23,24 +24,28 @@ def get_global_vars(
     return json.load(open(json_path))
 
 
-def get_keys_of_interest_from_dict(
-    dictionary: dict[Any, Any], keys_of_interest: List[Any]
-) -> dict[Any, Any]:
+KeyType = typing.TypeVar("KeyType")
+ValueType = typing.TypeVar("ValueType")
+
+
+def filter_dict_by_keys(
+    dictionary: Dict[KeyType, ValueType], filter_keys: List[KeyType]
+) -> Dict[KeyType, ValueType]:
     """Receives a dictionary and a list of keys and returns a dictionary with only the keys of interest.
 
     Parameters
     ----------
-    dictionary : dict[Any, Any]
+    dictionary : dict[KeyType, ValueType]
         Any dictionary.
-    keys_of_interest : List[Any]
+    filter_keys : List[KeyType]
         A list of keys to keep.
 
     Returns
     -------
-    dict[Any, Any]
+    Dict[KeyType, ValueType]
         The original dictionary, but only with the keys present in the list.
     """
     filtered_dict = {
-        key: dictionary[key] for key in keys_of_interest if key in dictionary
+        key: dictionary[key] for key in filter_keys if key in dictionary
     }
     return filtered_dict
