@@ -70,6 +70,10 @@ table thead tr td {
   padding: 10px;
 }
 
+table tbody td {
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.1);
+}
+
 table tbody td:first-child {
   font-style: italic;
   color: var(--yellow);
