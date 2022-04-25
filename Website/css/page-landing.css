@@ -18,10 +18,14 @@ body {
 
 h1 {
   color: var(--red);
+  font-size: 50px;
+  text-shadow: 10px 10px 20px black;
 }
 
 h2 {
   color: var(--green);
+  font-size: 36px;
+  text-shadow: 10px 10px 20px black;
 }
 
 p {
@@ -35,16 +39,22 @@ a {
 
 .repo-link {
   font-size: 24px;
+  text-shadow: 10px 10px 20px black;
 }
 
 .proposal p {
   margin: 20px 20%;
 }
 
+.proposal p strong {
+  font-size: 22px;
+  text-shadow: 0px 0px 20px black;
+}
+
 table {
   border-collapse: collapse;
-  border-radius: 10px;
-  box-shadow: 0px 10px 30px 5px rgba(0, 0, 0, 0.15);
+  border-radius: 15px;
+  box-shadow: 5px 10px 20px 5px rgba(0, 0, 0, 0.15);
   margin: 25px auto;
 }
 
@@ -59,6 +69,7 @@ table td:first-child {
 
 table thead tr {
   border-bottom: 1px dashed grey;
+  text-shadow: 1px 1px 20px black;
 }
 
 table thead tr td {
@@ -70,15 +81,20 @@ table thead tr td {
   padding: 10px;
 }
 
-table tbody td {
+table tbody tr {
   border-bottom: 1px dotted rgba(255, 255, 255, 0.1);
+}
+
+table tbody tr:last-child {
+  border-bottom: 0px;
 }
 
 table tbody td:first-child {
   font-style: italic;
   color: var(--yellow);
-  width: 100px;
+  width: 180px;
   text-align: center;
+  text-shadow: 1px 1px 20px black;
 }
 
 table tbody td:last-child {
