@@ -26,6 +26,7 @@ h2 {
   color: var(--green);
   font-size: 36px;
   text-shadow: 10px 10px 20px black;
+  padding-top: 20px;
 }
 
 p {
@@ -101,4 +102,13 @@ table tbody td:last-child {
   width: 550px;
   padding-left: 20px;
   padding-right: 10px;
+}
+
+.about {
+  text-align: center;
+  margin: 10px 35%;
+}
+
+.about p {
+  margin: 5px 0px;
 }
