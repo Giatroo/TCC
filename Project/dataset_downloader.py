@@ -1,6 +1,6 @@
 """This module has functionally to get the dataset from the web and unpack it.
     One can run directly it to get the dataset from the web and unpack it.
-    
+
     It uses dataset_url and dataset_path from the global variables file to
     know the URL to extract the data and the path to put it.
 """
@@ -115,7 +115,7 @@ def check_if_path_already_exists(path: str) -> bool:
 def main():
     """The main function of the module.
     It gets and dataset from the web, puts it in the path specified by the global
-    variables, unpacks the bz2 files, and deletes them.
+    variables, unpacks the bz2 files, and deletes the packed files.
     """
     # importing inside code because we don't use it in the rest of the module
     import sys
@@ -131,9 +131,11 @@ def main():
 
     GLOBAL_VARS = utils.get_global_vars()
 
-    path_already_exists = check_if_path_already_exists(GLOBAL_VARS["dataset_path"])
+    path_already_exists = check_if_path_already_exists(
+        GLOBAL_VARS["dataset_path"]
+    )
     if path_already_exists:
-        print("Canceling...")
+        print("Canceling download because path already exists...")
         return
 
     get_dataset_from_web(GLOBAL_VARS["dataset_url"], num_cut_dirs=num_cut_dirs)
