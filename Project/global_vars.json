@@ -1,4 +1,14 @@
 {
-    "dataset_path": "./SARC_dataset/",
-    "dataset_url": "https://nlp.cs.princeton.edu/SARC/2.0/main/"
+  "dataset_path": "./SARC_dataset/",
+  "dataset_url": "https://nlp.cs.princeton.edu/SARC/2.0/main/",
+  "preloaded_files": [
+    {
+      "file_name": "preloaded_train.csv",
+      "file_url": ""
+    },
+    {
+      "file_name": "preloaded_test.csv",
+      "file_url": ""
+    }
+  ]
 }
