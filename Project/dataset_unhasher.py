@@ -1,3 +1,4 @@
+import argparse
 import json
 import os
 import sys
@@ -93,15 +94,14 @@ def get_n_instances_from_df(df: DataFrame, num_instances: int) -> DataFrame:
     DataFrame
         A dataframe with only num_instances rows.
     """
+    if num_instances > len(df):
+        return df
     sub_df = df.iloc[:num_instances]
     return sub_df
 
 
 def save_unhashed_df_to_path(df: DataFrame, path: str):
     """Receives a dataframe and a path to save it.
-
-    Saves it to the path using a csv format (but different strategies could be
-    used).
 
     Parameters
     ----------
@@ -110,7 +110,7 @@ def save_unhashed_df_to_path(df: DataFrame, path: str):
     path : str
         The path to save (without the file extension).
     """
-    df.to_csv(f"{path}.csv", index=False)
+    df.to_pickle(f"{path}.pkl")
 
 
 def translate_row(
@@ -189,7 +189,24 @@ def translate_row(
     return new_row
 
 
-def main():
+def parse_input():
+    """Parses the command line arguments."""
+    parser = argparse.ArgumentParser(
+        description="This script parses the dataset and saves it in a pickle file."
+    )
+    parser.add_argument(
+        "--num_instances",
+        "-n",
+        type=int,
+        default=None,
+        required=True,
+        help="The number of instances to preprocess.",
+    )
+    args = parser.parse_args()
+    return args
+
+
+def main(num_instances: int):
     """The main function.
 
     It's called when we call the module as a script.
@@ -198,16 +215,11 @@ def main():
     unhash from the dataset. Also the dataset path must be already downloaded
     in the right folder (which is the folder defined in the global variables).
 
+    Parameters
+    ----------
+    num_instances : int
+        The number of instances to preprocess.
     """
-    if len(sys.argv) == 1:
-        print("Usage: python dataset_unhasher.py <num_instances>")
-        exit(-1)
-
-    try:
-        num_instances = int(sys.argv[1])
-    except ValueError:
-        print("Please provide an integer number of instances.")
-        exit(-1)
 
     dataset_path = utils.get_global_vars()["dataset_path"]
     keys_of_interest = [
@@ -236,4 +248,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    args = parse_input()
+    num_instances = args.num_instances
+
+    main(num_instances)
