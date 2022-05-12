@@ -1,14 +1,14 @@
 """This module has global utilities for the project."""
 import json
 import typing
-from typing import Any, Dict, List
+from typing import Dict, List
 
 DEFAULT_GLOBAL_VARS_PATH = "global_vars.json"
 
 
 def get_global_vars(
     json_path: str = DEFAULT_GLOBAL_VARS_PATH,
-) -> dict[str, str]:
+) -> Dict[str, str]:
     """Returns the global variables from the json file.
 
     Parameters
