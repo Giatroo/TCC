@@ -13,7 +13,6 @@ def parse_input():
         "--num_instances",
         "-n",
         type=int,
-        default=None,
         required=True,
         help="The number of instances to preprocess.",
     )

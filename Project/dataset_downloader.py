@@ -4,6 +4,7 @@
     It uses dataset_url and dataset_path from the global variables file to
     know the URL to extract the data and the path to put it.
 """
+import argparse
 import bz2
 import os
 
@@ -112,23 +113,32 @@ def check_if_path_already_exists(path: str) -> bool:
     return False
 
 
-def main():
+def parse_input():
+    """Parses the input arguments."""
+    parser = argparse.ArgumentParser(
+        description="Downloads the dataset from the web and unpacks it."
+    )
+    parser.add_argument(
+        "--num_cut_dirs",
+        type=int,
+        default=0,
+        help="The number of directories to cut from the url path.",
+    )
+    args = parser.parse_args()
+    return args
+
+
+def main(num_cut_dirs: int = 0):
     """The main function of the module.
-    It gets and dataset from the web, puts it in the path specified by the global
-    variables, unpacks the bz2 files, and deletes the packed files.
+    It gets and dataset from the web, puts it in the path specified by the
+    global variables, unpacks the bz2 files, and deletes the packed files.
+
+    Parameters
+    ----------
+    num_cut_dirs : int
+        The number of directories to cut from the url path.
     """
     # importing inside code because we don't use it in the rest of the module
-    import sys
-
-    if len(sys.argv) > 1:
-        try:
-            num_cut_dirs = int(sys.argv[1])
-        except ValueError:
-            print("Please provide an integer number of cut directories.")
-            exit()
-    else:
-        num_cut_dirs = 0
-
     GLOBAL_VARS = utils.get_global_vars()
 
     path_already_exists = check_if_path_already_exists(
@@ -146,4 +156,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    args = parse_input()
+    main(num_cut_dirs=args.num_cut_dirs)
