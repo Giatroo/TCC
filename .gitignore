@@ -34,5 +34,7 @@ Project/SARC_dataset/*
 Project/__pycache__/*
 Project/.vscode/*
 Project/venv/*
+Project/models/*
 Materials/*
 private/*
+.vscode/*
