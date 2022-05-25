@@ -1,7 +1,9 @@
 """This module has global utilities for the project."""
 import json
 import typing
-from typing import Dict, List
+from typing import Dict, List, Tuple
+
+from pandas import Series
 
 DEFAULT_GLOBAL_VARS_PATH = "global_vars.json"
 
@@ -49,3 +51,29 @@ def filter_dict_by_keys(
         key: dictionary[key] for key in filter_keys if key in dictionary
     }
     return filtered_dict
+
+
+def get_example_input(row: Series, answer_number: int) -> Tuple[str, str, int]:
+    """Receives a row of the dataset and returns the input for the model.
+
+    Parameters
+    ----------
+    row : Series
+        A row of the dataset.
+    answer_number : int
+        The answer number, either 1 or 2.
+
+    Returns
+    -------
+    comment : str
+        The comment.
+    answer : str
+        A answer to that comment.
+    label : int
+        The label of the answer. 0 means not scarcastic, 1 means scarcastic.
+    """
+    comment = row["comment_text"]
+    answer = row[f"answer{answer_number}_text"]
+    label = int(row[f"answer{answer_number}_label"])
+
+    return comment, answer, label
