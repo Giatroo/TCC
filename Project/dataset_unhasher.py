@@ -181,8 +181,8 @@ def translate_row(
 
     # Getting the labels info
     labels = row["labels"].split()
-    new_row_dict["answer1_label"] = labels[0]
-    new_row_dict["answer2_label"] = labels[1]
+    new_row_dict["answer1_label"] = int(labels[0])
+    new_row_dict["answer2_label"] = int(labels[1])
 
     # Defining the new row as a Series
     new_row = pd.Series(new_row_dict)
