@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 import numpy as np
 from numpy import ndarray
-from pandas import Series
+from pandas import DataFrame, Series
 from sentence_transformers import CrossEncoder
 from tqdm import tqdm
 
@@ -63,15 +63,17 @@ class ModelTester:
 
     def get_probabilities_and_labels(
         self,
+        dataset: DataFrame,
         model: CrossEncoder,
         verbose: bool = False,
-        preloaded_datasets: bool = False,
     ) -> Tuple[List[float], List[int]]:
         """Returns the probabilities of sarcasm and the true sarcasm labels of
         the test DataFrame.
 
         Parameters
         ----------
+        dataset : DataFrame
+            The dataset to test the model on.
         model : CrossEncoder
             The model used to predict the sarcasm probability.
         verbose : bool, default=False
@@ -85,12 +87,9 @@ class ModelTester:
             A tuple with the probabilities of sarcasm and the true sarcasm
             labels of the test DataFrame.
         """
-        dfs_loader = DataFramesLoader()
-        _, test_df = dfs_loader.get_datasets(preloaded_datasets)
-
         predictions = list()
         labels = list()
-        iterator = list(test_df.iterrows())
+        iterator = list(dataset.iterrows())
         for _, row in tqdm(iterator, desc="Predicting", disable=not verbose):
             for answer_number in (1, 2):
                 prediction, label = self._get_row_prediction_and_label(
