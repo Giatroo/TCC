@@ -12,7 +12,7 @@ from tqdm import tqdm
 import utils
 
 
-class ModelTester:
+class Predictor:
     def _get_prediction_label(self, prediction: ndarray) -> int:
         """Receives a (1, 2) numpy array with the probabilities of sarcasm for
         the first and second answer and returns the label of the answer with the
