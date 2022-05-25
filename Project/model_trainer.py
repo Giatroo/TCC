@@ -108,6 +108,22 @@ class ModelTrainer:
         model : CrossEncoder
             The model to save.
         model_path : str
-            The path to save the model.
+            The path to save the model. It must be a folder name.
         """
         model.save(model_path)
+
+    def load_model(self, model_path: str) -> CrossEncoder:
+        """Loads a model.
+
+        Parameters
+        ----------
+        model_path : str
+            The path to the model. It must be a folder name.
+
+        Returns
+        -------
+        model : CrossEncoder
+            The pre-trained model.
+        """
+        model = CrossEncoder(model_path)
+        return model
