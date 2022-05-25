@@ -1,6 +1,7 @@
 {
   "dataset_path": "./SARC_dataset/",
   "dataset_url": "https://nlp.cs.princeton.edu/SARC/2.0/main/",
+  "models_path": "./models/",
   "preloaded_files_info": [
     {
       "file_name": "preloaded_train.pkl",
