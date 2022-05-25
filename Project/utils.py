@@ -1,8 +1,10 @@
 """This module has global utilities for the project."""
+# Python Standard Libraries
 import json
 import typing
 from typing import Dict, List, Tuple
 
+# Third Party Libraries
 from pandas import Series
 
 DEFAULT_GLOBAL_VARS_PATH = "global_vars.json"

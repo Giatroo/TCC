@@ -4,10 +4,12 @@
     It uses dataset_url and dataset_path from the global variables file to
     know the URL to extract the data and the path to put it.
 """
+# Python Standard Libraries
 import argparse
 import bz2
 import os
 
+# Project Libraries
 import utils
 
 

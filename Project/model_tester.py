@@ -1,13 +1,15 @@
+# Python Standard Libraries
 from typing import List, Tuple
 
+# Third Party Libraries
 import numpy as np
 from numpy import ndarray
 from pandas import DataFrame, Series
 from sentence_transformers import CrossEncoder
 from tqdm import tqdm
 
+# Project Libraries
 import utils
-from dataframes_loader import DataFramesLoader
 
 
 class ModelTester:

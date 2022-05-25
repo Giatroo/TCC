@@ -2,10 +2,13 @@
 
 The preloaded datasets are training and testing datasets that are already preprocessed and ready to be used to train and test the models."""
 
+# Python Standard Libraries
 import os
 
+# Third Party Libraries
 import gdown
 
+# Project Libraries
 import utils
 
 

@@ -1,10 +1,13 @@
+# Python Standard Libraries
 import typing
 
+# Third Party Libraries
 from pandas import DataFrame
 from sentence_transformers import CrossEncoder, InputExample
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+# Project Libraries
 import utils
 
 
@@ -133,6 +136,7 @@ class ModelTrainer:
 
 
 def parse_input():
+    # Python Standard Libraries
     import argparse
 
     """Parses the command line arguments."""
@@ -217,8 +221,9 @@ def main(
     verbose : bool
         Whether to print the progress or not.
     """
-    import utils
+    # Project Libraries
     from dataframes_loader import DataFramesLoader
+    import utils
 
     df_loader = DataFramesLoader()
     train_df, _ = df_loader.get_datasets(preloaded_data)

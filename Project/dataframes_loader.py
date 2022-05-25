@@ -1,8 +1,11 @@
+# Python Standard Libraries
 from typing import Tuple
 
+# Third Party Libraries
 import pandas as pd
 from pandas import DataFrame
 
+# Project Libraries
 import utils
 
 
