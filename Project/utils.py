@@ -2,7 +2,7 @@
 # Python Standard Libraries
 import json
 import typing
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 # Third Party Libraries
 from pandas import Series
@@ -12,7 +12,7 @@ DEFAULT_GLOBAL_VARS_PATH = "global_vars.json"
 
 def get_global_vars(
     json_path: str = DEFAULT_GLOBAL_VARS_PATH,
-) -> Dict[str, str]:
+) -> Dict[str, Any]:
     """Returns the global variables from the json file.
 
     Parameters

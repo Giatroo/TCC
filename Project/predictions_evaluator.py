@@ -1,5 +1,6 @@
 # Python Standard Libraries
 import typing
+from typing import Dict, Iterable
 
 # Third Party Libraries
 from numpy import ndarray
@@ -14,19 +15,19 @@ from sklearn.metrics import (
 
 
 class PredictionsEvaluator:
-    _predictions: ndarray
-    _true_values: ndarray
+    _predictions: Iterable
+    _true_values: Iterable
 
-    def __init__(self, predictions: ndarray, true_values: ndarray):
+    def __init__(self, predictions: Iterable, true_values: Iterable) -> None:
         self._predictions = predictions
         self._true_values = true_values
 
-    MetricFunc = typing.Callable[[ndarray, ndarray], float]
+    MetricFunc = typing.Callable[[Iterable, Iterable], float]
 
     def evaluate_using(self, metric_func: MetricFunc) -> float:
         return metric_func(self._true_values, self._predictions)
 
-    def general_evaluation(self):
+    def general_evaluation(self) -> Dict[str, float]:
         return {
             "accuracy": self.evaluate_using(accuracy_score),
             "precision": self.evaluate_using(precision_score),
