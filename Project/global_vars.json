@@ -4,12 +4,12 @@
   "models_path": "./models/",
   "preloaded_files_info": [
     {
-      "file_name": "preloaded_train.pkl",
-      "file_url": "https://drive.google.com/uc?id=131F7p0RBE4zvTKSeX-FZ2sJdlWb5apa6"
+      "file_name": "preloaded_train_df.pkl",
+      "file_url": "https://drive.google.com/uc?id=1TjmUd4ZuVN2_5YhUFPJvPVeRZUyjTcen"
     },
     {
-      "file_name": "preloaded_test.pkl",
-      "file_url": "https://drive.google.com/uc?id=1cZT_toOafdQD-0Qz8Wfd_qam1lanijK4"
+      "file_name": "preloaded_test_df.pkl",
+      "file_url": "https://drive.google.com/uc?id=1dsslUS3q22XEA13UeOTpTy-x3yunlPKU"
     }
   ]
 }
