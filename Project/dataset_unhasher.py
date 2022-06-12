@@ -112,7 +112,7 @@ def save_unhashed_df_to_path(df: DataFrame, path: str):
     path : str
         The path to save (without the file extension).
     """
-    df.to_pickle(f"{path}.pkl")
+    df.to_pickle(f"{path}.pkl", protocol=4) # must be 4 for retrocompatibility
 
 
 def translate_row(
