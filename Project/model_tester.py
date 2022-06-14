@@ -11,10 +11,12 @@ from predictions_evaluator import PredictionsEvaluator
 
 
 class ModelTester:
-    self._model: CrossEncoder
+    _model: CrossEncoder
+    _verbose: bool
 
-    def __init__(self, model: CrossEncoder) -> None:
+    def __init__(self, model: CrossEncoder, verbose: bool = False) -> None:
         self._model = model
+        self._verbose = verbose
 
     def get_model_metrics(self, dataset: DataFrame) -> Dict[str, float]:
         predictor = Predictor()
@@ -22,9 +24,89 @@ class ModelTester:
         predictions, y_true = predictor.get_probabilities_and_labels(
             dataset,
             self._model,
-            verbose=True,
+            verbose=self._verbose,
         )
         y_pred = predictor.get_labels_from_probs(predictions)
 
         evaluator = PredictionsEvaluator(y_pred, y_true)
         return evaluator.general_evaluation()
+
+    def save_model_metrics(self, metrics: Dict[str, float], name: str) -> None:
+        with open(f"evaluations/{name}.txt", "w") as f:
+            for key, value in metrics.items():
+                f.write(f"{key}: {value}\n")
+
+
+def parse_input():
+    # Python Standard Libraries
+    import argparse
+
+    """Parses the command line arguments."""
+    parser = argparse.ArgumentParser(
+        description="This script tests a model on the test dataset. It receives a pretrained model and uses it to predict and test the predictions."
+    )
+    parser.add_argument(
+        "model_name",
+        type=str,
+        help="The name of a pretrained model.",
+    )
+    parser.add_argument(
+        "--preloaded_data",
+        action="store_true",
+        default=False,
+        help="Whether to use the preloaded data or not.",
+    )
+    parser.add_argument(
+        "--verbose",
+        "-v",
+        action="store_true",
+        default=False,
+        help="Whether to print the progress or not.",
+    )
+
+    args = parser.parse_args()
+    return args
+
+
+def main(
+    model_name: str,
+    preloaded_data: bool,
+    verbose: bool,
+) -> None:
+    """Trains a model and saves it.
+
+    Parameters
+    ----------
+    model_name : str
+        The name of the model to save.
+    preloaded_data : bool
+        Whether to use the preloaded data or not.
+    verbose : bool
+        Whether to print the progress or not.
+    """
+    # Project Libraries
+    from dataframes_loader import DataFramesLoader
+    from predictions_evaluator import PredictionsEvaluator
+    import utils
+
+    df_loader = DataFramesLoader()
+    _, test_df = df_loader.get_datasets(preloaded_data)
+    models_path = utils.get_global_vars()["models_path"]
+
+    model = CrossEncoder(f"{models_path}{model_name}")
+    tester = ModelTester(model, verbose)
+    metrics = tester.get_model_metrics(test_df)
+
+    if verbose:
+        print(f"Saving model to {models_path}{model_name}")
+    tester.save_model_metrics(metrics, model_name)
+
+
+if __name__ == "__main__":
+    args = parse_input()
+
+    main(
+        model_name=args.model_name,
+        preloaded_data=args.preloaded_data,
+        verbose=args.verbose,
+    )
