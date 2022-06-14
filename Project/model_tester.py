@@ -1,4 +1,5 @@
 # Python Standard Libraries
+from datetime import datetime
 from typing import Dict
 
 # Third Party Libraries
@@ -8,6 +9,7 @@ from sentence_transformers import CrossEncoder
 # Project Libraries
 from model_predictor import Predictor
 from predictions_evaluator import PredictionsEvaluator
+import utils
 
 
 class ModelTester:
@@ -32,9 +34,13 @@ class ModelTester:
         return evaluator.general_evaluation()
 
     def save_model_metrics(self, metrics: Dict[str, float], name: str) -> None:
-        with open(f"evaluations/{name}.txt", "w") as f:
+        evaluations_path = utils.get_global_vars()["evaluations_path"]
+        with open(f"{evaluations_path}/{name}.txt", "a") as f:
+            now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            f.write(f"=== {now} ===\n")
             for key, value in metrics.items():
                 f.write(f"{key}: {value}\n")
+            f.write("\n")
 
 
 def parse_input():
@@ -87,18 +93,20 @@ def main(
     # Project Libraries
     from dataframes_loader import DataFramesLoader
     from predictions_evaluator import PredictionsEvaluator
-    import utils
 
     df_loader = DataFramesLoader()
     _, test_df = df_loader.get_datasets(preloaded_data)
     models_path = utils.get_global_vars()["models_path"]
+    evaluations_path = utils.get_global_vars()["evaluations_path"]
 
     model = CrossEncoder(f"{models_path}{model_name}")
     tester = ModelTester(model, verbose)
     metrics = tester.get_model_metrics(test_df)
 
     if verbose:
-        print(f"Saving model to {models_path}{model_name}")
+        print(
+            f"Saving evaluation metrics to {evaluations_path}{model_name}.txt"
+        )
     tester.save_model_metrics(metrics, model_name)
 
 

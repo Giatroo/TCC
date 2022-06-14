@@ -35,6 +35,7 @@ Project/__pycache__/*
 Project/.vscode/*
 Project/venv/*
 Project/models/*
+Project/evaluations/*
 Materials/*
 private/*
 .vscode/*
