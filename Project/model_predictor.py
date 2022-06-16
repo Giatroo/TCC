@@ -63,7 +63,7 @@ class Predictor:
 
         return prediction, label
 
-    def get_probabilities_and_labels(
+    def get_probabilities_and_true_labels(
         self,
         dataset: DataFrame,
         model: CrossEncoder,
@@ -80,8 +80,6 @@ class Predictor:
             The model used to predict the sarcasm probability.
         verbose : bool, default=False
             If True, prints the progress of the test.
-        preloaded_datasets : bool, default=False
-            If True, uses the preloaded datasets.
 
         Returns
         -------
@@ -112,3 +110,32 @@ class Predictor:
             A list of labels.
         """
         return list(map(self._get_prediction_label, predictions_probs))
+
+    def get_y_pred_y_true(
+        self,
+        dataset: DataFrame,
+        model: CrossEncoder,
+        verbose: bool = False,
+    ) -> Tuple[List[int], List[int]]:
+        """Returns the predicted and true labels of the test DataFrame.
+
+        Parameters
+        ----------
+        dataset : DataFrame
+            The dataset to test the model on.
+        model : CrossEncoder
+            The model used to predict the sarcasm probability.
+        verbose : bool, default=False
+            If True, prints the progress of the test.
+
+        Returns
+        -------
+        y_pred, y_true : Tuple[List[int], List[int]]
+            A tuple with the predicted and true labels of the test DataFrame.
+        """
+        predictions, y_true = self.get_probabilities_and_true_labels(
+            dataset, model, verbose
+        )
+        y_pred = self.get_labels_from_probs(predictions)
+
+        return y_pred, y_true

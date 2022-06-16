@@ -23,7 +23,7 @@ class ModelTester:
     def get_model_metrics(self, dataset: DataFrame) -> Dict[str, float]:
         predictor = Predictor()
 
-        predictions, y_true = predictor.get_probabilities_and_labels(
+        predictions, y_true = predictor.get_probabilities_and_true_labels(
             dataset,
             self._model,
             verbose=self._verbose,
