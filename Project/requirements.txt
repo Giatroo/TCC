@@ -8,4 +8,5 @@ tqdm==4.64.0
 gdown>=4.4
 black==22.3.0
 isort==5.10.1
-
+ipykernel==6.15.0
+ipywidgets==7.7.0
