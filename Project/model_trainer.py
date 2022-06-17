@@ -1,5 +1,6 @@
 # Python Standard Libraries
 import typing
+import os
 
 # Third Party Libraries
 from pandas import DataFrame
@@ -135,6 +136,29 @@ class ModelTrainer:
         return model
 
 
+def check_if_model_folder_already_exists(model_path: str) -> None:
+    """Checks if the model folder already exists and, if so, asks the user whether to overwrite it or not.
+
+    If the user don't want to overwrite it, it'll exit the script.
+
+    Parameters
+    ----------
+    model_path : str
+        The path to the model. It must be a folder name.
+    """
+    if os.path.exists(model_path) and not preloaded_model:
+        usr_input = input(
+            f"The folder {model_path} already exists and you didn't specify you want to retrain the model. Do you want to delete the previous trained model and train it again from scratch (y/[n])? "
+        )
+
+        if usr_input == "y":
+            print(f"Deleting {model_path} folder...")
+            os.system(f"rm -rf {model_path}")
+        else:
+            print("Exiting...")
+            exit(-1)
+
+
 def parse_input():
     # Python Standard Libraries
     import argparse
@@ -228,9 +252,12 @@ def main(
     df_loader = DataFramesLoader()
     train_df, _ = df_loader.get_datasets(preloaded_data)
     models_path = utils.get_global_vars()["models_path"]
+    model_path = f"{models_path}{model_name}"
+
+    check_if_model_folder_already_exists(model_path)
 
     if preloaded_model:
-        model = CrossEncoder(f"{models_path}{model_name}")
+        model = CrossEncoder(model_path)
         get_model = lambda: model
     else:
         get_model = (
@@ -247,8 +274,8 @@ def main(
     )
 
     if verbose:
-        print(f"Saving model to {models_path}{model_name}")
-    trainer.save_model(model, f"{models_path}{model_name}")
+        print(f"Saving model to {model_path}")
+    trainer.save_model(model, model_path)
 
 
 if __name__ == "__main__":
