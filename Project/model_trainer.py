@@ -1,6 +1,6 @@
 # Python Standard Libraries
-import typing
 import os
+import typing
 
 # Third Party Libraries
 from pandas import DataFrame
@@ -75,6 +75,7 @@ class ModelTrainer:
         get_model: GetModelFunction,
         epochs: int = 5,
         warmup_steps: int = 100,
+        batch_size: int = 4,
         verbose: bool = True,
     ) -> CrossEncoder:
         """Trains the model and returns it.
@@ -89,6 +90,8 @@ class ModelTrainer:
             The number of epochs.
         warmup_steps : int, default=100
             The number of warmup steps.
+        batch_size : int, default=4
+            The batch size for the dataloader.
         verbose : bool, default=True
             Whether to print the progress or not.
         Returns
@@ -97,7 +100,9 @@ class ModelTrainer:
             The model after training.
         """
         model = get_model()
-        train_dataloader = self._create_dataloader(dataset, verbose=verbose)
+        train_dataloader = self._create_dataloader(
+            dataset, batch_size=batch_size, verbose=verbose
+        )
 
         model.fit(
             train_dataloader=train_dataloader,
@@ -228,6 +233,7 @@ def main(
     use_bert: bool,
     epochs: int,
     warmup_steps: int,
+    batch_size: int,
     preloaded_model: bool,
     verbose: bool,
 ) -> None:
@@ -245,6 +251,8 @@ def main(
         The number of epochs to train the model.
     warmup_steps : int
         The number of warmup steps for the model.
+    batch_size : int
+        The batch size for the dataloader.
     preloaded_model : bool
         If specified, it'll assume the model name is an already used model and
         will train it again.
@@ -276,6 +284,7 @@ def main(
         get_model,
         epochs=epochs,
         warmup_steps=warmup_steps,
+        batch_size=batch_size,
         verbose=verbose,
     )
 
@@ -293,6 +302,7 @@ if __name__ == "__main__":
         use_bert=args.bert,
         epochs=args.epochs,
         warmup_steps=args.warmup_steps,
+        batch_size=args.batch_size,
         preloaded_model=args.preloaded_model,
         verbose=args.verbose,
     )
