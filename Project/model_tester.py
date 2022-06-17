@@ -54,7 +54,7 @@ def parse_input():
     parser.add_argument(
         "model_name",
         type=str,
-        help="The name of a pretrained model.",
+        help="The name of a pretrained model. This is the only required argument.",
     )
     parser.add_argument(
         "--preloaded_data",

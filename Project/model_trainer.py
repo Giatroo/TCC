@@ -165,12 +165,12 @@ def parse_input():
 
     """Parses the command line arguments."""
     parser = argparse.ArgumentParser(
-        description="This script trains a model on the train dataset."
+        description="This script trains a model on the train dataset and saves it."
     )
     parser.add_argument(
         "model_name",
         type=str,
-        help="The name of the model to save.",
+        help="The name of the model to save. This is the only required argument.",
     )
     parser.add_argument(
         "--preloaded_data",
@@ -189,14 +189,20 @@ def parse_input():
         "-e",
         type=int,
         default=5,
-        help="The number of epochs to train the model.",
+        help="The number of epochs to train the model. The default is 5.",
     )
     parser.add_argument(
         "--warmup_steps",
         "-ws",
         type=int,
         default=100,
-        help="The number of warmup steps for the model.",
+        help="The number of warmup steps for the model. The default is 100.",
+    )
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=4,
+        help="The batch size for the dataloader. The default is 4.",
     )
     parser.add_argument(
         "--preloaded_model",
