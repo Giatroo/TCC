@@ -74,7 +74,7 @@ def load_comments_json():
         comment attributes as values.
     """
     dataset_path = utils.get_global_vars()["dataset_path"]
-    comments = json.load(open(f"{dataset_path}/comments.json"))
+    comments = json.load(open(f"{dataset_path}comments.json"))
     return comments
 
 

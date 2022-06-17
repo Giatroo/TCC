@@ -248,7 +248,7 @@ def main(
 
     if verbose:
         print(f"Saving model to {models_path}{model_name}")
-    trainer.save_model(model, f"{models_path}/{model_name}")
+    trainer.save_model(model, f"{models_path}{model_name}")
 
 
 if __name__ == "__main__":
