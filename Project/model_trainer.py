@@ -141,7 +141,9 @@ class ModelTrainer:
         return model
 
 
-def check_if_model_folder_already_exists(model_path: str) -> None:
+def check_if_model_folder_already_exists(
+    model_path: str, preloaded_model: bool
+) -> None:
     """Checks if the model folder already exists and, if so, asks the user whether to overwrite it or not.
 
     If the user don't want to overwrite it, it'll exit the script.
@@ -150,6 +152,8 @@ def check_if_model_folder_already_exists(model_path: str) -> None:
     ----------
     model_path : str
         The path to the model. It must be a folder name.
+    preloaded_model : bool
+        Whether the model is preloaded or not.
     """
     if os.path.exists(model_path) and not preloaded_model:
         usr_input = input(
@@ -268,7 +272,7 @@ def main(
     models_path = utils.get_global_vars()["models_path"]
     model_path = f"{models_path}{model_name}"
 
-    check_if_model_folder_already_exists(model_path)
+    check_if_model_folder_already_exists(model_path, preloaded_model)
 
     if preloaded_model:
         model = CrossEncoder(model_path)
