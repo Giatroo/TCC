@@ -80,8 +80,8 @@ def parse_input():
     parser.add_argument(
         "--batch_size",
         type=int,
-        default=4,
-        help="The batch size for the dataloader. The default is 4.",
+        default=8,
+        help="The batch size for the dataloader. The default is 8.",
     )
     parser.add_argument(
         "--preloaded_model",

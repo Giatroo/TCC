@@ -74,7 +74,7 @@ class ModelTrainer:
         get_model: GetModelFunction,
         epochs: int = 5,
         warmup_steps: int = 100,
-        batch_size: int = 4,
+        batch_size: int = 8,
         verbose: bool = True,
     ) -> CrossEncoder:
         """Trains the model and returns it.
@@ -89,7 +89,7 @@ class ModelTrainer:
             The number of epochs.
         warmup_steps : int, default=100
             The number of warmup steps.
-        batch_size : int, default=4
+        batch_size : int, default=8
             The batch size for the dataloader.
         verbose : bool, default=True
             Whether to print the progress or not.
