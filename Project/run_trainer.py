@@ -79,6 +79,7 @@ def parse_input():
     )
     parser.add_argument(
         "--batch_size",
+        "-b",
         type=int,
         default=8,
         help="The batch size for the dataloader. The default is 8.",
