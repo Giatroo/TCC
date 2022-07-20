@@ -4,9 +4,6 @@ arguments."""
 import argparse
 import os
 
-# Third Party Libraries
-from sentence_transformers import CrossEncoder
-
 # Project Libraries
 from dataframes_loader import DataFramesLoader
 import model_io
