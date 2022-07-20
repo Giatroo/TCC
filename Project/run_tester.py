@@ -1,11 +1,11 @@
 # Python Standard Libraries
 import argparse
+from typing import Dict
 
 # Project Libraries
 from dataframes_loader import DataFramesLoader
 import model_io
 from model_tester import ModelTester
-from predictions_evaluator import PredictionsEvaluator
 import utils
 
 
@@ -37,6 +37,20 @@ def parse_input():
     return args
 
 
+def get_metrics(
+    model_name: str, preloaded_data: bool, verbose: bool
+) -> Dict[str, float]:
+    df_loader = DataFramesLoader()
+    _, test_df = df_loader.get_datasets(preloaded_data)
+
+    models_path = utils.get_global_vars()["models_path"]
+    model_path = f"{models_path}{model_name}"
+    model = model_io.load_model(model_path)
+    tester = ModelTester(model, verbose)
+    metrics = tester.get_model_metrics(test_df)
+    return metrics
+
+
 def main(
     model_name: str,
     preloaded_data: bool,
@@ -53,22 +67,14 @@ def main(
     verbose : bool
         Whether to print the progress or not.
     """
-
-    df_loader = DataFramesLoader()
-    _, test_df = df_loader.get_datasets(preloaded_data)
-    models_path = utils.get_global_vars()["models_path"]
-    model_path = f"{models_path}{model_name}"
-    evaluations_path = utils.get_global_vars()["evaluations_path"]
-
-    model = model_io.load_model(model_path)
-    tester = ModelTester(model, verbose)
-    metrics = tester.get_model_metrics(test_df)
+    metrics = get_metrics(model_name, preloaded_data, verbose)
 
     if verbose:
-        print(
-            f"Saving evaluation metrics to {evaluations_path}{model_name}.txt"
-        )
-    tester.save_model_metrics(metrics, model_name)
+        evaluations_path = utils.get_global_vars()["evaluations_path"]
+        evaluations_path = f"{evaluations_path}/{model_name}.txt"
+        print(f"Saving evaluation metrics to {evaluations_path}")
+
+    model_io.save_model_metrics(metrics, model_name)
 
 
 if __name__ == "__main__":
