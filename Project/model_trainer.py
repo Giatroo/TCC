@@ -3,7 +3,9 @@ import typing
 
 # Third Party Libraries
 from pandas import DataFrame
-from sentence_transformers import CrossEncoder, InputExample
+from sentence_transformers import CrossEncoder
+from sentence_transformers.readers import InputExample
+from torch.optim import Adamax
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
@@ -12,11 +14,26 @@ import utils
 
 
 class ModelTrainer:
+    GetModelFunction = typing.Callable[[], CrossEncoder]
+
+    @staticmethod
+    def get_deberta() -> CrossEncoder:
+        """Returns the DeBERTa model."""
+        model = CrossEncoder("microsoft/deberta-base", num_labels=2)
+        return model
+
+    @staticmethod
+    def get_bert() -> CrossEncoder:
+        """Returns the BERT model."""
+        model = CrossEncoder("bert-base-uncased", num_labels=2)
+        return model
+
     def _create_dataloader(
         self,
         df: DataFrame,
+        model: CrossEncoder,
         shuffle: bool = True,
-        batch_size: int = 4,
+        batch_size: int = 8,
         verbose=False,
     ) -> DataLoader:
         """Receives a dataset and creates a dataloader for it.
@@ -27,7 +44,7 @@ class ModelTrainer:
             The dataset.
         shuffle : bool, default=True
             Whether to shuffle the dataset or not.
-        batch_size : int, default=4
+        batch_size : int, default=8
             The batch size for the dataloader.
         verbose : bool, default=False
             Whether to print the progress or not.
@@ -49,24 +66,11 @@ class ModelTrainer:
             example = InputExample(texts=[comment, answer2], label=label2)
             examples.append(example)
 
+        # dataset = SentencesDataset(examples, model)
         dataloader = DataLoader(
             examples, shuffle=shuffle, batch_size=batch_size
         )
         return dataloader
-
-    @staticmethod
-    def get_deberta() -> CrossEncoder:
-        """Returns the DeBERTa model."""
-        model = CrossEncoder("microsoft/deberta-base", num_labels=2)
-        return model
-
-    @staticmethod
-    def get_bert() -> CrossEncoder:
-        """Returns the BERT model."""
-        model = CrossEncoder("bert-base-uncased", num_labels=2)
-        return model
-
-    GetModelFunction = typing.Callable[[], CrossEncoder]
 
     def train_model(
         self,
@@ -100,12 +104,14 @@ class ModelTrainer:
         """
         model = get_model()
         train_dataloader = self._create_dataloader(
-            dataset, batch_size=batch_size, verbose=verbose
+            dataset, model, batch_size=batch_size, verbose=verbose
         )
 
         model.fit(
             train_dataloader=train_dataloader,
             epochs=epochs,
+            optimizer_class=Adamax,
+            optimizer_params=dict(lr=2e-5),
             warmup_steps=warmup_steps,
             show_progress_bar=verbose,
         )
