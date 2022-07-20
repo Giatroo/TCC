@@ -28,5 +28,5 @@ def load_model(model_path: str) -> CrossEncoder:
     model : CrossEncoder
         The pre-trained model.
     """
-    model = CrossEncoder(model_path)
+    model = CrossEncoder(model_path, num_labels=2)
     return model
