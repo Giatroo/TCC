@@ -61,6 +61,12 @@ def parse_input():
         help="Whether to use BERT or DeBERTa. If not specified, DeBERTa is used.",
     )
     parser.add_argument(
+        "--roberta",
+        action="store_true",
+        default=False,
+        help="Whether to use ROBERTA or DeBERTa. If not specified, DeBERTa is used.",
+    )
+    parser.add_argument(
         "--epochs",
         "-e",
         type=int,
@@ -103,6 +109,7 @@ def main(
     model_name: str,
     preloaded_data: bool,
     use_bert: bool,
+    use_roberta: bool,
     epochs: int,
     warmup_steps: int,
     batch_size: int,
@@ -119,6 +126,8 @@ def main(
         Whether to use the preloaded data or not.
     use_bert : bool
         Whether to use BERT or DeBERTa. If not specified, DeBERTa is used.
+    use_roberta : bool
+        Whether to use ROBERTA or DeBERTa. If not specified, DeBERTa is used.
     epochs : int
         The number of epochs to train the model.
     warmup_steps : int
@@ -142,9 +151,12 @@ def main(
         model = model_io.load_model(model_path)
         get_model = lambda: model
     else:
-        get_model = (
-            ModelTrainer.get_bert if use_bert else ModelTrainer.get_deberta
-        )
+        if use_bert:
+            get_model = ModelTrainer.get_bert
+        elif use_roberta:
+            get_model = ModelTrainer.get_roberta
+        else:
+            get_model = ModelTrainer.get_deberta
 
     trainer = ModelTrainer()
     model = trainer.train_model(
@@ -168,6 +180,7 @@ if __name__ == "__main__":
         model_name=args.model_name,
         preloaded_data=args.preloaded_data,
         use_bert=args.bert,
+        use_roberta=args.roberta,
         epochs=args.epochs,
         warmup_steps=args.warmup_steps,
         batch_size=args.batch_size,

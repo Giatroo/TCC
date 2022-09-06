@@ -5,7 +5,6 @@ import typing
 from pandas import DataFrame
 from sentence_transformers import CrossEncoder
 from sentence_transformers.readers import InputExample
-from torch.optim import Adamax
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
@@ -26,6 +25,12 @@ class ModelTrainer:
     def get_bert() -> CrossEncoder:
         """Returns the BERT model."""
         model = CrossEncoder("bert-base-uncased", num_labels=2)
+        return model
+
+    @staticmethod
+    def get_roberta() -> CrossEncoder:
+        """Returns the ROBERTA model."""
+        model = CrossEncoder("roberta-base", num_labels=2)
         return model
 
     def _create_dataloader(
@@ -110,8 +115,6 @@ class ModelTrainer:
         model.fit(
             train_dataloader=train_dataloader,
             epochs=epochs,
-            optimizer_class=Adamax,
-            optimizer_params=dict(lr=2e-5),
             warmup_steps=warmup_steps,
             show_progress_bar=verbose,
         )
