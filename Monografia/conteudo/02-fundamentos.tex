@@ -11,19 +11,63 @@
 De acordo com o dicionário Dicio, sarcasmo é uma zombaria que busca ofender,
 enquanto ironia é a ação de dizer o oposto do que se deseja expressar. Ainda
 segundo ele, a diferença entre esses dois termos se dá no fato de que sarcasmo é
-um dito ácido que pode ou não ser expresso por meio de uma ironia e ironia, por
-sua vez, pode ou não ser utilizada para ofender.~\cite{dicio_sarc, dicio_irony}
+um dito ácido que pode ou não ser expresso por meio de uma ironia e essa, por
+sua vez, pode ou não ser utilizada para
+ofender.\cite{dicio_sarc}\cite{dicio_irony}
+
 (H. Paul Grice. 1975. Logic and Conversation)
+
 (Irony and Sarcasm: Corpus Generation and Analysis Using Crowdsourcin)
 
-O termo detecção de sarcasmo, por sua vez, refere-se à determinação de se há ou
-não sarcasmo em uma porção de texto verbal.
+O termo detecção de sarcasmo refere-se à determinação de se há ou não sarcasmo
+em uma porção de texto verbal. E o termo detecção automática de sarcasmo
+refere-se a métodos computacionais de se resolver o problema acima mencionado.
+Computacionalmente, podemos definir esse problema como uma
+\textit{\textbf{classificação binária}}, termo explicado mais a frente.
 
-Em geral, esse problema é difícil, pois, por vezes, nem o interlocutor consegue
-perceber essa figura de linguagem. Além disso, o contexto tende a importar
-muito.
+Entretanto, na literatura é bastante comum também se definir detecção de
+sarcasmo como a determinação de se há ou não sarcasmo ou ironia verbal em uma
+porção de texto verbal. Portanto, em geral, ao se falar de sarcasmo, a
+literatura engloba tanto sarcasmo quanto ironia como se fossem a mesma coisa.
+Este texto também não fará discriminação entre sarcasmo ou ironia.
 
+Em geral, esse problema é difícil, pois, por vezes, nem humanos conseguem
+perceber essa figura de linguagem (e.g. ``\textit{Oba, hoje está tão ensolarado,
+que vontade de ir para a escola.}''). Além disso, o contexto tende a importar
+muito. Muitas características externas ao texto podem servir para descriminar se
+uma pessoa está ou não sendo sarcástica. Entre alguns exemplos estão intonação,
+locutor, interlocutor, conhecimento prévio sobre a fala, tempo e espaço em que
+se fala e elementos não verbais.
 
+(Humans Require Context to Infer Ironic Intent (so Computers Probably do, too))
 
+O problema de detecção de sarcasmo pode ser tratado como uma classificação
+binária. Esse tipo de problema é muito estudado no campo do aprendizado de
+máquina e envolve classificar os elementos de um conjunto em dois grupos
+chamados de classes. Por classificar entende-se a determinação de um elemento do
+conjunto entre pertencente à primeira ou segunda classe.
+
+No caso da detecção de sarcasmo, os elementos são os pedaços de texto e as duas
+classes são \textit{ser sarcástico} e \textit{não ser sarcástico}. Em termos
+matemáticos, dizemos que temos um conjunto de exemplos denotado pela matriz $X$
+de dimensões $n\times m$ onde $n$ é o número de exemplos e $m$ é o número de
+características que usamos para descrever cada um desses exemplos. Cada linha
+de $X$ é denotada por $\xii[x]{i}$ e chamada de \textit{exemplo} $i$ ou
+\textit{instância} $i$.
+
+Cada instância $i$ pertence ou à primeira classe ou à segunda, modelamos isso
+por um valor $\xii[y]{i}$ chamado de $i$-ésimo rótulo (do inglês,
+\textit{label}). E dizemos que $\xii[y]{i}\in\set{0, 1}$, onde cada valor
+representa uma das classes. No caso de sarcasmo, podemos representar por
+\textit{não sarcasmo} o valor $0$ e \textit{sarcasmo}, o valor $1$. Com esses
+valores $\xii[y]{i}$ construímos um vetor $y$ onde $y_i=\xii[y]{i}$.
+
+Ao final, o problema é descobrir uma função $f$ que mapeie bem $X$ em $y$. Note
+que $n$, o número de exemplos, é possivelmente infinito, pois sempre se pode
+achar novos exemplos. Ou seja, tenta-se achar essa função $f$ conhecendo
+parcialmente o conjunto das instâncias.
+
+\section{Trabalhos Relacionados}%
+\label{sec:trabalhos_relacionados}
 
 
