@@ -25,6 +25,7 @@ Monografia/*.snm
 Monografia/*.vrb
 Monografia/*.lop
 Monografia/*.(busy)
+Monografia/latexmkrc-make
 Monografia/timestamp
 Monografia/mkidxhead.ist
 Monografia/hyperxindy.xdy
