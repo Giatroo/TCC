@@ -13,7 +13,11 @@ enquanto ironia é a ação de dizer o oposto do que se deseja expressar. Ainda
 segundo ele, a diferença entre esses dois termos se dá no fato de que sarcasmo é
 um dito ácido que pode ou não ser expresso por meio de uma ironia e essa, por
 sua vez, pode ou não ser utilizada para
-ofender.\cite{dicio_sarc}\cite{dicio_irony}
+ofender.~\cite{dicio_sarc, dicio_irony}
+
+\cite{sarcasm:survey}
+
+(R. Giora, On Irony and Negation)
 
 (H. Paul Grice. 1975. Logic and Conversation)
 
@@ -41,6 +45,9 @@ se fala e elementos não verbais.
 
 (Humans Require Context to Infer Ironic Intent (so Computers Probably do, too))
 
+\section{Classificação binárias}%
+\label{sec:classificacao_binarias}
+
 O problema de detecção de sarcasmo pode ser tratado como uma classificação
 binária. Esse tipo de problema é muito estudado no campo do aprendizado de
 máquina e envolve classificar os elementos de um conjunto em dois grupos
@@ -49,25 +56,217 @@ conjunto entre pertencente à primeira ou segunda classe.
 
 No caso da detecção de sarcasmo, os elementos são os pedaços de texto e as duas
 classes são \textit{ser sarcástico} e \textit{não ser sarcástico}. Em termos
-matemáticos, dizemos que temos um conjunto de exemplos denotado pela matriz $X$
-de dimensões $n\times m$ onde $n$ é o número de exemplos e $m$ é o número de
-características que usamos para descrever cada um desses exemplos. Cada linha
-de $X$ é denotada por $\xii[x]{i}$ e chamada de \textit{exemplo} $i$ ou
+matemáticos, tem-se um conjunto de exemplos denotado pela matriz $X$ de
+dimensões $n\times m$, onde $n$ é o número de exemplos e $m$ é o número de
+características que se usa para descrever cada um desses exemplos. Cada linha de
+$X$ é denotada por $\xii[x]{i}$ e chamada de \textit{exemplo} $i$ ou
 \textit{instância} $i$.
 
-Cada instância $i$ pertence ou à primeira classe ou à segunda, modelamos isso
-por um valor $\xii[y]{i}$ chamado de $i$-ésimo rótulo (do inglês,
-\textit{label}). E dizemos que $\xii[y]{i}\in\set{0, 1}$, onde cada valor
-representa uma das classes. No caso de sarcasmo, podemos representar por
-\textit{não sarcasmo} o valor $0$ e \textit{sarcasmo}, o valor $1$. Com esses
-valores $\xii[y]{i}$ construímos um vetor $y$ onde $y_i=\xii[y]{i}$.
+A linha $\xii[x]{i}$ é um vetor de $m$ posições em que cada posição é uma
+característica que descreve a entrada. Por exemplo, na detecção de sarcasmo, o
+primeiro valor pode ser a quantidade de palavras lidas, o segundo valor pode ser
+a quantidade de caracteres, a terceira pode ser a soma de positividade do texto
+(definida por algum critério específico) e assim por diante. É importante que a
+mesma posição em diferentes instâncias tenha o mesmo significado. Portanto, caso
+se defina que a primeira posição represente o número de palavras, todas as
+instâncias devem seguir essa regra.
 
-Ao final, o problema é descobrir uma função $f$ que mapeie bem $X$ em $y$. Note
-que $n$, o número de exemplos, é possivelmente infinito, pois sempre se pode
-achar novos exemplos. Ou seja, tenta-se achar essa função $f$ conhecendo
-parcialmente o conjunto das instâncias.
+Cada instância $i$ pertence ou à primeira classe ou à segunda, modela-se isso
+por um valor $\xii[y]{i}$ chamado de $i$-ésimo rótulo (do inglês,
+\textit{label}). E escreve-se $\xii[y]{i}\in\set{0, 1}$, onde cada valor
+representa uma das classes. No caso de sarcasmo, pode-se representar por
+\textit{não sarcasmo} o valor $0$ e \textit{sarcasmo}, o valor $1$. Com esses
+valores $\xii[y]{i}$ constrói-se um vetor $y$ onde $y_i=\xii[y]{i}$.
+
+Ao final, o problema é descobrir uma função $f$ que mapeie bem $X$ em $y$. Note,
+entretanto, que $n$, o número de exemplos, é possivelmente infinito, pois sempre
+se pode achar novos exemplos e testar se $f$ os mapeia corretamente. Ou seja,
+tenta-se achar essa função $f$ conhecendo parcialmente o conjunto das
+instâncias.
+
+\subsection{Métricas de avaliação}%
+\label{sub:metricas_de_avaliacao}
+
+Para saber se a função $f$ mapeia bem $X$ em $y$, é preciso definir uma métrica
+de avaliação, que é uma função matemática bem definida que indica quanto de erro
+se comete em determinado conjunto $X$.
+
+Dado um conjunto de entrada $X$ com $n$ instâncias, seja $y$ o vetor que
+representa se cada instância é ou não sarcástica. Seja então $f$ a função sob
+avaliação (ou seja, a função de modelagem que recebe os textos e determina se
+são ou não sarcásticos). Seja $\hat{y}=f(X)$ os resultados gerados por essa
+função.
+
+Note que para cada exemplo $i$, podemos ter duas opções:
+\begin{enumerate}
+  \item $\hat{y}_i=y_i$  (\textit{acerto})
+  \item $\hat{y}_i\neq y_i$ (\textit{erro})
+\end{enumerate}
+
+Além disso, pode-se note que o par $\pair{y_i}{\hat{y}_i}$ pode ter quatro
+valores:
+\begin{enumerate}
+  \item $\pair{1}{1}$, caso \textit{verdadeiro positivo} (também conhecido como
+    \textit{true positive} e denotado por $tp$).
+  \item $\pair{0}{1}$, caso \textit{falso positivo} (também conhecido como
+    \textit{false positive} e denotado por $fp$).
+  \item $\pair{0}{0}$, caso \textit{verdadeiro negativo} (também conhecido como
+    \textit{true negative} e denotado por $tn$).
+  \item $\pair{1}{0}$, caso \textit{falso negativo} (também conhecido como
+    \textit{false negative} e denotado por $fn$).
+\end{enumerate}
+
+Definidos esses valores, pode-se definir algumas métricas que ajudam a perceber
+quão boa a função $f$ é. Dessa forma, pode-se comparar duas funções $f$.
+
+\paragraph{Acurácia}%
+\label{par:acuracia}
+
+Definida simplesmente como a quantidade total de acertos divido pela quantidade
+total de instâncias. Seja $n'$ a quantidade de acertos, então:
+\[
+\texttt{Acurácia} = \dfrac{n'}{n}
+\]
+
+É comum também definir a acurácia em termos dos vamos acima listados:
+\[
+\texttt{Acurácia} = \dfrac{tp+tn}{tp+tn+fp+fn}
+\]
+
+Note que $tp+tn$ representa justamente quando $\hat{y}_i=y_i$ e $fp+fn$,
+$\hat{y}_i\neq y_i$.
+
+\paragraph{Precisão}%
+\label{par:precisao}
+
+Definida como:
+\[
+\texttt{Precisão} = \dfrac{tp}{tp+fp}
+\]
+
+é a taxa de verdadeiros positivos em relação a todos os positivos. Portanto,
+mede a fração de quantos positivos foram acertados em relação a todos os que
+existiam no conjunto observado.
+
+\paragraph{Revocação}%
+\label{par:revocacao}
+
+Muitas vezes chamada por seu nome em inglês, \textit{recall}, é definida como:
+\[
+\texttt{Revocação} = \dfrac{tp}{tp+fn}
+\]
+
+é a taxa de verdadeiros positivos em relação todas as instâncias preditas como
+positivas. Portanto, a fração entre todos as instâncias previstas como positivas
+e as instâncias que realmente eram positivas.
+
+A precisão e a revocação guardam uma relação chave entre si e geralmente se quer
+ter um bom balanço entre as duas. Observe essa relação a partir do seguinte
+exemplo.
+
+Comece com a função
+\begin{equation}
+  f\paren{\xii[x]{i}} = 1~~\forall i
+\end{equation}
+
+Como ela sempre considera a entrada como positiva, então os únicos casos
+existentes serão de verdadeiros positivos e falso positivos. Logo:
+\[
+\texttt{Precisão} = \dfrac{tp}{tp+fp} = \dfrac{tp}{tp+(n-tp)} = \dfrac{tp}{n}
+\]
+e
+\[
+\texttt{Revocação} = \dfrac{tp}{tp+fn} = \dfrac{tp}{tp+0} = 1
+\]
+
+Portanto, a revocação terá o maior valor possível, enquanto a precisão será
+exatamente a fração de valores positivos que o conjunto observado possui. Como,
+semanticamente, a revocação é penalizada sempre que um elemento é positivo, mas
+foi previsto como negativo, então faz sentido que se tenha uma revocação de
+$100\%$, já que não se comete esse tipo de erro.
+
+Agora, tome a função
+\begin{equation}
+  f\paren{\xii[x]{i}} = 0~~\forall i
+\end{equation}
+
+Como ela sempre considera a entrada como negativa, então os únicos casos
+existentes serão de verdadeiro negativo e falso negativo. Logo:
+\[
+\texttt{Precisão} = \dfrac{tp}{tp+fp} = \dfrac{0}{0+fp} = 0
+\]
+e
+\[
+\texttt{Revocação} = \dfrac{tp}{tp+fn} = \dfrac{0}{0+fn} = 0
+\]
+
+Portanto, como a função nunca tenta marcar uma instância como positiva, ela
+nunca acerta os verdadeiros positivos e comete $100\%$ de erro.
+
+\paragraph{Métrica $F_1$}%
+\label{par:metrica_f_1_}
+
+Por esses e outros motivos, é interessante agregar a precisão e revocação em um
+único valor, que permite fácil comparação entre dois modelos. É possível
+utilizar uma média simples desses dois valores, mas é muito mais comum a
+utilização da métrica $F_1$ (ou, do inglês, $F_1$ \textit{score}).
+
+Ela é definida como:
+\[
+F_1=2\cdot
+\dfrac{\texttt{precisão}\cdot\texttt{revocação}}
+{\texttt{precisão}+\texttt{revocação}}
+\]
 
 \section{Trabalhos Relacionados}%
 \label{sec:trabalhos_relacionados}
 
+\subsection{Abordagens Baseadas em Regras}%
+\label{sub:abordagens_baseados_em_regras}
 
+Abordagens baseadas em regras são aquelas que usam regras fixas para determinar
+se uma sequência de palavras contém ou não ironia. Para criar essas regras,
+várias características do texto podem ser utilizadas, como as classes sintáticas
+das palavras, se são palavras de cunho positivo ou negativo, se há a presença ou
+não de certas palavras em uma ordem, entre qualquer outro tipo de regra
+imaginável.
+
+Essa abordagem é computacional, porque as regras formam um algoritmo que pode
+ser implementado por uma linguagem de computação. Dessa forma, qualquer
+sequência de palavras pode ser dada como entrada para o algoritmo e ele
+retornará se ele acha que essa sequência contém ou não sarcasmo.
+
+\cite{veale:2010} investigam em seu artigo sequências da forma ``\textit{as * as
+a *''} (``tão * quanto um(a) *''), consideradas como analogias entre o que os
+autores chamam de \textit{base} (\textit{ground}) e \textit{meio}
+(\textit{vehicle}). Eles utilizam a API do Google para coletar 45021 instâncias
+do padrão ``\textit{about as * as *}'' e filtram os resultados na mão para
+chegar em 20299 instâncias que de fato são consideradas analogias. Eles então
+anotam manualmente os rótulos para essas instâncias e encontraram que 15502
+casos ($76\%$) são irônicos e apenas 4797 ($24\%$) são não irônicos.
+
+Então, dado uma sequência ``\textit{as * as a *}'', os autores utilizam
+mecanismos de busca na rede como a API do Google para distinguir entre três
+casos: os casos em que essa sequência nunca foi usada como ``\textit{about}'';
+aqueles que já foram, mas não frequentemente; e aqueles que que são
+frequentemente usados com essa marcação. Segundo os próprios autores, essas três
+categorias proveem, respectivamente, evidencia fraca contra ironia, evidencia
+fraca a favor da ironia e evidência forte para ironia. Ou seja, o caso em que
+temos mais certeza de que é uma ironia é o caso em que a sequência é
+frequentemente utilizada junto com a palavra ``\textit{about}''.
+
+Assim sendo, \cite{veale:2010} criam um sequência de nove passos para
+classificar uma frase desse tipo entre as classes \textit{ironia} e \textit{não
+ironia}. Esses passos são bastante claros e precisos, podendo ser, portanto,
+implementados por um programa de computador e caracterizando, por conseguinte,
+uma detecção automática de sarcasmo.
+
+Nessas regras, os autores utilizam o fato de que analogias mais frequentemente
+utilizadas são menos prováveis de serem irônicas, pois a ironia é utiliza
+bastante a criatividade do locutor para fazer analogias não usuais.
+
+Devido à natureza das regras propostas pelos autores, eles conseguem medir a
+precisão e revocação obtida por cada uma das regras. No geral, o modelo atinge
+uma acurácia de $88\%$, o que é um valor bastante alto para esse tipo de
+problema. Entretanto, note-se que os autores se limitaram a um escopo muito
+fechado (das frases do tipo ``\textit{as * as a *}'').
