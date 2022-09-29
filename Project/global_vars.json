@@ -3,7 +3,7 @@
   "dataset_url": "https://nlp.cs.princeton.edu/SARC/2.0/main/",
   "models_path": "./models/",
   "evaluations_path": "./evaluations/",
-  "predictions_path": "./predictions/"
+  "predictions_path": "./predictions/",
   "preloaded_files_info": [
     {
       "file_name": "preloaded_train_df.pkl",
