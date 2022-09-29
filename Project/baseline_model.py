@@ -1,11 +1,11 @@
 # Third Party Libraries
+import SARC_dataset.model_io as model_io
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
 # Project Libraries
 from dataframes_loader import DataFramesLoader
-import model_io
 from predictions_evaluator import PredictionsEvaluator
 
 df_loader = DataFramesLoader()

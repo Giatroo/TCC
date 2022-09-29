@@ -2,10 +2,12 @@
 import argparse
 from typing import Dict
 
+# Third Party Libraries
+import SARC_dataset.model_io as model_io
+from model_tester import ModelTester
+
 # Project Libraries
 from dataframes_loader import DataFramesLoader
-import model_io
-from model_tester import ModelTester
 import utils
 
 

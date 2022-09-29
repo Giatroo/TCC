@@ -13,10 +13,12 @@ At the end, it stop when the model is trained well and save it.
 import argparse
 import os
 
-# Project Libraries
-import model_io
+# Third Party Libraries
+import SARC_dataset.model_io as model_io
 import run_tester
 import run_trainer
+
+# Project Libraries
 import utils
 
 THRESHOLD = 0.55
