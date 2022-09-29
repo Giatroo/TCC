@@ -3,7 +3,6 @@ import typing
 from typing import Dict, Iterable
 
 # Third Party Libraries
-from numpy import ndarray
 from sklearn.metrics import (
     accuracy_score,
     confusion_matrix,
