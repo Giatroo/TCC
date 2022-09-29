@@ -270,3 +270,63 @@ precisão e revocação obtida por cada uma das regras. No geral, o modelo ating
 uma acurácia de $88\%$, o que é um valor bastante alto para esse tipo de
 problema. Entretanto, note-se que os autores se limitaram a um escopo muito
 fechado (das frases do tipo ``\textit{as * as a *}'').
+
+\cite{maynard-greenwood:2014:cares} exploram o uso de regras baseadas em
+hashtags presentes em postagens da rede social Twitter
+(\texttt{https://twitter.com/}) e sua aplicação para detecção de sarcasmo em um
+contexto mais geral de análise de sentimento.
+
+Em seu artigo, eles utilizam um algoritmo de tokenização de hashtags para
+transformá-las em palavras com as quais eles conseguem extrair informação. No
+caso, eles utilizam as palavras contidas nas hashtags para avaliar se o
+sentimento é positivo ou negativo e inverter o sentido original da frase caso
+detectem sarcasmo nas hashtags. Por exemplo, a hashtag \textit{\#notreally} é
+tokenizada em \textit{not} e \textit{really} e identificada como uma tag
+sarcástica de acordo com regras definidas pelos autores.
+
+Então, eles aplicam cinco regras que podem determinar o sentimento de uma
+postagem como \textit{negativo} ou \textit{positivo}, ou então trocar o
+sentimento pré-determinado da postagem. Os autores, portanto, fazem uso da
+detecção de sarcasmo utilizando hashtags para resolver um outro problema mais
+geral que é definir o sentimento predominante de um texto.
+
+Como ponto negativo de sua técnica, está o fato de que nem sempre o tokenizador
+de hashtags funciona de forma adequada. Por exemplo, \textit{\#greatstart} pode
+ser dividida de duas formas: \textit{greats} e \textit{tart} ou \textit{great}
+e \textit{start}. Um ser humano provavelmente saberia que a segunda opção é a
+mais provável, mas o algoritmo não sabe fazer essa distinção e acaba ficando com
+o primeiro conjunto e palavras. Apesar disso, esse sistema de tokenização possui
+um $F1$ de $97,25\%$ e os autores obtiveram $91\%$ de precisão e revocação no
+conjunto de dados utilizado por eles.
+
+\cite{bharti-etal:2015:parsing-sarcasm} apresentam duas abordagens baseadas em
+regras. A primeira é através da análise morfossintática (do inglês,
+\textit{Part-of-Speech Tagging}) e criação de árvores sintáticas (do inglês,
+\textit{parse-trees}) que identificam a positividade do sentimento e situação
+predominantes em tweets. A segunda é através da análise sintática de tweets que
+começam com interjeições.
+
+Em sua primeira abordagem, os autores utilizam dicionários e algoritmos
+pré-criados para encontrar as classes morfológicas e sintáticas das palavras.
+Então, baseando-se nisso, eles utilizam um algoritmo criado por eles para
+encontrar um valor de positividade para o sentimento do texto e para a situação
+retratada e, com esses valores, caso seus valores tenham sinais contrários
+(sentimento positivo e situação negativa ou vice-versa), eles consideram o texto
+como sarcástico. Por exemplo, em ``\textit{I hate Australia in cricket, because
+they always win}'' (``eu odeio a Australia no críquete, porque eles sempre
+ganham''), as palavras ``\textit{I hate}'' apresentam um sentimento negativo,
+enquanto as palavras ``\textit{they always win}'' retratam uma situação
+positiva, e, portanto, essa frase seria classificada como sarcástica em sua
+primeira abordagem.
+
+Em sua segunda abordagem, os autores utilizam novamente algoritmos de
+\textit{POS Tagging} pré-criados para achar as classes morfológicas e sintáticas
+de palavras em tweets que começam com interjeições, como \textit{wow},
+\textit{oh}, \textit{wow}, \textit{aha}, \textit{yay}, \textit{yeah},
+\textit{nah}, etc. Em seu algoritmo, eles classificam como sarcásticos os textos
+que começam por interjeições e possuem um adjetivo ou advérbio imediatamente
+após a interjeição, ou então possuem, em algum após a interjeição, ou um
+advérbio seguido de adjetivo ou um adjetivo seguido de um substantivo ou um
+advérbio seguido de um verbo. Essa abordagem é bastante interessante, pois ela é
+bastante simples e, ainda assim, consegue um ótimo resultado de 0.90 $F_1$ no
+subconjunto de tweets marcado com a hashtag \textit{sarcasm}.
