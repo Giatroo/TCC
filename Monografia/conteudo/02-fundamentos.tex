@@ -234,7 +234,20 @@ imaginável.
 Essa abordagem é computacional, porque as regras formam um algoritmo que pode
 ser implementado por uma linguagem de computação. Dessa forma, qualquer
 sequência de palavras pode ser dada como entrada para o algoritmo e ele
-retornará se ele acha que essa sequência contém ou não sarcasmo.
+retornará se ele acredita que essa sequência contém ou não sarcasmo.
+
+A principal vantagem desse tipo de abordagem é que ela, além de detectar o
+sarcasmo, ajuda a estudá-lo. Ao criar uma regra do tipo \textit{se o texto
+possui essas características, então ele é sarcástico} se cria uma explicação
+para as principais características presentes em um texto sarcástico.
+
+Entretanto, as metodologias utilizadas são bastante específicas para cada tipo
+de texto e cada conjunto de dados. Por exemplo, as regras criadas para um
+determinado conjunto da rede social Twitter podem não funcionar em outras redes
+sociais como o Facebook, o Instagram ou o WhatsApp, pois cada uma dessas redes
+sociais possui um contexto e formato de conversação muito diferente. Portanto,
+são modelos que nos permitem explicar o processo de decisão, mas não permitem
+fácil generalização.
 
 \cite{veale:2010} investigam em seu artigo sequências da forma ``\textit{as * as
 a *''} (``tão * quanto um(a) *''), consideradas como analogias entre o que os
@@ -330,3 +343,124 @@ advérbio seguido de adjetivo ou um adjetivo seguido de um substantivo ou um
 advérbio seguido de um verbo. Essa abordagem é bastante interessante, pois ela é
 bastante simples e, ainda assim, consegue um ótimo resultado de 0.90 $F_1$ no
 subconjunto de tweets marcado com a hashtag \textit{sarcasm}.
+
+\subsection{Abordagens Baseadas em Conjuntos de Características}%
+\label{sub:abordagens_baseadas_em_conjuntos_de_caracteristicas}
+
+Como dito anteriormente, ao criar a matriz de exemplos de entrada $X$, cada
+coluna representa uma característica do texto. Dessa forma, o texto fica
+agregado em um conjunto de valores numéricos que são acessíveis para a máquina
+utilizar e comparar. Ao invés de se comparar dois texto distintos com números de
+caracteres e palavras diferentes, utiliza-se um algoritmo para extrair
+características (do inglês, ``\textit{features}'') comuns entre os textos e
+compará-los por meio dessas características.
+
+Um exemplo é o método chamado \textit{bag-of-words} (em tradução literal
+``sacola-de-palavras'') que cria um vetor com, por exemplo, 512 posições de
+valores naturais onde cada posição do vetor representa quantas vezes uma
+determinada palavra  apareceu no texto. Cada posição do vetor é associada a uma
+palavra e, muitas vezes, se utiliza uma outra posição especial para denotar
+qualquer palavra que não está no dicionário de palavras selecionadas
+previamente. Por exemplo, a primeira posição pode representar quantas vezes a
+palavra ``\textit{a}'' aparece no texto, a segunda posição pode representar
+quantas vezes a palavra ``\textit{the}'' aparece, e assim por diante. Se a
+palavra "Lucas" for lida, então será adicionado um à última posição do vetor,
+que é utilizado para contar qualquer palavra que não é uma das outras 511.
+
+(imagem ilustrando BOW)
+
+Esse tipo de abordagem fica entre o baseado em regras e abordagens baseadas em
+aprendizado no quesito de explicabilidade dos modelos. Isso porque os
+autores, ao invés de criar regras específicas, utilizam métodos de extração de
+características, criadas especificamente com o intuito de fazer a detecção de
+sarcasmo.
+
+A vantagem dessa abordagem é que geralmente os modelos são mais generalistas do
+que os baseados em regras, que são bastante fixas e não se adaptam bem a
+diferentes conjuntos de dados. Nesse caso, as mesmas metodologias de extração de
+características podem ser aplicadas em um conjunto de dados de textos extraídos
+de contextos diferentes (como redes sociais, análises de produtos vendidos
+online, aplicativos de troca de mensagens ou falas transcritas).
+
+Entretanto, como desvantagem, o fator manual ainda é muito presente nesse tipo
+de abordagem, assim como os métodos baseados em regras. Ao criar um modelo, um
+determinado conjunto de características é escolhido \textit{a priori}
+arbitrariamente, assim como era o caso das regras no primeiro tipo de abordagem.
+
+\cite{reyes:2012:from-humor} exploram quatro grupos de características dentro de
+um contexto mais geral de detecção de humor e ironia. Esses grupos são:
+ambiguidade, através dos níveis estrutural, morfossintático e semântico;
+polaridade, através de palavras que possuam semântica positiva ou negativa;
+imprevisibilidade, através de desbalanceamentos contextuais entre o significado
+literal das palavras; e os cenários emocionais, através das emoções passadas por
+cada palavras.
+
+\cite{liebrecht:2013:perfect-solution} utilizam uni-, bi- e trigramas como
+características do texto. Um n-grama é uma sequência de n palavras do texto.
+Portanto, nesse tipo de característica, o unigrama seria o \textit{bag-of-words}
+clássico citado acima, com as contagens de cada palavra, já o bigrama se trata
+das contagens de duas palavras seguidas. Por exemplo, sempre que as palavras
+``\textit{so nice}'' aparecerem em sequência, adiciona-se um à coluna que se
+refere a essa sequência.
+
+\cite{reyes:2013:multidimensional-approach} utilizam uma abordagem parecida com
+\cite{reyes:2012:from-humor}, com quatro grupos de características: assinaturas,
+imprevisibilidade, estilo e cenários emocionais. Cada um dos grupos foca em
+várias características. Dentro das assinaturas, por exemplo, há o foco em
+pontuações específicas, emojis, citações e palavras em maiúsculas; há o foco em
+marcas implícitas que geram oposição entre partes do texto; e há o foco na
+compressão temporal, que identifica oposição temporal entre elementos
+relacionados.
+
+A grande diferença desse trabalho em relação aos demais está, entretanto, no
+grupo de características de estilo. Esse grupo tenta modelar o estilo de escrita
+do texto para, assim, fazer a diferenciação entre estilos sarcásticos e não
+sarcásticos. Para fazer isso, eles utilizam três tipos de sequências textuais:
+n-gramas no nível de caracteres (ao invés de palavras) (abreviado pelos autores
+por \textit{c-grams}), \textit{skip-grams} (\textit{s-grams}) e
+\textit{skip-grams} de polaridade (\textit{ps-grams}).
+
+Os \textit{c-grams} capturam a frequência de sequências de informação
+morfológica como sufixos e prefixos (como \textit{-ly}, \textit{-ing},
+\textit{dis-}, \textit{un-}). Os \textit{s-grams} funcionam como n-gramas, mas
+com alguns pulos entre palavras e são utilizados para obter relações entre
+palavras não adjacentes no texto. Por exemplo, na sentença ``Hoje está chovendo,
+quero tanto ir à praia'', um bigrama é representado pela sequência ``Hoje
+está'', enquanto um bigrama com pulo de uma palavra seria ``Hoje chovendo''. Por
+fim, os \textit{ps-grams} criam uma sequência de rótulos de positividade baseado
+nos \textit{s-grams}. Por exemplo, ``Hoje chovendo'' seria rotulado como
+``pos-neg'' (positivo e negativo).
+
+\cite{barbieri:2014:modelling-sarcasm}, por sua vez, usam sete grupos de
+características léxicas que abstraem o uso de termos específicos e tornam o
+processo de detecção de sarcasmo mais genérico e fácil de implementar, não
+modelando padrões de palavras como em trabalhos anteriores. Esses grupos são:
+frequência, que mede o quão comum é cada palavra utilizada no texto;
+escrito-falado (da tradução literal de \textit{written-spoken} utilizado pelos
+autores em seu artigo), que funciona como a frequência, mas a frequência que a
+palavra é usada em diálogos escritos ou falados; intensidade, que mede o uso de
+adjetivos e advérbios para aumentar ou diminuir a intensidade semântica de
+outras palavras no texto; estrutura, que mede, por exemplo, o número de
+caracteres usados, o número de palavras, o tamanho médio das palavras, o número
+de verbos, de substantivos, o número total de pontuações, o número de risadas, o
+número de vírgulas, pontos finais, sinais de exclamação, o número de emojis (ou
+emoticons), o número de organizações, pessoas, títulos e datas citados pelos
+texto; sentimento, que mede valores de positividade entre as palavras e usa
+algumas métricas como soma dos valores positivos, soma dos negativos, média da
+diferença entre positivos e negativos, entre outros; sinônimos, que calcula
+métricas relacionadas aos sinônimos das palavras usadas no texto, como a
+quantidade de sinônimos que uma determinada palavra tem e que possuem frequência
+de utilização menor do que ela; e ambiguidade, que mede a quantidade de sentidos
+possíveis que uma palavra pode ter.
+
+
+
+\subsection{Abordagens Baseadas em Métodos de Aprendizado}%
+\label{sub:abordagens_baseadas_em_metodos_de_aprendizado}
+
+\subsection{Abordagens Baseadas em Contexto}%
+\label{sub:abordagens_baseadas_em_contexto}
+
+
+
+
