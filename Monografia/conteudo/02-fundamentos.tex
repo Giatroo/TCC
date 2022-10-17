@@ -15,8 +15,6 @@ um dito ácido que pode ou não ser expresso por meio de uma ironia e essa, por
 sua vez, pode ou não ser utilizada para
 ofender.~\cite{dicio_sarc, dicio_irony}
 
-\cite{sarcasm:survey}
-
 (R. Giora, On Irony and Negation)
 
 (H. Paul Grice. 1975. Logic and Conversation)
@@ -42,8 +40,6 @@ muito. Muitas características externas ao texto podem servir para descriminar s
 uma pessoa está ou não sendo sarcástica. Entre alguns exemplos estão intonação,
 locutor, interlocutor, conhecimento prévio sobre a fala, tempo e espaço em que
 se fala e elementos não verbais.~\cite{wallace-etal:2014:ironic-context}
-
-(Humans Require Context to Infer Ironic Intent (so Computers Probably do, too))
 
 \section{Classificação binárias}%
 \label{sec:classificacao_binarias}
@@ -488,12 +484,247 @@ arestas.
 \subsection{Abordagens Baseadas em Métodos de Aprendizado}%
 \label{sub:abordagens_baseadas_em_metodos_de_aprendizado}
 
-Como já mencionado, a modelagem clássica de um problema de detecção de sarcasmo
-é utilizando uma matriz de características $X$ e um vetor de rótulos $y$.
+Métodos de aprendizado são aqueles que usam modelos baseados em aprendizado de
+máquina. Dentro desse campo do conhecimento, existem alguns tipos de
+aprendizado. Dentre eles, os principais são o aprendizado supervisionado, o
+aprendizado semi-supervisionado, o aprendizado não supervisionado e o
+aprendizado por reforço. Pesquisadores já fizeram uso dos três primeiros tipos
+de aprendizados listados, mas nesta monografia ater-se-á apenas aos trabalhos
+envolvendo aprendizado supervisionado, pois são os mais similares às técnicas
+aqui utilizadas. Para uma listagem mais vasta dos trabalhos correlacionados,
+recomenda-se a leitura dos trabalhos de
+\cite{joshi:2017:sarcasm-detection-survey} e
+\cite{yaghoobian:2021:sarcasm-detection-comparative-study}.
+
+Dentro do campos do algoritmos de aprendizado supervisionado estão os algoritmos
+de classificação, que como dito anteriormente, trata-se de achar uma função $f$
+que mapeie bem os exemplos $X$ em seus respectivos rótulos $y$. A matriz $X$
+contém contém diversas características extraídas do texto, como as exploradas em
+\ref{sub:conjuntos-de-caracteristicas}. E o vetor de rótulos $y$ contém números
+associados às classes de classificação. No caso da classificação binária, são
+apenas duas classes (que, em detecção de sarcasmo, são \textit{sarcasmo} e
+\textit{não sarcasmo}), mas em contextos mais gerais, podem haver várias
+classes, como em análise de sentimento. Nesse caso, as classes podem ser o
+sentimento predominante no texto e sarcasmo é apenas mais uma entre outras
+classes. Isso depende de como cada autor quer modelar o problema e quais
+aplicações se espera ter de resultado.
+
+Em abordagens clássicas utilizando aprendizado de máquina, muitos trabalhos se
+baseiam em modelos bem conhecidos e estudados como \textit{decision trees} (DT),
+\textit{random forecasts} (RF), \textit{support vector machines} (SVM),
+\textit{naive Bayes} (NB) e \textit{Neural Networks}
+(NN)~(\cite{yaghoobian:2021:sarcasm-detection-comparative-study}). Esses modelos
+são utilizados em várias áreas nas quais se aplica o aprendizado de máquina e
+são aplicados por muitos autores sem colocar seu foco principal em modificar o
+modelo ou criar modelos específicos para a detecção de sarcasmo. Em alguns
+outros trabalhos, entretanto, os autores procuram alternativas menos conhecidas
+ou modelos híbridos para conseguir melhores resultados.
+
+\cite{riloff:2013:sarcasm-constract} utilizam uma abordagem híbrida que combina
+as previsões de uma SVM com um método baseado em contraste. Dessa forma, os
+autores combinam uma abordagem baseada em aprendizado com uma baseada em regras
+para criar um novo modelo. Nesse modelo, sempre que qualquer uma das duas
+abordagens classificar o texto como sarcástico, então o texto é classificado
+como sarcástico pelo modelo final.
+
+\cite{liebrecht:2013:perfect-solution} fazem uso de um algoritmo menos conhecido
+chamado de \textit{balanced winnow}, que é similar ao algoritmo
+\textit{perceptron}. Esse algoritmo permite a investigação de quais
+características foram mais importantes para fazer a classificação.  Dessa forma,
+é possível procurar quais os padrões mais importantes para o classificador e
+tentar entender por que esse é o caso.
+
+Árvores de decisão (do inglês \textit{decision trees}) foram experimentadas por
+\cite{reyes:2013:multidimensional-approach} para poder investigar a ordem de
+decisões tomadas pela árvore para ver também quais características fazem a maior
+diferença e explicam mais o resultado. Além disso, eles usam também o modelo
+\textit{naive Bayes}, pois seu artigo utiliza diversas características booleanas
+(com valores zero ou um).
+
+\cite{joshi-etal:2016:harnessing} partem para um estudo e abordagem diferentes.
+Ao invés de utilizar bases de dados de redes sociais, como o frequentemente
+utilizado Twitter, eles exploram a detecção de sarcasmo em diálogos da séries de
+TV ``Friends''. E argumentam que o problema de detecção de sarcasmo de diálogos
+é melhor modelado como uma tarefa de rotulação de sequências ao invés de uma
+tarefa de classificação de cada rótulo isoladamente.
+
+Nessa modelagem, a ordem em que as falas de um diálogo aparecem é levada em
+conta. Ao invés de tomar uma fala isoladamente e classificá-la, o modelo deve
+classificá-la utilizando todas as falas que vieram antes dela. Eles, então,
+utilizam dois modelos de aprendizado de máquina, o SEARN e o SVM-HMM e mostram
+que esses modelos de sequência performam melhor que os classificadores
+tradicionais.
+
+\cite{liu-etal:2014:imbalanced-classification} apresentam uma nova estratégia
+chamada por eles de \textit{multi-strategy ensemble learning approach} (MSELA).
+Em seu trabalho, eles exploram a detecção de sarcasmo em um conjunto de dados
+bastante desbalanceado (ou seja, com uma proporção pequena de textos sarcásticos
+em relação aos não sarcásticos). Para lidar com esse problema, eles propõem essa
+estratégia.
+
+A MSELA é constituída de três partes diferentes. A primeira é chamada de
+\textit{sample-ensemble strategy} (em tradução livre, ``estratégia de conjunto
+de amostragens'') e consiste em fazer amostragens nos dados originais de forma a
+criar $N$ conjuntos da dados balanceados. Cada um desses sub-conjuntos de dados
+é então usado para treinar pequenos classificadores, que consistem da segunda
+parte: a \textit{classifier-ensemble strategy} (em tradução livre, ``estratégia
+de conjunto de classificadores''). Nessa etapa, cada os classificadores de cada
+sub-conjunto de dados não necessariamente são os mesmos. Os autores empregam
+três tipos de classificadores (sendo que, em teoria, pode-se utilizar mais) e,
+para cada sub-conjunto, escolhem um classificador aleatório para ser treinado.
+Por fim, a terceira etapa serve para juntar cada uma das classificações em uma
+única e é chamada de \textit{weighted voting strategy} (em tradução livre,
+``estratégia de voto ponderado''). Nessa última estratégia, as decisões de cada
+classificador são ponderadas por uma medida de entropia da informação e, dessa
+forma, unidas para resultar em uma última decisão de se o texto é ou não
+sarcástico.
+
+Além do modelos de aprendizado tidos como mais ``clássicos'', modelos de
+aprendizado profundo (ou seja, aqueles que utilizam grandes redes neurais)
+também foram utilizados. Esse tipo de modelo costuma resultar em melhores
+métricas, mas também exige uma quantidade muito grande de dados. Isso por muitas
+vezes é um problema, pois a maioria dos conjuntos de dados é rotulado por seres
+humanos que decidem se um texto é ou não sarcástico utilizando seus próprios
+conhecimentos.
+
+\cite{ghosh-veale:2016:fracking-sarcasm-nn} utilizam três tipos de redes neurais
+em conjunto e comparam seu desempenho em um conjunto de dados extraído do
+Twitter. Eles utilizam \textit{long short term memories} (LSTMs),
+\textit{convolutional neural networks} (CNNs) e \textit{deep neural networks}
+(DNNs), combinando esses modelos entre si para conseguir melhores performances.
+
+\cite{van-hee-etal:2018:semeval} mostram em seu artigo os resultados da terceira
+tarefa da SemEval-2018, um \textit{workshop} internacional de PLN com o objetivo
+de avançar as fronteiras do estado-da-arte em determinadas tarefas. Nesse
+artigo, eles mostram que as melhores soluções (em termos da métrica $F_1$)
+propostas pelos times utilizam modelos baseados em aprendizado profundo. Eles
+fazem principalmente o uso de redes do tipo LSTMs, CNNs e DNNs. Além disso, é
+presente o uso de \textit{word embeddings} como o GloVe, que retratam cada uma
+das palavras presentes em um texto como vetores nos quais palavras de sentidos
+parecidos possuem vetores parecidos.
+
+A tarefa proposta pela SemEval-2018 era dividida em duas sub-tarefas. A primeira
+era uma detecção de sarcasmo comum, onde bastava o modelo distinguir entre
+\textit{tweets} sarcásticos e não sarcásticos. A segunda tarefa, entretanto, era
+mais complexa, pois exigia que o modelo também classificasse o tipo de sarcasmo
+que ocorria no texto. Os resultados mostraram que mesmo modelos de aprendizado
+profundo bastante sofisticados ainda estavam bastante longe de resultados
+promissores. Enquanto na primeira sub-tarefa o melhor time obteve uma métrica
+$F_1$ de $0.705$, o melhor time na segunda sub-tarefa obteve apenas $0.507$
+pontos dessa mesma métrica.
 
 \subsection{Abordagens Baseadas em Contexto}%
 \label{sub:abordagens_baseadas_em_contexto}
 
+Até então, foram exibidos trabalhos que se restringiram apenas ao texto de
+interesse. Entretanto, muitos outros trabalhos partem de outra abordagem, que é
+utilizar informações além do texto para se determinar se um texto é ou não
+sarcástico, chamadas de contexto.
 
+\cite{wallace-etal:2014:ironic-context} mostram em seu artigo que humanos obtém
+melhores resultados para detectar se um texto é ou não sarcástico quando eles
+recebem contexto além do texto original. Em seu trabalho, eles exploram a rede
+social Reddit e pedem para seres humanos decidirem se uma postagem nessa rede é
+ou não sarcástica e qual o seu grau de confiança nessa decisão. O humano pode
+pedir por contexto quando estiver em dúvida e os autores, então, apresentam qual
+era o tópico em que a postagem estava inserida e uma lista de outras postagens
+do mesmo usuário.
 
+Eles então mostram que serem humanos acertam consistentemente mais quando obtém
+esse contexto extra, além de ficarem mais confiantes em sua decisão. Não só
+isso, mas os autores também mostram que um modelo \textit{bag-of-words} costuma
+errar nesses casos em que humanos precisam de contexto extra. Portanto, os
+autores argumentam que máquinas provavelmente também precisam de contexto extra
+para conseguir melhores resultados. Como veremos, muitos outros autores criaram
+modelos que utilizam o contexto de uma postagem e provam empiricamente que o
+contexto pode ajudar.
 
+Há muitas formas de se adicionar informações extras referentes ao contexto,
+\cite{hazarika-etal:2018:cascade} criam um método para criar representar
+\textit{embeddings} de usuários, que capturam o estilo de descrita e
+personalidade para criar uma representação que pode ser utilizada em adição ao
+texto escrito por aquele usuário.
+
+\cite{wang-etal:2015:context-twitter} utilizam contexto da conversa e do tópico,
+utilizando os tweets que vieram antes do tweet de interesse, outros tweets do
+mesmo autor e outro tweets que tenham as mesmas \textit{hashtags} do tweet de
+interesse (ou seja, que pertençam ao mesmo tópico).
+
+O melhor resultado obtido por eles é quando utilizam o histórico de tweets do
+autor. Eles experimental com o último tweet do autor, os três últimos e os cinco
+últimos, obtendo o melhores resultados conforme aumentavam esse número. Além
+disso, utilizar o contexto da conversa (ou seja, o histórico de respostas de que
+levou até o tweet de interesse) possui também um ganho nas métricas, mas variar
+entre 1, 3 ou 5 tweets não muda muito. Isso mostra que se o modelo tivesse
+acesso apenas ao tweet de interesse (que queremos determinar sarcasmo) e o tweet
+que ele respondeu (o anterior a ele na conversa) já possui a maioria do ganho
+que obteríamos ao olhar para a conversa. Intuitivamente, isso faz sentido, pois
+quando se dá uma resposta sarcástica, essa é uma resposta àquilo que foi falado
+imediatamente antes na vasta maioria dos casos. Por fim, eles mostram que a
+métrica $F_1$ cai ao adicionar contexto do tópico e que, portanto, adicionar
+outros tweets com a mesma \textit{hashtag} do de interesse apenas atrapalha.
+
+\cite{ghosh:2018:sarcasm-conversation-context} também utilizam contexto da
+conversa em conjunto com LSTMs e mostram que ao adicionar a postagem que foi
+respondida pela postagem de interesse melhora os resultados. Eles utilizam
+vários conjuntos de dados e várias formas diferentes de LSTMs, assim, eles
+testam diversas formas de se acoplar o comentário anterior ao de interesse e
+mostram que adicionar o contexto referente à postagem anterior sempre melhora os
+resultados.
+
+\cite{jena-etal:2020:cnet} criam um novo modelo chamado por eles de C-Net que
+foca também em utilizar o contexto gerado pelos comentários anteriores de um
+comentário de interesse. Dado que eles tenham $n-1$ comentários anteriores, eles
+criam $n$ modelos BERT, um para cada comentário. Portanto, em uma cadeia de $n$
+comentários (onde o $n$-ésimo é o comentário de interesse, o $n-1$-ésimo é o
+comentário anterior a ele e assim por diante), o $i$-ésimo BERT é treinado
+utilizando apenas o $i$-ésimo comentário e deve retornar uma porcentagem $y_i$
+de que o comentário $i$ leve a uma resposta sarcástica. Depois, eles concatenam
+esses resultados dos $n$ modelos utilizando uma camada de fusão (do inglês,
+\textit{fusion layer}) que utiliza algum modelo que recebe $n$ valores e retorna
+uma probabilidade final $y_{n+1}$ que será utilizada para dizer se o último
+comentário foi ou não sarcástico. Para fazer essa concatenação, eles utilizam
+um modelo de séries temporais chamado de \textit{simple exponential smoothing}
+(SES).
+
+\cite{kolchinski-potts:2018:representing-social-media-users} exploram outra
+forma de se criar \textit{embeddings} para os usuário de uma rede social. Para
+cada autor nos dados de treinamento, ele criam um vetor de 15 valores
+randômicos. Então esses vetores são passados como entrada para um modelo de rede
+neural recorrente (RNN) bidirecional e são atualizados durante o treinamento,
+com o objetivo de aprender características importantes do usuário. Então se
+aquele usuário aparece novamente na hora de fazer uma predição fora dos dados de
+treinamento, seu vetor de \textit{embeddings} é utilizado. Contudo, caso o autor
+não tenha aparecido no treinamento, um vetor randômico é utilizado.
+
+Por fim, há outras duas formas de se adicionar contexto à tarefa. A primeira
+delas é utilizando \textit{word embeddings}, pois elas permitem aos modelos que
+as utilizam fazer comparações entre palavras e compreender a semântica passada
+por elas. Alguns exemplos são
+\texttt{Word2vec}~(\cite{mikolov-etal:2013:word2vec}),
+\texttt{GloVe}~(\cite{pennington-etal:2014:glove}),
+\texttt{fastText}~(\cite{bojanowski-etal:2016:fasttext}),
+\texttt{ELMo}~(\cite{peters-etal:2018:elmo}),
+\texttt{BERT}~(\cite{devlin-etal:2018:bert}).
+A segunda é utilizando uma técnica chamada de transferência de aprendizado (ou
+aprendizado por transferência) (do inglês, \textit{transfer learning}).
+que consistem de um conjunto de dados realmente grande. Depois disso, os
+parâmetros do modelo são refinados na tarefa específica. Dentro do contexto de
+PLN, os modelos mais utilizados são os conhecidos como \textit{transformers},
+um tipo de modelo que será explicado no capítulo AAAA. Alguns exemplos são
+\texttt{GPT-3}~(\cite{brown-etal:2020:gpt3}),
+\texttt{XLNet}~(\cite{yang-etal:2019:xlnet}),
+\texttt{BERT}~(\cite{devlin-etal:2018:bert}),
+\texttt{RoBERTa}~(\cite{liu-etal:2019:roberta})
+e \texttt{DeBERTa}~(\cite{he-etal:2020:deberta}), que é o foco deste trabalho.
+
+Entre os trabalhos que utilizam \textit{transformers}, um dos mais bem sucedidos
+é o de \cite{potamias-etal:2020:transform-sarcasm}, que criam um modelo que
+utiliza um RoBERTa em conjunto com uma LSTM bidirecional (BiLSTM). Os autores
+argumentam que o RoBERTa é capaz de mapear as palavras para um espaço vetorial
+rico em semântica e que outros modelos de redes neurais podem usar esses valores
+para capturar dependências tempo-espaciais entre as palavras. Eles, portanto,
+removem a última camada do modelo pré-treinado RoBERTa e passam os valores da
+sua última camada escondida (do inglês, \textit{hidden layer}) para uma BiLSTM
+que, por sua vez, tem seus resultados concatenados por uma camada completamente
+conectada e passados para uma camada \textit{softmax}.
