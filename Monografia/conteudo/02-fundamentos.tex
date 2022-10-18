@@ -8,11 +8,11 @@
 \section{Detecção de Sarcasmo}%
 \label{sec:deteccao_de_sarcasmo}
 
-De acordo com o dicionário Dicio, sarcasmo é uma zombaria que busca ofender,
-enquanto ironia é a ação de dizer o oposto do que se deseja expressar. Ainda
-segundo ele, a diferença entre esses dois termos se dá no fato de que sarcasmo é
-um dito ácido que pode ou não ser expresso por meio de uma ironia e essa, por
-sua vez, pode ou não ser utilizada para
+De acordo com o dicionário Dicio, \textbf{sarcasmo} é uma zombaria que busca
+ofender, enquanto \textbf{ironia} é a ação de dizer o oposto do que se deseja
+expressar. Ainda segundo ele, a diferença entre esses dois termos se dá no fato
+de que sarcasmo é um dito ácido que pode ou não ser expresso por meio de uma
+ironia e essa, por sua vez, pode ou não ser utilizada para
 ofender.~\cite{dicio_sarc, dicio_irony}
 
 (R. Giora, On Irony and Negation)
@@ -21,11 +21,12 @@ ofender.~\cite{dicio_sarc, dicio_irony}
 
 (Irony and Sarcasm: Corpus Generation and Analysis Using Crowdsourcin)
 
-O termo detecção de sarcasmo refere-se à determinação de se há ou não sarcasmo
-em uma porção de texto verbal. E o termo detecção automática de sarcasmo
-refere-se a métodos computacionais de se resolver o problema acima mencionado.
-Computacionalmente, podemos definir esse problema como uma
-\textit{\textbf{classificação binária}}, termo explicado mais a frente.
+O termo \textbf{detecção de sarcasmo} refere-se à determinação de se há ou não
+sarcasmo em uma porção de texto verbal. E o termo \textbf{detecção automática de
+sarcasmo} refere-se a resolução (ou tentativa de) resolver o problema mencionado
+utilizando métodos computacionais que automatizam essa decisão.
+Computacionalmente, podemos definir esse problema como uma \textbf{classificação
+binária} de texto, termo explicado mais a frente.
 
 Entretanto, na literatura é bastante comum também se definir detecção de
 sarcasmo como a determinação de se há ou não sarcasmo ou ironia verbal em uma
@@ -60,8 +61,8 @@ $X$ é denotada por $\xii[x]{i}$ e chamada de \textit{exemplo} $i$ ou
 
 A linha $\xii[x]{i}$ é um vetor de $m$ posições em que cada posição é uma
 característica que descreve a entrada. Por exemplo, na detecção de sarcasmo, o
-primeiro valor pode ser a quantidade de palavras lidas, o segundo valor pode ser
-a quantidade de caracteres, a terceira pode ser a soma de positividade do texto
+primeiro valor pode ser a quantidade de palavras, o segundo valor pode ser a
+quantidade de caracteres, a terceira pode ser a soma de positividade do texto
 (definida por algum critério específico) e assim por diante. É importante que a
 mesma posição em diferentes instâncias tenha o mesmo significado. Portanto, caso
 se defina que a primeira posição represente o número de palavras, todas as
@@ -76,16 +77,31 @@ valores $\xii[y]{i}$ constrói-se um vetor $y$ onde $y_i=\xii[y]{i}$.
 
 Ao final, o problema é descobrir uma função $f$ que mapeie bem $X$ em $y$. Note,
 entretanto, que $n$, o número de exemplos, é possivelmente infinito, pois sempre
-se pode achar novos exemplos e testar se $f$ os mapeia corretamente. Ou seja,
-tenta-se achar essa função $f$ conhecendo parcialmente o conjunto das
-instâncias.
+se pode achar novos exemplos e testar se $f$ os mapeia corretamente. Portanto,
+na prática, o valor de $n$ é limitado às instâncias em um determinado
+\textit{conjunto de dados} coletado de alguma forma (manual, semi-automática ou
+automática). Ou seja, tenta-se achar essa função $f$ conhecendo parcialmente o
+conjunto das instâncias. Além disso, após encontrar a função $f$ nesse conjunto
+limitado de dados, chamado de \textit{dados de treinamento}, deseja-se
+utiliza-la para discriminar novos textos similares aos originais, mas para os
+quais não se sabe de antemão se são ou não sarcásticos. Esses novos dados são,
+em muitos casos, chamados de \textit{dados de teste}.
+
+Vale a pena, entretanto, mencionar que os dados de treinamento geralmente são
+divididos em duas ou três partições que são chamadas de \textit{dados de
+treinamento}, \textit{dados de validação} e \textit{dados de teste}. Essa
+nomenclatura pode ser um pouco confusa, pois os termos acabam se repetindo.
+Portanto, daqui em diante se utilizará \textit{dados rotulados} para os dados
+que se sabe a classe de antemão (ou seja, sabe-se se aquele texto é ou não
+sarcástico) e \textit{dados não rotulados} para os dados novos em que se deseja
+aplicar $f$ e não se sabe a classe de antemão.
 
 \subsection{Métricas de avaliação}%
 \label{sub:metricas_de_avaliacao}
 
-Para saber se a função $f$ mapeia bem $X$ em $y$, é preciso definir uma métrica
-de avaliação, que é uma função matemática bem definida que indica quanto de erro
-se comete em determinado conjunto $X$.
+Para saber se a função $f$ mapeia bem $X$ em $y$, é preciso definir uma
+\textbf{métrica de avaliação}, que é uma função matemática bem definida que
+indica quanto de erro se comete em determinado conjunto finito de exemplos $X$.
 
 Dado um conjunto de entrada $X$ com $n$ instâncias, seja $y$ o vetor que
 representa se cada instância é ou não sarcástica. Seja então $f$ a função sob
@@ -99,21 +115,29 @@ Note que para cada exemplo $i$, podemos ter duas opções:
   \item $\hat{y}_i\neq y_i$ (\textit{erro})
 \end{enumerate}
 
-Além disso, pode-se note que o par $\pair{y_i}{\hat{y}_i}$ pode ter quatro
-valores:
+Além disso, note que o par $\pair{y_i}{\hat{y}_i}$ pode ter quatro valores:
 \begin{enumerate}
-  \item $\pair{1}{1}$, caso \textit{verdadeiro positivo} (também conhecido como
+  \item $\pair{1}{1}$, caso \textit{verdadeiro positivo} (do inglês,
     \textit{true positive} e denotado por $tp$).
-  \item $\pair{0}{1}$, caso \textit{falso positivo} (também conhecido como
-    \textit{false positive} e denotado por $fp$).
-  \item $\pair{0}{0}$, caso \textit{verdadeiro negativo} (também conhecido como
+  \item $\pair{0}{1}$, caso \textit{falso positivo} (do inglês, \textit{false
+    positive} e denotado por $fp$).
+  \item $\pair{0}{0}$, caso \textit{verdadeiro negativo} (do inglês,
     \textit{true negative} e denotado por $tn$).
-  \item $\pair{1}{0}$, caso \textit{falso negativo} (também conhecido como
-    \textit{false negative} e denotado por $fn$).
+  \item $\pair{1}{0}$, caso \textit{falso negativo} (do inglês, \textit{false
+    negative} e denotado por $fn$).
 \end{enumerate}
 
-Definidos esses valores, pode-se definir algumas métricas que ajudam a perceber
-quão boa a função $f$ é. Dessa forma, pode-se comparar duas funções $f$.
+Nesses quatro casos, dois correspondem a quando o modelo acerta, os verdadeiros
+positivos e verdadeiros negativos, e dois correspondem a erros, os falsos
+positivos e falsos negativos. Os falsos positivos são, em alguns contextos,
+chamados de erros tipo 1, e são cometidos quando uma instância é erroneamente
+classificada como positiva. Já os falsos negativos são também chamados de erros
+tipo 2, e são cometidos quando uma instância é erroneamente classificada como
+negativa.
+
+Com esses valores em mente, pode-se definir algumas métricas que ajudam a
+perceber quão boa a função $f$ é. Dessa forma, pode-se comparar duas funções
+$f$.
 
 \paragraph{Acurácia}%
 \label{par:acuracia}
@@ -124,13 +148,13 @@ total de instâncias. Seja $n'$ a quantidade de acertos, então:
 \texttt{Acurácia} = \dfrac{n'}{n}
 \]
 
-É comum também definir a acurácia em termos dos vamos acima listados:
+É comum também definir a acurácia em termos dos valores acima listados:
 \[
 \texttt{Acurácia} = \dfrac{tp+tn}{tp+tn+fp+fn}
 \]
 
 Note que $tp+tn$ representa justamente quando $\hat{y}_i=y_i$ e $fp+fn$,
-$\hat{y}_i\neq y_i$.
+representa quando $\hat{y}_i\neq y_i$.
 
 \paragraph{Precisão}%
 \label{par:precisao}
@@ -140,9 +164,11 @@ Definida como:
 \texttt{Precisão} = \dfrac{tp}{tp+fp}
 \]
 
-é a taxa de verdadeiros positivos em relação a todos os positivos. Portanto,
-mede a fração de quantos positivos foram acertados em relação a todos os que
-existiam no conjunto observado.
+é a taxa de verdadeiros positivos em relação todas as instâncias preditas como
+positivas. Portanto, é a fração entre todas as instâncias previstas como
+positivas e as instâncias que realmente eram positivas. Ela pune o modelo quando
+ele comete erros do tipo 1, ou seja, quando classifica valores demais como
+positivos.
 
 \paragraph{Revocação}%
 \label{par:revocacao}
@@ -152,23 +178,27 @@ Muitas vezes chamada por seu nome em inglês, \textit{recall}, é definida como:
 \texttt{Revocação} = \dfrac{tp}{tp+fn}
 \]
 
-é a taxa de verdadeiros positivos em relação todas as instâncias preditas como
-positivas. Portanto, a fração entre todos as instâncias previstas como positivas
-e as instâncias que realmente eram positivas.
+é a taxa de verdadeiros positivos em relação a todos os positivos. Portanto,
+mede a fração de quantos positivos foram acertados em relação a todos os que
+existiam no conjunto observado. Ela pune o modelo quando ele comete erros do
+tipo 2, ou seja, quando ele deixa de classificar um valor como positivo.
 
 A precisão e a revocação guardam uma relação chave entre si e geralmente se quer
-ter um bom balanço entre as duas. Observe essa relação a partir do seguinte
-exemplo.
+ter um bom balanço entre as duas. Note que o modelo deve achar um ponto ótimo
+entre classificar valores como $1$ demais (baixa precisão) e de menos (baixa
+revocação). Observe essa relação a partir do seguinte exemplo.
 
 Comece com a função
 \begin{equation}
   f\paren{\xii[x]{i}} = 1~~\forall i
 \end{equation}
 
+% transformar os enums em tabelas:
+
 Como ela sempre considera a entrada como positiva, então os únicos casos
-existentes serão de verdadeiros positivos e falso positivos. Logo:
+existentes serão de verdadeiros e falsos positivos. Logo:
 \[
-\texttt{Precisão} = \dfrac{tp}{tp+fp} = \dfrac{tp}{tp+(n-tp)} = \dfrac{tp}{n}
+\texttt{Precisão} = \dfrac{tp}{tp+fp} = \dfrac{tp}{n}
 \]
 e
 \[
@@ -187,7 +217,7 @@ Agora, tome a função
 \end{equation}
 
 Como ela sempre considera a entrada como negativa, então os únicos casos
-existentes serão de verdadeiro negativo e falso negativo. Logo:
+existentes serão de verdadeiros e falsos negativos. Logo:
 \[
 \texttt{Precisão} = \dfrac{tp}{tp+fp} = \dfrac{0}{0+fp} = 0
 \]
@@ -214,15 +244,16 @@ F_1=2\cdot
 {\texttt{precisão}+\texttt{revocação}}
 \]
 
+Obter um valor $F_1$ alto significa que ambas precisão e revocação são altas.
+
 \section{Trabalhos Relacionados}%
 \label{sec:trabalhos_relacionados}
 
-Nessa seção abordar-se-á os trabalhos já realizados na área e as diferentes
-abordagens. Pode-se caracterizar os trabalhos por três principais tipos de
-abordagens: as baseadas em regras, baseadas em métodos de aprendizado e baseadas
-em contexto. Além disso, falar-se-á um pouco sobre as principais características
-extraídas dos textos que têm sido utilizadas para melhorar a eficácia das
-soluções.
+Esta seção aborda os trabalhos e as diferentes abordagens realizados na área.
+Pode-se caracterizar os trabalhos por três principais tipos de abordagens: as
+baseadas em regras, baseadas em métodos de aprendizado e baseadas em contexto.
+Além disso, fala-se um pouco sobre as principais características extraídas dos
+textos que são utilizadas para melhorar a eficácia das soluções.
 
 \subsection{Abordagens Baseadas em Regras}%
 \label{sub:abordagens_baseados_em_regras}
