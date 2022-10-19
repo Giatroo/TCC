@@ -110,22 +110,32 @@ são ou não sarcásticos). Seja $\hat{y}=f(X)$ os resultados gerados por essa
 função.
 
 Note que para cada exemplo $i$, podemos ter duas opções:
-\begin{enumerate}
-  \item $\hat{y}_i=y_i$  (\textit{acerto})
-  \item $\hat{y}_i\neq y_i$ (\textit{erro})
-\end{enumerate}
+
+\begin{center}
+\begin{tabular}{ c c }
+  $\hat{y}_i=y_i$ & \textit{acerto} \\
+  $\hat{y}_i\neq y_i$ & \textit{erro}
+\end{tabular}
+\end{center}
 
 Além disso, note que o par $\pair{y_i}{\hat{y}_i}$ pode ter quatro valores:
-\begin{enumerate}
-  \item $\pair{1}{1}$, caso \textit{verdadeiro positivo} (do inglês,
-    \textit{true positive} e denotado por $tp$).
-  \item $\pair{0}{1}$, caso \textit{falso positivo} (do inglês, \textit{false
-    positive} e denotado por $fp$).
-  \item $\pair{0}{0}$, caso \textit{verdadeiro negativo} (do inglês,
-    \textit{true negative} e denotado por $tn$).
-  \item $\pair{1}{0}$, caso \textit{falso negativo} (do inglês, \textit{false
-    negative} e denotado por $fn$).
-\end{enumerate}
+
+\begin{table}[h]
+  \centering
+  \caption{Os nomes dados para os diferentes tipos de erros e acertos.}
+  \label{tab:tabela_casos_error_acerto}
+  \begin{tabular}{ c | c c c }
+    $\pair{y_i}{\hat{y}_i}$ & caso & nome em inglês & notação \\
+    \hline
+    $\pair{1}{1}$ & verdadeiro positivo & \textit{true positive} & $tp$
+    \\
+    $\pair{0}{1}$ & falso positivo & \textit{false positive} & $fp$
+    \\
+    $\pair{0}{0}$ & verdadeiro negativo & \textit{true negative} & $tn$
+    \\
+    $\pair{1}{0}$ & falso negativo & \textit{false negative} & $fn$
+  \end{tabular}
+\end{table}
 
 Nesses quatro casos, dois correspondem a quando o modelo acerta, os verdadeiros
 positivos e verdadeiros negativos, e dois correspondem a erros, os falsos
@@ -263,7 +273,7 @@ se uma sequência de palavras contém ou não ironia. Para criar essas regras,
 várias características do texto podem ser utilizadas, como as classes sintáticas
 das palavras, se são palavras de cunho positivo ou negativo, se há a presença ou
 não de certas palavras em uma ordem, entre qualquer outro tipo de regra
-imaginável.
+proposta.
 
 Essa abordagem é computacional, porque as regras formam um algoritmo que pode
 ser implementado por uma linguagem de computação. Dessa forma, qualquer
@@ -276,18 +286,18 @@ possui essas características, então ele é sarcástico} se cria uma explicaç�
 para as principais características presentes em um texto sarcástico.
 
 Entretanto, as metodologias utilizadas são bastante específicas para cada tipo
-de texto e cada conjunto de dados. Por exemplo, as regras criadas para um
-determinado conjunto da rede social Twitter podem não funcionar em outras redes
-sociais como o Facebook, o Instagram ou o WhatsApp, pois cada uma dessas redes
-sociais possui um contexto e formato de conversação muito diferente. Portanto,
-são modelos que nos permitem explicar o processo de decisão, mas não permitem
-fácil generalização.
+de texto e cada conjunto de dados. As regras criadas para um determinado
+conjunto, por exemplo, da rede social Twitter podem não funcionar em outras
+redes sociais como o Facebook, o Instagram ou o WhatsApp, pois cada uma dessas
+redes sociais possui um contexto e formato de conversação muito diferente.
+Portanto, são modelos que nos permitem explicar o processo de decisão, mas não
+permitem fácil generalização.
 
 \cite{veale:2010} investigam em seu artigo sequências da forma ``\textit{as * as
 a *''} (``tão * quanto um(a) *''), consideradas como analogias entre o que os
 autores chamam de \textit{base} (\textit{ground}) e \textit{meio}
 (\textit{vehicle}). Eles utilizam a API do Google para coletar 45021 instâncias
-do padrão ``\textit{about as * as *}'' e filtram os resultados na mão para
+do padrão ``\textit{about as * as *}'' e filtram os resultados manualmente para
 chegar em 20299 instâncias que de fato são consideradas analogias. Eles então
 anotam manualmente os rótulos para essas instâncias e encontraram que 15502
 casos ($76\%$) são irônicos e apenas 4797 ($24\%$) são não irônicos.
@@ -295,94 +305,94 @@ casos ($76\%$) são irônicos e apenas 4797 ($24\%$) são não irônicos.
 Então, dado uma sequência ``\textit{as * as a *}'', os autores utilizam
 mecanismos de busca na rede como a API do Google para distinguir entre três
 casos: os casos em que essa sequência nunca foi usada como ``\textit{about}'';
-aqueles que já foram, mas não frequentemente; e aqueles que que são
-frequentemente usados com essa marcação. Segundo os próprios autores, essas três
-categorias proveem, respectivamente, evidencia fraca contra ironia, evidencia
-fraca a favor da ironia e evidência forte para ironia. Ou seja, o caso em que
-temos mais certeza de que é uma ironia é o caso em que a sequência é
-frequentemente utilizada junto com a palavra ``\textit{about}''.
+aqueles que já foram, mas não frequentemente; e aqueles que são frequentemente
+usados com essa marcação. Segundo os próprios autores, essas três categorias
+fornecem, respectivamente, evidencia fraca contra ironia, evidencia fraca a
+favor da ironia e evidência forte para ironia. Ou seja, o caso em que se tem
+mais certeza de que é uma ironia é o caso em que a sequência é frequentemente
+utilizada junto com a palavra ``\textit{about}''.
 
-Assim sendo, \cite{veale:2010} criam um sequência de nove passos para
+Assim sendo, \cite{veale:2010} criam uma sequência de nove passos para
 classificar uma frase desse tipo entre as classes \textit{ironia} e \textit{não
 ironia}. Esses passos são bastante claros e precisos, podendo ser, portanto,
 implementados por um programa de computador e caracterizando, por conseguinte,
 uma detecção automática de sarcasmo.
 
 Nessas regras, os autores utilizam o fato de que analogias mais frequentemente
-utilizadas são menos prováveis de serem irônicas, pois a ironia é utiliza
-bastante a criatividade do locutor para fazer analogias não usuais.
+utilizadas são menos prováveis de serem irônicas, pois a ironia utiliza bastante
+a criatividade do locutor para fazer analogias não usuais.
 
 Devido à natureza das regras propostas pelos autores, eles conseguem medir a
-precisão e revocação obtida por cada uma das regras. No geral, o modelo atinge
+precisão e revocação obtidas por cada uma das regras. No geral, o modelo atinge
 uma acurácia de $88\%$, o que é um valor bastante alto para esse tipo de
-problema. Entretanto, note-se que os autores se limitaram a um escopo muito
-fechado (das frases do tipo ``\textit{as * as a *}'').
+problema. Entretanto, note que os autores se limitaram a um escopo muito fechado
+(das frases do tipo ``\textit{as * as a *}'').
 
 \cite{maynard-greenwood:2014:cares} exploram o uso de regras baseadas em
-hashtags presentes em postagens da rede social Twitter
-(\texttt{https://twitter.com/}) e sua aplicação para detecção de sarcasmo em um
-contexto mais geral de análise de sentimento.
+\textit{hashtags} presentes em postagens da rede social Twitter e sua aplicação
+para detecção de sarcasmo em um contexto mais geral de análise de sentimento.
 
-Em seu artigo, eles utilizam um algoritmo de tokenização de hashtags para
-transformá-las em palavras com as quais eles conseguem extrair informação. No
-caso, eles utilizam as palavras contidas nas hashtags para avaliar se o
-sentimento é positivo ou negativo e inverter o sentido original da frase caso
-detectem sarcasmo nas hashtags. Por exemplo, a hashtag \textit{\#notreally} é
-tokenizada em \textit{not} e \textit{really} e identificada como uma tag
-sarcástica de acordo com regras definidas pelos autores.
+Em seu artigo, eles utilizam um algoritmo de tokenização de \textit{hashtags}
+para transformá-las em palavras com as quais eles conseguem extrair informação.
+No caso, eles utilizam as palavras contidas nas \textit{hashtags} para avaliar
+se o sentimento é positivo ou negativo e inverter o sentido original da frase
+caso detectem sarcasmo nas \textit{hashtags}. Por exemplo, a \textit{hashtag}
+\textit{\#notreally} é tokenizada em \textit{not} e \textit{really} e
+identificada como uma \textit{tag} sarcástica de acordo com regras definidas
+pelos autores.
 
 Então, eles aplicam cinco regras que podem determinar o sentimento de uma
 postagem como \textit{negativo} ou \textit{positivo}, ou então trocar o
-sentimento pré-determinado da postagem. Os autores, portanto, fazem uso da
-detecção de sarcasmo utilizando hashtags para resolver um outro problema mais
+sentimento pré-determinado da postagem. Os autores, assim, fazem uso da detecção
+de sarcasmo utilizando \textit{hashtags} para resolver um outro problema mais
 geral que é definir o sentimento predominante de um texto.
 
 Como ponto negativo de sua técnica, está o fato de que nem sempre o tokenizador
-de hashtags funciona de forma adequada. Por exemplo, \textit{\#greatstart} pode
-ser dividida de duas formas: \textit{greats} e \textit{tart} ou \textit{great}
-e \textit{start}. Um ser humano provavelmente saberia que a segunda opção é a
-mais provável, mas o algoritmo não sabe fazer essa distinção e acaba ficando com
-o primeiro conjunto e palavras. Apesar disso, esse sistema de tokenização possui
-um $F1$ de $97,25\%$ e os autores obtiveram $91\%$ de precisão e revocação no
-conjunto de dados utilizado por eles.
+de \textit{hashtags} funciona de forma adequada. Por exemplo,
+\textit{\#greatstart} pode ser dividida de duas formas: \textit{greats} e
+\textit{tart} ou \textit{great} e \textit{start}. Um ser humano provavelmente
+saberia que a segunda opção é a mais provável, mas o algoritmo não sabe fazer
+essa distinção e acaba ficando com o primeiro conjunto e palavras. Apesar disso,
+esse sistema de tokenização possui um $F1$ de $97,25\%$ e os autores obtiveram
+$91\%$ de precisão e revocação na tarefa no conjunto de dados utilizado por
+eles.
 
 \cite{bharti-etal:2015:parsing-sarcasm} apresentam duas abordagens baseadas em
 regras. A primeira é através da análise morfossintática (do inglês,
 \textit{Part-of-Speech Tagging}) e criação de árvores sintáticas (do inglês,
 \textit{parse-trees}) que identificam a positividade do sentimento e situação
-predominantes em tweets. A segunda é através da análise sintática de tweets que
-começam com interjeições.
+predominantes em \textit{tweets}. A segunda é através da análise sintática de
+\textit{tweets} que começam com interjeições.
 
 Em sua primeira abordagem, os autores utilizam dicionários e algoritmos
 pré-criados para encontrar as classes morfológicas e sintáticas das palavras.
-Então, baseando-se nisso, eles utilizam um algoritmo criado por eles para
+Então, baseando-se nisso, utilizam um algoritmo criado por eles para
 encontrar um valor de positividade para o sentimento do texto e para a situação
-retratada e, com esses valores, caso seus valores tenham sinais contrários
-(sentimento positivo e situação negativa ou vice-versa), eles consideram o texto
-como sarcástico. Por exemplo, em ``\textit{I hate Australia in cricket, because
-they always win}'' (``eu odeio a Australia no críquete, porque eles sempre
-ganham''), as palavras ``\textit{I hate}'' apresentam um sentimento negativo,
-enquanto as palavras ``\textit{they always win}'' retratam uma situação
-positiva, e, portanto, essa frase seria classificada como sarcástica em sua
-primeira abordagem.
+retratada e, caso seus valores tenham sinais contrários (sentimento positivo e
+situação negativa ou vice-versa), eles consideram o texto como sarcástico. Por
+exemplo, em ``\textit{I hate Australia in cricket, because they always win}''
+(``eu odeio a Australia no críquete, porque eles sempre ganham''), as palavras
+``\textit{I hate}'' apresentam um sentimento negativo, enquanto as palavras
+``\textit{they always win}'' retratam uma situação positiva, e, portanto, essa
+frase seria classificada como sarcástica em sua primeira abordagem.
 
 Em sua segunda abordagem, os autores utilizam novamente algoritmos de
 \textit{POS Tagging} pré-criados para achar as classes morfológicas e sintáticas
-de palavras em tweets que começam com interjeições, como \textit{wow},
+de palavras em \textit{tweets} que começam com interjeições, como \textit{wow},
 \textit{oh}, \textit{wow}, \textit{aha}, \textit{yay}, \textit{yeah},
 \textit{nah}, etc. Em seu algoritmo, eles classificam como sarcásticos os textos
 que começam por interjeições e possuem um adjetivo ou advérbio imediatamente
-após a interjeição, ou então possuem, em algum após a interjeição, ou um
+após a interjeição, ou então possuem, em alguma posição após a interjeição, ou um
 advérbio seguido de adjetivo ou um adjetivo seguido de um substantivo ou um
 advérbio seguido de um verbo. Essa abordagem é bastante interessante, pois ela é
 bastante simples e, ainda assim, consegue um ótimo resultado de 0.90 $F_1$ no
-subconjunto de tweets marcado com a hashtag \textit{sarcasm}.
+subconjunto de \textit{tweets} marcado com a hashtag \textit{sarcasm}.
 
 \subsection{Conjuntos de Características}%
 \label{sub:conjuntos-de-caracteristicas}
 
 Antes de prosseguir com as abordagens, essa seção mostra um pouco dos
-principais conjuntos de características usadas por essas abordagens. Abordagens
+principais conjuntos de características usados. Abordagens
 baseadas em regras utilizam determinadas características como principalmente as
 classes morfossintáticas das palavras. Entretanto, as abordagens listadas a
 seguir fazem uso de conjuntos muito maiores de características retiradas do
@@ -394,40 +404,22 @@ coluna representa uma característica do texto. Dessa forma, o texto fica
 agregado em um conjunto de valores numéricos que são acessíveis para a máquina
 utilizar e comparar. Ao invés de se comparar dois texto distintos com números de
 caracteres e palavras diferentes, utiliza-se um algoritmo para extrair
-características (do inglês, ``\textit{features}'') comuns entre os textos e
+características (do inglês, \textit{features}) comuns entre os textos e
 compará-los por meio dessas características.
 
-Um exemplo é o método chamado \textit{bag-of-words} (em tradução literal
+Um exemplo é o método chamado \textit{bag-of-words} (em tradução literal,
 ``sacola-de-palavras'') que cria um vetor com, por exemplo, 512 posições de
 valores naturais onde cada posição do vetor representa quantas vezes uma
 determinada palavra  apareceu no texto. Cada posição do vetor é associada a uma
-palavra e, muitas vezes, se utiliza uma outra posição especial para denotar
+palavra e, muitas vezes, utiliza-se uma outra posição especial para denotar
 qualquer palavra que não está no dicionário de palavras selecionadas
 previamente. Por exemplo, a primeira posição pode representar quantas vezes a
 palavra ``\textit{a}'' aparece no texto, a segunda posição pode representar
 quantas vezes a palavra ``\textit{the}'' aparece, e assim por diante. Se a
-palavra "Lucas" for lida, então será adicionado um à última posição do vetor,
+palavra ``Lucas'' for lida, então será adicionado um à última posição do vetor,
 que é utilizado para contar qualquer palavra que não é uma das outras 511.
 
 (imagem ilustrando BOW)
-
-Esse tipo de abordagem fica entre o baseado em regras e abordagens baseadas em
-aprendizado no quesito de explicabilidade dos modelos. Isso porque os
-autores, ao invés de criar regras específicas, utilizam métodos de extração de
-características, criadas especificamente com o intuito de fazer a detecção de
-sarcasmo.
-
-A vantagem dessa abordagem é que geralmente os modelos são mais generalistas do
-que os baseados em regras, que são bastante fixas e não se adaptam bem a
-diferentes conjuntos de dados. Nesse caso, as mesmas metodologias de extração de
-características podem ser aplicadas em um conjunto de dados de textos extraídos
-de contextos diferentes (como redes sociais, análises de produtos vendidos
-online, aplicativos de troca de mensagens ou falas transcritas).
-
-Entretanto, como desvantagem, o fator manual ainda é muito presente nesse tipo
-de abordagem, assim como os métodos baseados em regras. Ao criar um modelo, um
-determinado conjunto de características é escolhido \textit{a priori}
-arbitrariamente, assim como era o caso das regras no primeiro tipo de abordagem.
 
 \cite{reyes:2012:from-humor} exploram quatro grupos de características dentro de
 um contexto mais geral de detecção de humor e ironia. Esses grupos são:
@@ -473,14 +465,12 @@ fim, os \textit{ps-grams} criam uma sequência de rótulos de positividade basea
 nos \textit{s-grams}. Por exemplo, ``Hoje chovendo'' seria rotulado como
 ``pos-neg'' (positivo e negativo).
 
-\cite{barbieri:2014:modelling-sarcasm}, por sua vez, usam sete grupos de
-características léxicas que abstraem o uso de termos específicos e tornam o
-processo de detecção de sarcasmo mais genérico e fácil de implementar, não
-modelando padrões de palavras como em trabalhos anteriores. Esses grupos são:
-frequência, que mede o quão comum é cada palavra utilizada no texto;
-escrito-falado (da tradução literal de \textit{written-spoken} utilizado pelos
-autores em seu artigo), que funciona como a frequência, mas a frequência que a
-palavra é usada em diálogos escritos ou falados; intensidade, que mede o uso de
+\cite{barbieri:2014:modelling-sarcasm}, por sua vez, criar um dos conjuntos mais
+completos de características, com setes grupos. Esses grupos são: frequência,
+que mede o quão comum é cada palavra utilizada no texto; escrito-falado (da
+tradução literal de \textit{written-spoken}, utilizado pelos autores em seu
+artigo), que funciona como a frequência, mas a frequência que a palavra é usada
+em diálogos escritos em oposição a falados; intensidade, que mede o uso de
 adjetivos e advérbios para aumentar ou diminuir a intensidade semântica de
 outras palavras no texto; estrutura, que mede, por exemplo, o número de
 caracteres usados, o número de palavras, o tamanho médio das palavras, o número
@@ -517,20 +507,20 @@ arestas.
 
 Métodos de aprendizado são aqueles que usam modelos baseados em aprendizado de
 máquina. Dentro desse campo do conhecimento, existem alguns tipos de
-aprendizado. Dentre eles, os principais são o aprendizado supervisionado, o
-aprendizado semi-supervisionado, o aprendizado não supervisionado e o
-aprendizado por reforço. Pesquisadores já fizeram uso dos três primeiros tipos
-de aprendizados listados, mas nesta monografia ater-se-á apenas aos trabalhos
-envolvendo aprendizado supervisionado, pois são os mais similares às técnicas
-aqui utilizadas. Para uma listagem mais vasta dos trabalhos correlacionados,
-recomenda-se a leitura dos trabalhos de
-\cite{joshi:2017:sarcasm-detection-survey} e
+aprendizado. Dentre eles, os principais são o \textbf{aprendizado
+supervisionado}, o \textbf{aprendizado semi-supervisionado}, o
+\textbf{aprendizado não supervisionado} e o \textbf{aprendizado por reforço}.
+Pesquisadores já fizeram uso dos três primeiros tipos de aprendizados listados,
+mas nesta monografia ater-se-á apenas aos trabalhos envolvendo aprendizado
+supervisionado, pois são os mais similares às técnicas aqui utilizadas. Para uma
+listagem mais vasta dos trabalhos correlacionados, recomenda-se a leitura dos
+trabalhos de \cite{joshi:2017:sarcasm-detection-survey} e
 \cite{yaghoobian:2021:sarcasm-detection-comparative-study}.
 
 Dentro do campos do algoritmos de aprendizado supervisionado estão os algoritmos
 de classificação, que como dito anteriormente, trata-se de achar uma função $f$
 que mapeie bem os exemplos $X$ em seus respectivos rótulos $y$. A matriz $X$
-contém contém diversas características extraídas do texto, como as exploradas em
+contém diversas características extraídas do texto, como as exploradas em
 \ref{sub:conjuntos-de-caracteristicas}. E o vetor de rótulos $y$ contém números
 associados às classes de classificação. No caso da classificação binária, são
 apenas duas classes (que, em detecção de sarcasmo, são \textit{sarcasmo} e
@@ -565,19 +555,19 @@ características foram mais importantes para fazer a classificação.  Dessa for
 é possível procurar quais os padrões mais importantes para o classificador e
 tentar entender por que esse é o caso.
 
-Árvores de decisão (do inglês \textit{decision trees}) foram experimentadas por
-\cite{reyes:2013:multidimensional-approach} para poder investigar a ordem de
-decisões tomadas pela árvore para ver também quais características fazem a maior
-diferença e explicam mais o resultado. Além disso, eles usam também o modelo
-\textit{naive Bayes}, pois seu artigo utiliza diversas características booleanas
-(com valores zero ou um).
+Similarmente, árvores de decisão (do inglês \textit{decision trees}) foram
+experimentadas por \cite{reyes:2013:multidimensional-approach} para poder
+investigar a ordem de decisões tomadas pela árvore para ver também quais
+características fazem a maior diferença e explicam mais o resultado. Além disso,
+eles usam também o modelo \textit{naive Bayes}, pois seu artigo utiliza diversas
+características booleanas (com valores zero ou um).
 
 \cite{joshi-etal:2016:harnessing} partem para um estudo e abordagem diferentes.
 Ao invés de utilizar bases de dados de redes sociais, como o frequentemente
 utilizado Twitter, eles exploram a detecção de sarcasmo em diálogos da séries de
-TV ``Friends''. E argumentam que o problema de detecção de sarcasmo de diálogos
-é melhor modelado como uma tarefa de rotulação de sequências ao invés de uma
-tarefa de classificação de cada rótulo isoladamente.
+TV ``\textit{Friends}''. E argumentam que o problema de detecção de sarcasmo de
+diálogos é melhor modelado como uma tarefa de rotulação de sequências ao invés
+de uma tarefa de classificação de cada rótulo isoladamente.
 
 Nessa modelagem, a ordem em que as falas de um diálogo aparecem é levada em
 conta. Ao invés de tomar uma fala isoladamente e classificá-la, o modelo deve
@@ -622,7 +612,7 @@ conhecimentos.
 em conjunto e comparam seu desempenho em um conjunto de dados extraído do
 Twitter. Eles utilizam \textit{long short term memories} (LSTMs),
 \textit{convolutional neural networks} (CNNs) e \textit{deep neural networks}
-(DNNs), combinando esses modelos entre si para conseguir melhores performances.
+(DNNs), combinando esses modelos entre si para conseguir melhores resultados.
 
 \cite{van-hee-etal:2018:semeval} mostram em seu artigo os resultados da terceira
 tarefa da SemEval-2018, um \textit{workshop} internacional de PLN com o objetivo
@@ -631,8 +621,8 @@ artigo, eles mostram que as melhores soluções (em termos da métrica $F_1$)
 propostas pelos times utilizam modelos baseados em aprendizado profundo. Eles
 fazem principalmente o uso de redes do tipo LSTMs, CNNs e DNNs. Além disso, é
 presente o uso de \textit{word embeddings} como o GloVe, que retratam cada uma
-das palavras presentes em um texto como vetores nos quais palavras de sentidos
-parecidos possuem vetores parecidos.
+das palavras presentes em um texto como vetores reais nos quais palavras de
+sentidos parecidos possuem vetores parecidos.
 
 A tarefa proposta pela SemEval-2018 era dividida em duas sub-tarefas. A primeira
 era uma detecção de sarcasmo comum, onde bastava o modelo distinguir entre
@@ -647,7 +637,7 @@ pontos dessa mesma métrica.
 \subsection{Abordagens Baseadas em Contexto}%
 \label{sub:abordagens_baseadas_em_contexto}
 
-Até então, foram exibidos trabalhos que se restringiram apenas ao texto de
+Até então, foram exibidos trabalhos que se restringem apenas ao texto de
 interesse. Entretanto, muitos outros trabalhos partem de outra abordagem, que é
 utilizar informações além do texto para se determinar se um texto é ou não
 sarcástico, chamadas de contexto.
@@ -666,57 +656,15 @@ esse contexto extra, além de ficarem mais confiantes em sua decisão. Não só
 isso, mas os autores também mostram que um modelo \textit{bag-of-words} costuma
 errar nesses casos em que humanos precisam de contexto extra. Portanto, os
 autores argumentam que máquinas provavelmente também precisam de contexto extra
-para conseguir melhores resultados. Como veremos, muitos outros autores criaram
-modelos que utilizam o contexto de uma postagem e provam empiricamente que o
-contexto pode ajudar.
+para conseguir melhores resultados. Nos anos seguintes, muitos outros autores
+criaram modelos que utilizam o contexto de uma postagem e provam empiricamente
+que o contexto pode ajudar.
 
-Há muitas formas de se adicionar informações extras referentes ao contexto,
+Há muitas formas de se adicionar informações extras referentes ao contexto.
 \cite{hazarika-etal:2018:cascade} criam um método para criar representar
 \textit{embeddings} de usuários, que capturam o estilo de descrita e
 personalidade para criar uma representação que pode ser utilizada em adição ao
 texto escrito por aquele usuário.
-
-\cite{wang-etal:2015:context-twitter} utilizam contexto da conversa e do tópico,
-utilizando os tweets que vieram antes do tweet de interesse, outros tweets do
-mesmo autor e outro tweets que tenham as mesmas \textit{hashtags} do tweet de
-interesse (ou seja, que pertençam ao mesmo tópico).
-
-O melhor resultado obtido por eles é quando utilizam o histórico de tweets do
-autor. Eles experimental com o último tweet do autor, os três últimos e os cinco
-últimos, obtendo o melhores resultados conforme aumentavam esse número. Além
-disso, utilizar o contexto da conversa (ou seja, o histórico de respostas de que
-levou até o tweet de interesse) possui também um ganho nas métricas, mas variar
-entre 1, 3 ou 5 tweets não muda muito. Isso mostra que se o modelo tivesse
-acesso apenas ao tweet de interesse (que queremos determinar sarcasmo) e o tweet
-que ele respondeu (o anterior a ele na conversa) já possui a maioria do ganho
-que obteríamos ao olhar para a conversa. Intuitivamente, isso faz sentido, pois
-quando se dá uma resposta sarcástica, essa é uma resposta àquilo que foi falado
-imediatamente antes na vasta maioria dos casos. Por fim, eles mostram que a
-métrica $F_1$ cai ao adicionar contexto do tópico e que, portanto, adicionar
-outros tweets com a mesma \textit{hashtag} do de interesse apenas atrapalha.
-
-\cite{ghosh:2018:sarcasm-conversation-context} também utilizam contexto da
-conversa em conjunto com LSTMs e mostram que ao adicionar a postagem que foi
-respondida pela postagem de interesse melhora os resultados. Eles utilizam
-vários conjuntos de dados e várias formas diferentes de LSTMs, assim, eles
-testam diversas formas de se acoplar o comentário anterior ao de interesse e
-mostram que adicionar o contexto referente à postagem anterior sempre melhora os
-resultados.
-
-\cite{jena-etal:2020:cnet} criam um novo modelo chamado por eles de C-Net que
-foca também em utilizar o contexto gerado pelos comentários anteriores de um
-comentário de interesse. Dado que eles tenham $n-1$ comentários anteriores, eles
-criam $n$ modelos BERT, um para cada comentário. Portanto, em uma cadeia de $n$
-comentários (onde o $n$-ésimo é o comentário de interesse, o $n-1$-ésimo é o
-comentário anterior a ele e assim por diante), o $i$-ésimo BERT é treinado
-utilizando apenas o $i$-ésimo comentário e deve retornar uma porcentagem $y_i$
-de que o comentário $i$ leve a uma resposta sarcástica. Depois, eles concatenam
-esses resultados dos $n$ modelos utilizando uma camada de fusão (do inglês,
-\textit{fusion layer}) que utiliza algum modelo que recebe $n$ valores e retorna
-uma probabilidade final $y_{n+1}$ que será utilizada para dizer se o último
-comentário foi ou não sarcástico. Para fazer essa concatenação, eles utilizam
-um modelo de séries temporais chamado de \textit{simple exponential smoothing}
-(SES).
 
 \cite{kolchinski-potts:2018:representing-social-media-users} exploram outra
 forma de se criar \textit{embeddings} para os usuário de uma rede social. Para
@@ -728,6 +676,51 @@ aquele usuário aparece novamente na hora de fazer uma predição fora dos dados
 treinamento, seu vetor de \textit{embeddings} é utilizado. Contudo, caso o autor
 não tenha aparecido no treinamento, um vetor randômico é utilizado.
 
+\cite{wang-etal:2015:context-twitter} utilizam o contexto da conversa e do
+tópico, utilizando os \textit{tweets} que vieram antes do \textit{tweet} de
+interesse, outros \textit{tweets} do mesmo autor e outros \textit{tweets} que
+tenham as mesmas \textit{hashtags} do \textit{tweet} de interesse (ou seja, que
+pertençam ao mesmo tópico).
+
+O melhor resultado obtido por eles é quando utilizam o histórico de
+\textit{tweets} do autor. Eles experimentam com o último \textit{tweet} do
+autor, os três últimos e os cinco últimos, obtendo melhores resultados conforme
+aumentavam esse número. Além disso, utilizar o contexto da conversa (ou seja, o
+histórico de respostas de que levou até o \textit{tweet} de interesse) possui
+também um ganho nas métricas, mas variar entre 1, 3 ou 5 \textit{tweets} não
+muda muito. Isso mostra que se o modelo tivesse acesso apenas ao \textit{tweet}
+de interesse (que queremos determinar sarcasmo) e o \textit{tweet} que ele
+respondeu (o anterior a ele na conversa) já teria a maior parte do ganho que
+se obteria ao olhar para a conversa toda. Intuitivamente, isso faz sentido, pois
+quando se dá uma resposta sarcástica, essa é uma resposta àquilo que foi falado
+imediatamente antes na vasta maioria dos casos. Por fim, eles mostram que a
+métrica $F_1$ cai ao adicionar contexto do tópico e que, portanto, adicionar
+outros \textit{tweets} com a mesma \textit{hashtag} do de interesse apenas
+atrapalha.
+
+\cite{ghosh:2018:sarcasm-conversation-context} também utilizam contexto da
+conversa em conjunto com LSTMs e mostram que ao adicionar a postagem que foi
+respondida pela postagem de interesse melhora os resultados. Eles utilizam
+vários conjuntos de dados e várias formas diferentes de LSTMs, assim, eles
+testam diversas maneiras de se acoplar o comentário anterior ao de interesse e
+mostram que adicionar o contexto referente à postagem anterior sempre melhora os
+resultados.
+
+\cite{jena-etal:2020:cnet} criam um novo modelo chamado por eles de C-Net que
+foca também em utilizar o contexto gerado pelos comentários anteriores de um
+comentário de interesse. Dado que eles tenham $n-1$ comentários anteriores, eles
+criam $n$ modelos BERT, um para cada comentário. Assim, em uma cadeia de $n$
+comentários (onde o $n$-ésimo é o comentário de interesse, o $n-1$-ésimo é o
+comentário anterior a ele e assim por diante), o $i$-ésimo BERT é treinado
+utilizando apenas o $i$-ésimo comentário e deve retornar uma porcentagem $y_i$
+de que o comentário $i$ leve a uma resposta sarcástica. Depois, eles agregam
+esses resultados dos $n$ modelos utilizando uma camada de fusão (do inglês,
+\textit{fusion layer}) que utiliza algum modelo que recebe $n$ valores e retorna
+uma probabilidade final $y_{n+1}$ que será utilizada para dizer se o último
+comentário foi ou não sarcástico. Para fazer essa concatenação, eles utilizam
+um modelo de séries temporais chamado de \textit{simple exponential smoothing}
+(SES).
+
 Por fim, há outras duas formas de se adicionar contexto à tarefa. A primeira
 delas é utilizando \textit{word embeddings}, pois elas permitem aos modelos que
 as utilizam fazer comparações entre palavras e compreender a semântica passada
@@ -737,12 +730,16 @@ por elas. Alguns exemplos são
 \texttt{fastText}~(\cite{bojanowski-etal:2016:fasttext}),
 \texttt{ELMo}~(\cite{peters-etal:2018:elmo}),
 \texttt{BERT}~(\cite{devlin-etal:2018:bert}).
-A segunda é utilizando uma técnica chamada de transferência de aprendizado (ou
-aprendizado por transferência) (do inglês, \textit{transfer learning}).
-que consistem de um conjunto de dados realmente grande. Depois disso, os
-parâmetros do modelo são refinados na tarefa específica. Dentro do contexto de
-PLN, os modelos mais utilizados são os conhecidos como \textit{transformers},
-um tipo de modelo que será explicado no capítulo AAAA. Alguns exemplos são
+A segunda é pelo uso de uma técnica chamada de transferência de aprendizado (ou
+aprendizado por transferência) (do inglês, \textit{transfer learning}),
+que consiste de um modelo treinado em tarefas genéricas utilizando um conjunto
+de dados realmente grande. Esse modelo passa a ser chamado de
+\textbf{pré-treinado} e seus parâmetros são salvos para serem refinados (do
+inglês, \textit{fine-tuning}) depois em uma tarefa específica.  Dentro do
+contexto de PLN, os modelos mais utilizados são os conhecidos como
+\textit{transformers} (explicados em
+\ref{sec:modelos_de_redes_neurais_transformers}).
+Alguns exemplos são
 \texttt{GPT-3}~(\cite{brown-etal:2020:gpt3}),
 \texttt{XLNet}~(\cite{yang-etal:2019:xlnet}),
 \texttt{BERT}~(\cite{devlin-etal:2018:bert}),
