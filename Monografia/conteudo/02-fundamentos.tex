@@ -610,7 +610,7 @@ conhecimentos.
 
 \cite{ghosh-veale:2016:fracking-sarcasm-nn} utilizam três tipos de redes neurais
 em conjunto e comparam seu desempenho em um conjunto de dados extraído do
-Twitter. Eles utilizam \textit{long short term memories} (LSTMs),
+Twitter. Eles utilizam \textit{long short-term memories} (LSTMs),
 \textit{convolutional neural networks} (CNNs) e \textit{deep neural networks}
 (DNNs), combinando esses modelos entre si para conseguir melhores resultados.
 
@@ -769,6 +769,61 @@ objetivo apresentar em maiores detalhes o funcionamento desse tipo de
 arquitetura de redes neurais (NN) e apresentar os \textit{transformers} mais
 conhecidos e utilizados.
 
+\subsection{RNNs}%
+\label{sub:rnns}
+
+Para se chegar em como os \textit{transformers} foram criados, é interessante
+dar um panorama histórico do estado-da-arte no processamento de linguagem
+natural e, em especial, na tarefa de tradução automática. Devido à
+característica sequencial de qualquer texto, redes neurais recorrentes (RNNs)
+são a principal escolha para esse tipo de tarefa.
+
+Uma RNN é uma rede neural que consiste de um estado escondido (do inglês,
+\textit{hidden state}) $h$ e uma saída opcional $y$ que opera em uma sequência
+de tamanho variável $x=\paren{\seq{x}{T}}$. A cada passo temporal $t$, o estado
+escondido $h_{\angbracket{t}}$ da RNN é atualizado pela função $f$:
+
+\begin{equation}
+h_{\angbracket{t}} = f\paren{h_{\angbracket{t-1}}, x_t},
+\end{equation}
+
+onde $f$ é uma função de ativação não linear que pode ser tão simples quando uma
+sigmoide ou tão complexa quanto uma unidade \textit{long short-term memory}
+(LSTM), introduzida por \cite{hochreiter-schmidhuber:1997:lstm} em 1997.
+
+A RNN, então, consegue aprender uma distribuição de probabilidade com base na
+sequência de entrada ao ser treinada para predizer o próximo elemento da
+sequência. Portanto, ao receber uma sequência $x=\paren{\seq{x}{t-1}}$, ela
+consegue retornar a probabilidade do próximo elemento da sequência ser $j$ ao
+utilizar uma função de ativação do tipo \textit{softmax} em sua saída:
+
+\begin{equation}
+  p\paren{x_{t,j}=1 \cond \seq{x}{t-1}} =
+  \dfrac{\exp \paren{w_j h_{\angbracket{t}}}}
+  {\spsum{j'=1}{K}\exp\paren{w_{j'}h_{\angbracket{t}}}},
+\end{equation}
+
+onde $w_j$ é a $j$-ésima linha de uma matriz de pesos $W$.
+
+(imagem RNN)
+
+Utilizando esse tipo de rede neural, \cite{cho-etal:2014:rnn-encoder-decoder}
+propõem uma nova arquitetura chamada de \textit{RNN Encoder-Decoder}, que
+utiliza uma RNN para codificar a sequência de entrada $x$ em um único valor
+escalar $c$ chamada de \textbf{contexto} (não confundir com contexto já
+mencionado em \ref{sub:abordagens_baseadas_em_contexto}), que, por sua vez, é
+passado como entrada para uma segunda etapa de decodificação, que produz uma
+nova sequência $y$. No caso de tradução de texto, a sequência $x$ é o texto a
+ser traduzido e a sequência $y$ é o texto após tradução.
+
+(foto RNN E-D)
+
+\subsection{Mecanismos de Atenção}%
+\label{sub:mecanismos_de_atencao}
+
+\cite{bahdanau-etal:2014:attention-mechanism} estendem a arquitetura de
+\cite{cho-etal:2014:rnn-encoder-decoder} criando um mecanismo que mais tarde
+ficaria conhecido como \textbf{mecanismo de atenção}.
 
 
 
