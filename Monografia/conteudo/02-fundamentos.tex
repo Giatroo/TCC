@@ -779,12 +779,13 @@ característica sequencial de qualquer texto, redes neurais recorrentes (RNNs)
 são a principal escolha para esse tipo de tarefa.
 
 Uma RNN é uma rede neural que consiste de um estado escondido (do inglês,
-\textit{hidden state}) $h$ e uma saída opcional $y$ que opera em uma sequência
-de tamanho variável $x=\paren{\seq{x}{T}}$. A cada passo temporal $t$, o estado
-escondido $h_{\angbracket{t}}$ da RNN é atualizado pela função $f$:
+\textit{hidden state}) $h$ e uma saída opcional $y$ que recebe como entrada uma
+sequência de tamanho variável $x=\paren{\seq{x}{T_x}}$. A cada passo temporal
+$t$, o estado escondido $h_t$ da RNN é atualizado pela função $f$:
 
 \begin{equation}
-h_{\angbracket{t}} = f\paren{h_{\angbracket{t-1}}, x_t},
+h_t = f\paren{h_{t-1}, x_t},
+\label{eq:rnn}
 \end{equation}
 
 onde $f$ é uma função de ativação não linear que pode ser tão simples quando uma
@@ -793,14 +794,14 @@ sigmoide ou tão complexa quanto uma unidade \textit{long short-term memory}
 
 A RNN, então, consegue aprender uma distribuição de probabilidade com base na
 sequência de entrada ao ser treinada para predizer o próximo elemento da
-sequência. Portanto, ao receber uma sequência $x=\paren{\seq{x}{t-1}}$, ela
+sequência. Portanto, ao receber uma sequência $x=\paren{\seq{x}''{t-1}}$, ela
 consegue retornar a probabilidade do próximo elemento da sequência ser $j$ ao
 utilizar uma função de ativação do tipo \textit{softmax} em sua saída:
 
 \begin{equation}
   p\paren{x_{t,j}=1 \cond \seq{x}{t-1}} =
-  \dfrac{\exp \paren{w_j h_{\angbracket{t}}}}
-  {\spsum{j'=1}{K}\exp\paren{w_{j'}h_{\angbracket{t}}}},
+  \dfrac{\exp \paren{w_j h_t}}
+  {\spsum{j'=1}{K}\exp\paren{w_{j'}h_t}},
 \end{equation}
 
 onde $w_j$ é a $j$-ésima linha de uma matriz de pesos $W$.
@@ -809,14 +810,40 @@ onde $w_j$ é a $j$-ésima linha de uma matriz de pesos $W$.
 
 Utilizando esse tipo de rede neural, \cite{cho-etal:2014:rnn-encoder-decoder}
 propõem uma nova arquitetura chamada de \textit{RNN Encoder-Decoder}, que
-utiliza uma RNN para codificar a sequência de entrada $x$ em um único valor
-escalar $c$ chamada de \textbf{contexto} (não confundir com contexto já
-mencionado em \ref{sub:abordagens_baseadas_em_contexto}), que, por sua vez, é
-passado como entrada para uma segunda etapa de decodificação, que produz uma
-nova sequência $y$. No caso de tradução de texto, a sequência $x$ é o texto a
-ser traduzido e a sequência $y$ é o texto após tradução.
+utiliza uma RNN para codificar a sequência de entrada $x$ em um único vetor $c$
+de dimensão pré-definida chamado de \textbf{contexto} (não confundir com
+contexto já mencionado em \ref{sub:abordagens_baseadas_em_contexto}), que, por
+sua vez, é passado como entrada para uma segunda etapa de decodificação, que
+produz uma nova sequência $y$. No caso de tradução de texto, a sequência $x$ é o
+texto a ser traduzido e a sequência $y$ é o texto após tradução.
 
-(foto RNN E-D)
+(imagem RNN E-D)
+
+Diferentemente de \ref{eq:rnn}, o estado escondido do decodificador, $s_t$, não
+é uma função da entrada, mas sim do contexto gerado pelo codificador e também
+pelo último elemento da saída produzido:
+
+\begin{equation}
+s_t = f\paren{s_{t-1}, y_{t-1}, c},
+\label{rnn-decoder}
+\end{equation}
+
+e o próximo elemento da saída é gerado utilizando a função de distribuição dada
+por:
+
+\begin{equation}
+P(y_t\cond\seq{y}{t-1},c)=g\paren{y_{t-1},s_t,c},
+\end{equation}
+
+onde $f$ e $g$ são funções de ativações e $g$ deve ser uma função que produz
+probabilidades válidas (como, por exemplo a \textit{softmax}). Vale ainda
+ressaltar que para escolher $y_t$, o próximo elemento da sequência de saída do
+modelo, pode-se utilizar várias estratégias. As mais conhecidas são escolher
+$y_t$ como o elemento de maior probabilidade da função de distribuição ou então
+escolher um elemento aleatoriamente ponderando pelas probabilidades de cada
+elemento (isto é, elementos com valores de probabilidade mais altos dados pela
+distribuição têm maiores chances de serem escolhidos como o próximo elemento da
+sequência de saída).
 
 \subsection{Mecanismos de Atenção}%
 \label{sub:mecanismos_de_atencao}
@@ -825,5 +852,68 @@ ser traduzido e a sequência $y$ é o texto após tradução.
 \cite{cho-etal:2014:rnn-encoder-decoder} criando um mecanismo que mais tarde
 ficaria conhecido como \textbf{mecanismo de atenção}.
 
+Primeiramente, eles o fato de que o vetor $c$ é fixo em todas as iterações de
+cálculo do novo estado escondido. Cada $s_i$ é uma função de um vetor de
+contexto $c_i$:
+
+\begin{equation}
+  s_i=f\paren{s_{i-1},y_{i-1},c_i}.
+\end{equation}
+
+O vetor de contexto, por sua vez, é criado como sendo uma combinação linear dos
+estados gerados pelo codificador, $\set{\seq{h}{T_x}}$, ponderado por valores
+$\alpha_{ij}$:
+
+\begin{equation}
+  c_i=\spsum{j=1}{T_x}\alpha_{ij}h_j
+  \label{eq:attention}
+\end{equation}
+
+Os valores $\alpha_{ij}$ são calculados de maneira que formem uma distribuição
+de probabilidades. Ou seja, cada valor $\alpha_{ij}$ está entre zero e um e a
+sua soma em $j$ vale um. Isso é garantido ao utilizar a função \textit{softmax}:
+
+\begin{equation}
+  \alpha_{ij}=\dfrac{\exp\paren{e_{ij}}}
+  {\spsum{k=1}{T_x}\exp\paren{e_{ik}}},
+\end{equation}
+
+onde
+
+\begin{equation}
+  e_{ij}=a\paren{s_{i-1},h_j}.
+\end{equation}
+
+A função $a$ por sua vez é uma função que retorna uma pontuação para quanta
+atenção o modelo deve prestar ao redor da posição $j$ da entrada para predizer a
+posição $i$ da saída. No artigo original de
+\cite{bahdanau-etal:2014:attention-mechanism} é utilizada uma rede completamente
+conectada que é treinada juntamente com o restante do modelo.
+
+Para resumir antes de prosseguir, o codificador itera sobre os valores da
+sequência de entrada $x=\paren{\seq{x}{T_x}}$ e gera uma sequência
+$h=\paren{\seq{h}{X_T}}$ que representa aquela entrada, mas codificada através
+da equação \ref{eq:rnn} (no artigo original, os autores na verdade utilizam uma
+BiRNN, mas por propósitos didáticos, isso foi abstraído - COLOCAR ISSO COMO
+FOOTNOTE).
+
+Na arquitetura comum de um \textit{encoder-decoder}, os valores de $h$ são
+utilizados diretamente para gerar a saída. Entretanto,
+\cite{bahdanau-etal:2014:attention-mechanism} propõem que exista uma camada
+intermediária entre o codificador e decodificador que faz com que o
+decodificador foque sua atenção (intuitivamente falando) em elementos
+específicos da sequência $h$. Para tanto, o $i$-ésimo contexto, $c_i$, que
+gera a $i$-ésima saída $y_i$, é criado através de uma soma que percorre cada
+elemento $h_j$ e o multiplica por uma probabilidade $\alpha_{ij}$ de $h_j$ ser
+relevante na predição de $y_i$.
+
+Após essa nova proposta de \cite{bahdanau-etal:2014:attention-mechanism}, muito
+são os trabalhos que utilizam, adaptam e incrementam o mecanismo de atenção.
+\cite{galassi:2021:attention-in-nlp} fazem uma revisão de diversos mecanismos de
+atenção utilizados na literatura e propõem um modelo genérico que engloba grande
+parte dos trabalhos que fazem uso desse mecanismo.
+
+\subsection{\textit{Transformers}}%
+\label{sub:transformers}
 
 
