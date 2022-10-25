@@ -27,8 +27,6 @@ def main(
 ):
     model_io = ModelIO(verbose=verbose)
 
-    print(training_instances)
-
     train_df = get_train_df(preloaded_data, training_instances)
     train_df, validation_df = get_train_validation_df(train_df, validation_perc)
 
