@@ -916,4 +916,20 @@ parte dos trabalhos que fazem uso desse mecanismo.
 \subsection{\textit{Transformers}}%
 \label{sub:transformers}
 
+Mecanismos de atenção são utilizados em conjunto a uma RNN, de maneira similar a
+\cite{bahdanau-etal:2014:attention-mechanism}, por muitos outros trabalhos.
+RNNs, entretanto, possuem um problema intrínseco em sua arquitetura, que é o
+fato de serem recorrentes. Isso significa que uma RNN precisa do valor do estado
+escondido anterior $h_{t-1}$ para calcular o novo estado $h_t$ (seja no
+codificador ou decodificador). Dessa forma, não se pode paralelizar sua
+computação facilmente. \cite{vaswani-etal:2017:attention-is-all-you-need} criam,
+então, um novo modelo chamado de \textit{transformer}~\footnote{o termo
+\textit{transformer} é uma palavra em inglês que significa ``transformador'',
+mas nesta monografia opta-se por utilizar o próprio termo em inglês
+\textit{transformer}}.
 
+Essa nova arquitetura utiliza apenas uma versão nova do mecanismo de atenção
+para criar um modelo do tipo \textit{encoder-decoder}, que pode ser aplicado
+sobre uma sequência, de forma análoga a uma RNN. Esse novo modelo de atenção é
+chamado de \textit{self-attention} (em tradução literal, ``\textit{atenção a si
+próprio}'').
