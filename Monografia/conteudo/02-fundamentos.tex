@@ -928,8 +928,116 @@ então, um novo modelo chamado de \textit{transformer}~\footnote{o termo
 mas nesta monografia opta-se por utilizar o próprio termo em inglês
 \textit{transformer}}.
 
-Essa nova arquitetura utiliza apenas uma versão nova do mecanismo de atenção
-para criar um modelo do tipo \textit{encoder-decoder}, que pode ser aplicado
-sobre uma sequência, de forma análoga a uma RNN. Esse novo modelo de atenção é
-chamado de \textit{self-attention} (em tradução literal, ``\textit{atenção a si
-próprio}'').
+Essa nova arquitetura se baseia apenas em uma versão nova do mecanismo de
+atenção para criar um modelo do tipo \textit{encoder-decoder}, que pode ser
+aplicado sobre uma sequência, de forma análoga a uma RNN. Esse novo modelo de
+atenção é chamado de \textit{self-attention} (em tradução literal,
+``\textit{atenção a si próprio}'').
+
+Nele, todos os elementos da sequência de entrada podem ser processados ao mesmo
+tempo pelo codificador e os de saída pelo decodificador.  Entretanto, suponha
+que se quer prever o elemento $y_i$ da sequência de saída.  Nesse caso, o
+\textit{transformer} recebera a sequência $x$ e a sequência correta de saída
+$y$, mas os elementos $y_j$ com $j\geq i$ são mascarados para simular uma RNN,
+que não tem acesso a esses valores (e também limitar a trivialidade que seria
+predizer o elemento $y_i$ com esse elemento dado como entrada para o modelo).
+
+Para dar um exemplo, suponha que a tarefa é de tradução do português para o
+inglês e que se deseja traduzir a frase ``Atenção é tudo que você precisa'' para
+a frase ``\textit{Attention is all you need}''. Portanto, tem-se
+$x=\paren{\texttt{Atenção}, \texttt{é}, \texttt{tudo}, \texttt{que},
+\texttt{você}, \texttt{precisa}}$ e $y=\paren{\textit{Attention}, \textit{is},
+\textit{all}, \textit{you}, \textit{need}}$. Em caso de se desejar prever o
+terceiro elemento da sequência, $y_3$, o valor de entrada é a própria sequência
+$x$, mas a entrada da saída gerada até agora é $y=\paren{\textit{Attention},
+\textit{is}, \texttt{<MASK>}, \texttt{<MASK>}, \texttt{<MASK>}}$, onde
+$\texttt{<MASK>}$ é um token especial que acaba recebendo uma atenção de menos
+infinito. Dessa forma, portanto, o modelo consegue o mesmo resultado dos modelos
+anteriores, mas com uma arquitetura que pode ser paralelizada para alcançar uma
+velocidade de processamento maior.
+
+(img transformer)
+
+O mecanismo de atenção do transformer é um pouco diferente e é chamado de
+\textit{scaled dot-product attention} (do inglês, atenção de produto escalar
+escalado). Assim como na equação \ref{eq:attention}, a atenção é calculada
+fazendo uma média ponderada entre os valores atribuídos aos elementos da
+sequência. \cite{vaswani-etal:2017:attention-is-all-you-need}, entretanto,
+modificam como os pesos de ponderação são calculados. Para isso, eles introduzem
+a equação
+\begin{equation}
+  \texttt{Attention}\paren{Q, K, V}
+  =\texttt{softmax}\paren{\dfrac{QK^{T}}{\sqrt{d_k}}}V.
+\end{equation}
+
+Nela, os valores $Q$, $K$ e $V$ são matrizes que representam respectivamente
+\textit{consultas}, \textit{chaves} e \textit{valores} (do inglês,
+\textit{queries}, \textit{keys} e \textit{values}). Essa função de atenção é
+aplicada um número $h$ de vezes na mesma entrada, mas resultando em consultas,
+chaves e valores diferentes. Isso pois um tipo de atenção pode relacionar
+elementos que sejam das mesmas classes sintáticas e replicar o comportamento de
+alguns dos métodos de regras vistos na sessão
+\ref{sub:abordagens_baseados_em_regras}, enquanto outras atenções podem
+olhar para a semântica de termos relacionados.
+
+Essas $h$ ``cabeças'' de atenção possuem seus resultados concatenados em uma
+saída única que pode ser processada pela próxima camada da rede neural. Essa
+camada cheia de cabeças recebe, portanto, o nome de atenção multi-cabeça (do
+inglês, \textit{multi-head attention}).
+
+(img atenção multi-cabeça)
+
+No codificador, $Q$, $K$ e $V$ são todas providas pelo próprio codificador (ou
+pela sequência de entrada, no cabeço da primeira camada). Já no decodificador,
+os valores de $Q$ e $K$ são providos pelo codificador e os valores $V$ são
+criados pelo próprio decodificador com base na sequência esperada de saída.
+Dessa forma, a rede presta atenção na sequência de saída, mas levando como base
+a sequência de entrada.
+
+Por fim, é importante mencionar que, apesar de resolver o problema do
+processamento sequência anteriormente mencioado, os \textit{transformers} criam
+um novo problema que é o de não representar adequadamente a característica
+sequêncial de suas entradas. Como não se utiliza RNNs, pode-se pensar em um
+\textit{transformer} como se fosse uma rede neural completamente conectada
+(DNN). Esse tipo de rede não é bom em saber que existe relação entre o elemento
+$x_1$ e $x_2$ e que, essa relação é uma métrica com o dobro de valor para $x_1$
+e $x_3$. Para dar uma solução parcial a esse problema, os autores propõem uma
+codificação posicional que deve ser adicionada à representação original das
+palavras. Portanto, o valor da entrada que o modelo realmente recebe é
+$x_i+PE(i)$ para a entrada $i$.
+
+O modelo completo é muito mais complexo do que o apresentado aqui e recomenda-se
+ao leitor a leitura completa do artigo por
+\cite{vaswani-etal:2017:attention-is-all-you-need} caso ele tenha mais interesse
+no assunto.
+
+\subsection{BERT}%
+\label{sub:bert}
+
+Para finalizar o capítulo, falar-se-á de um dos modelos de redes
+\textit{transformers} que é vastamente aplicado em problemas de NLP e que é uma
+das bases para o modelo explorado nesse trabalho. Este \textit{transformer} é o
+\texttt{BERT}, que é uma sigla para \textit{Bidirectional Encoder
+Representations from Transformers} (em tradução livre, ``representações de
+codificação bidirecional de
+\textit{transformers}'')~(\cite{devlin-etal:2018:bert}).
+
+A principal inovação desse modelo é que ele torna o treinamento bidirecional
+através de um objetivo de treinamento denominado \textit{masked language model}
+(MLM) (do inglês, modelo de linguagem mascarada). Nesse tipo de treinamento,
+alguns dos \textit{tokens} da sequência de entrada são aleatoriamente
+mascarados (isto é, trocados por um \textit{token} específico \texttt{<MASK>}) e
+a tarefa alvo do treinamento é justamente identificar quais eram as palavras
+originais, antes de serem mascaradas.
+
+Isso faz com que o modelo possa utilizar o contexto bidirecionalmente, ou seja,
+observar as palavras ao redor da palavra alvo para predizê-la. Por exemplo, na
+frase ``A roda do meu \texttt{<MASK>} quebrou novamente'', as palavras ``roda''
+e ``quebrou'' são importantes para supor que \texttt{<MASK>} corresponde à
+palavra ``carro'' ou algum automóvel similar. De forma análoga, o modelo
+\texttt{BERT} pode utilizar essas palavras ao redor da palavra mascarada para
+estimar qual palavra ela era originalmente.
+
+As aplicações desse modelo são vastas, mas para o escopo deste trabalho, basta
+saber que ele pode ser utilizado também na detecção automática de sarcasmo
+(\cite{yaghoobian:2021:sarcasm-detection-comparative-study}).
