@@ -5,4 +5,139 @@
 \chapter{Materiais e Métodos}%
 \label{cha:materiais_e_metodos}
 
+Este capítulo abordará os principais recursos utilizados na experimentação com o
+modelo DeBERTa na tarefa de detecção automática de sarcasmo. Inicialmente,
+falar-se-á um pouco sobre o modelo em si e como ele aborda alguns dos problemas
+anteriormente encontrados na literatura. Depois, abordar-se-á o conjunto de
+dados utilizado nos experimentos. Por fim, discutir-se-á o código em si e as
+ferramentas pré-existentes que foram utilizadas neste trabalho.
+
+\section{DeBERTa}%
+\label{sec:deberta}
+
+O modelo DeBERTa foi criado por um grupo de pesquisadores da Microsoft e
+publicado em 2021 (~\cite{he-etal:2020:deberta}). Seu nome é uma sigla que
+significa ``\textit{Decoding-Enhanced BERT with Disentangled Attention}'' (em
+tradução livre, ``BERT com decodificação melhorada por atenção decomposta'').
+Como o nome já sugere, o DeBERTa foi criado com o modelo
+BERT~(\cite{devlin-etal:2018:bert}) como uma base, mas também tem principal
+inspiração o modelo RoBERTa~(\cite{liu-etal:2019:roberta}), que é outro modelo
+que propõe melhorias para o BERT.
+
+Suas principais contribuições para a área são duas: \textit{disentangled
+attention} (em tradução livre, ``atenção decomposta'') e \textit{enhanced mask
+decoder} (em tradução livre, ``decodificador de máscara
+melhorado'')~\footnote{Assim como alguns outros termos utilizados nessa
+monografia, optou-se por não traduzir \textit{disentangled attention}
+e \textit{enhanced mask decoder} pelo fato de serem termos muito novos na
+literatura e não terem uma tradução canônica para o português.}.
+
+A primeira e mais importante contribuição é a \textit{disentangled attention}.
+Como visto em \ref{sub:transformers}, os modelos \textit{transformers} possuem
+o problema de não conseguirem mapear muito bem a distância entre os elementos da
+sequência de entrada. Assim como no artigo original de
+\cite{vaswani-etal:2017:attention-is-all-you-need}, o modelo BERT também utiliza
+uma soma da codificação dos elementos da sequência com uma codificação de
+posições da sequência. Ao somar entretanto, perde-se um pouco do conteúdo
+original de cada uma das codificações. No mecanismo de \textit{disentangled
+attention}, o \textit{conteúdo} (ou seja, a codificação dos elementos da
+sequências - em geral, palavras) e a \textit{posição} são representados
+utilizando dois vetores diferentes. E as atenções entre as palavras são
+computadas utilizando também matrizes distintas e baseadas no conteúdo das
+palavras e na sua distância relativa.
+
+Utilizando a própria notação presente no artigo original do modelo
+(\cite{he-etal:2020:deberta}), um elemento na posição $i$ de uma sequência é
+representado por dois vetores $\bracket{H_i}$ e $\bracket{P_{i\cond j}}$, que
+representam respectivamente o conteúdo do elemento e a sua posição relativa com
+um outro elemento na posição $j$. Então, a atenção cruzada que os elementos $i$
+e $j$ prestam entre si (essa relação é simétrica) é calculada pelo produto
+\begin{equation} \label{eq:deberta-atenttion}
+\begin{split}
+   A_{i,j}&=\bracket{H_i,~P_{i\cond j}}\times\bracket{H_j,~P_{j,i}}^{T} \\
+          &=H_iH_j^{T} +
+          H_iP_{j\cond i}^{T} +
+          P_{i\cond j}H_j^{T} +
+          P_{i\cond j}P_{j\cond i}^{T}.
+\end{split}
+\end{equation}
+
+Portanto, no caso em que as informações relativas ao conteúdo e posição dos
+elementos, a atenção total entre $i$ e $j$ pode ser calculada como quatro outras
+atenções: conteúdo-para-conteúdo, conteúdo-para-posição, posição-para-conteúdo e
+posição-para-posição. Em seu artigo, os autores argumentam que apenas as três
+primeiras atenções são realmente úteis e, portanto, descartam o caso de atenção
+entre posições relativas.
+
+Vale a notar que os autores fazem uma leve mudança de nomenclatura em seu
+artigo. Enquanto originalmente,
+\cite{vaswani-etal:2017:attention-is-all-you-need} chamam de atenção o resultado
+da equação \ref{eq:self-attention}. \cite{he-etal:2020:deberta} chamam de
+atenção apenas o resultado da multiplicação das consultas, $Q$, pelas chaves
+$K$. Para fazer uma comparação, no modelo de \textit{self-attention} original,
+tem-se:
+\[
+Q=HW_q,~K=HW_k,~V=HW_v,~A=\dfrac{QK^{T}}{\sqrt{d}}
+\]
+\[
+H_o=\texttt{softmax}(A)V,
+\]
+
+onde $H$ representa os vetores de conteúdo, $H_o$ a saída da
+\textit{self-attention}, $W_q,W_k,W_v$ são matrizes de pesos aprendidas pela
+rede neural e $A$ é a matriz de atenção.
+
+No modelo de \textit{disentangled attention}, entretanto, a atenção é calculada
+como
+\begin{equation}
+\begin{split}
+   Q_c=HW_{q,c},~K_c&=HW_{k,c},~V_c=HW_{v,c},~Q_r=PW_{q,r},~K_r=PW_{k,r} \\
+   \tilde{A}_{i,j}&=\underbrace{Q^{c}_iK^{cT}_j}_{\text{conteúdo-para-conteúdo}} +
+   \underbrace{Q^{c}_iK^{rT}_{\delta(i,j)}}_{\text{conteúdo-para-posição}} +
+   \underbrace{K^{r}_jQ^{cT}_{\delta(j,i)}}_{\text{posição-para-conteúdo}} \\
+   H_o&=\texttt{softmax}\paren{\dfrac{\tilde{A}}{\sqrt{3d}}}V_c,
+\end{split}
+\end{equation}
+
+onde $\tilde{A}$ é a matriz de atenção e $\tilde{A}_{i,j}$ representa a atenção
+do elemento $i$ para o elemento $j$, $Q^{c}_i$ é a $i$-ésima linha de $Q_c$,
+$K^{c}_j$ é a $j$-ésima linha de $K_c$ e $\delta(i,j)$ é uma função que dá a
+distância relativa entre $i$ e $j$ (para mais detalhes, ler o artigo original).
+
+Com essa nova forma de calcular a atenção, os autores conseguem dividir as rotas
+utilizadas pela informação de forma que o modelo consiga ter aceso a informação
+das posições relativas e conteúdos do texto de forma ``limpa'', sem ser por meio
+de uma soma como feito em trabalhos anteriores.
+
+Por fim, a segunda contribuição desse modelo é a \textit{enhanced mask decoder},
+que é quase uma consequência direta da primeira contribuição mencionada
+anteriormente. Ao desacoplar conteúdo e posição, os autores utilizam as posições
+relativas entre as palavras, mas esse modelo acaba perdendo as informações das
+posições absolutas do texto. Por exemplo, na frase ``A roda do meu carro quebrou
+novamente'', o modelo saberia apenas que ``roda'' e ``carro'' possuem uma
+distância de 3 posições entre si, mas não saberia que ``roda'' está na segunda
+posição do texto. Para endereçar esse problema, o modelo precisa, em algum ponto
+de sua arquitetura, receber a informação da posição absoluta das palavras no
+texto de entrada.
+
+O modelo BERT recebia essa informação logo no começo, através de uma soma dos
+vetores, como já mencionado. Mas o modelo DeBERTa adiciona essa informação
+apenas no último passo da arquitetura, logo antes de uma camada
+\texttt{softmax} predizer qual é o elemento mascarado que se deseja predizer.
+Portanto, o DeBERTa utiliza apenas as posições relativas entre as palavras
+durante toda sua arquitetura e recebe a informação das posições absolutas apenas
+como um complemento para decodificar as palavras mascaradas. Os autores fazem um
+estudo empírico e mostram que essa abordagem é mais eficiente do que a abordagem
+utilizada pelo BERT e outros modelos anteriores a esse estudo.
+
+\subsection{DeBERTa V3}%
+\label{sub:deberta_v3}
+
+\section{Conjunto de dados SARC}%
+\label{sec:conjunto_de_dados_sarc}
+
+\section{Código e ferramentas}%
+\label{sec:codigo_e_ferramentas}
+
+
 
