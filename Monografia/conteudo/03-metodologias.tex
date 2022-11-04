@@ -133,6 +133,34 @@ utilizada pelo BERT e outros modelos anteriores a esse estudo.
 \subsection{DeBERTa V3}%
 \label{sub:deberta_v3}
 
+Este trabalho utiliza a nova versão do DeBERTa, o
+DeBERTaV3~\cite{he-etal:2021:debertav3}, que é uma melhoria da versão original
+utilizando ideias apresentadas por \cite{clark-etal:2020:electra} no modelo
+ELECTRA.
+
+O ELECTRA é um modelo que utiliza uma proposta de trocar o \textit{masked
+language model} (MLM) utilizado pelo BERT (\ref{sub:bert}) e demais modelos que
+o têm o referência (como RoBERTa e DeBERTa) por um novo modelo chamado de
+\textit{replaced token detection} (RTD) (do inglês, detecção de símbolo
+substituído). Nesse tipo de modelagem, ao invés de substituir alguns
+\textit{tokens} aleatoriamente por um símbolo especial \texttt{<MASK>}, troca-se
+símbolos válidos por outros símbolos válidos, mas que são gerados por um
+gerador. Então, um discriminador é treinado na tarefa de reconhecer quais
+símbolos foram trocados pelo gerador e não são os símbolos originais da
+sequência. Ao utilizar esse novo tipo de modelagem, os autores demonstram ganhos
+significativos na efetividade do modelo.
+
+Além disso, nesse novo modelo, os autores melhoram o modelo ELECTRA ao propor
+uma nova forma de treinamento chamada de \textit{gradient-disentangled embedding
+sharing} (em tradução livre, \textit{compartilhamento de representação com
+gradiente desagradado}). Os autores argumentam que o compartilhamento das
+\textit{embeddings} entre o gerador e discriminador é bastante prejudicial para
+a tarefa que ambos pretendem realizar, pois o gerador deseja representar
+palavras com semânticas similares de forma próxima, enquanto o discriminador
+deseja fazer o oposto. Dessa forma, eles propõem uma nova forma de otimização da
+rede que desacopla o gradiente utilizado no discriminador do gradiente usado
+pelo gerador.
+
 \section{Conjunto de dados SARC}%
 \label{sec:conjunto_de_dados_sarc}
 
