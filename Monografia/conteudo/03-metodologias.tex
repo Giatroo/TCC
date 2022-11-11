@@ -164,6 +164,68 @@ pelo gerador.
 \section{Conjunto de dados SARC}%
 \label{sec:conjunto_de_dados_sarc}
 
+Para realizar a detecção de sarcasmo, é necessário um conjunto de dados
+rotulados. Muitos trabalhos na literatura utilizam o Twitter (ver
+\ref{cha:fundamentos_e_trabalhos_relacionados}), mas há vários trabalhos que,
+mais recentemente, têm utilizado o Reddit.
+
+Esta é uma rede social baseada em comunidades. Cada comunidade é chamada de
+\textit{subreddit}, e, muitas vezes, referencia-se a elas por tópicos, pois o
+nome do \textit{subreddit} define o tipo de publicações que os usuários fazem
+dentro dele. Por exemplo, em \texttt{gaming} as pessoas falam sobre jogos, em
+\texttt{datascience} as pessoas falam sobre ciência de dados (os nomes
+geralmente são bastante autoexplicativos). Além disso, cada postagem feita em um
+\textit{subreddit} pode receber comentários e cada comentário, por sua vez, pode
+receber sub-comentários (formando uma estrutura recursiva).
+
+\cite{khodak-etal:2017:sarc} em 2017 introduzem um \textit{corpus} de textos
+retirados do Reddit que recebeu o nome de SARC, uma sigla para
+\textit{Self-Annotated Reddit Corpus} (em tradução livre, ``corpus do Reddit
+auto-anotado''). Esse conjunto de dados revolucionou a detecção de sarcasmo,
+pois foi o primeiro a passar de um milhão de comentários sarcásticos (e mais de
+quinhentos milhões de comentários no total). Esse marco se deve ao fato de este
+conjunto de dados ser o primeiro a utilizar a estrutura de comentários do Reddit
+e rotular o sarcasmo automaticamente, com base em anotações dos próprios autores
+dos comentários.
+
+Para rotular um comentário como sarcásticos, os autores utilizam o fato de que
+muitos usuários do Reddit utilizam a marcação \texttt{/s} em um comentário para
+denotar que estão sendo sarcásticos (de forma similar à \textit{hashtag}
+``\textit{\#sarcasm}'' no Twitter)~(\cite{what-does-s-mean}). Dessa forma, todo
+comentário encontrado pelos autores com essa marcação é anotado como sendo
+sarcástico, enquanto comentários sem essa anotação são marcados como não
+sarcásticos.
+
+Os autores, entretanto, reveem seu trabalho e apontam que há uma certa
+quantidade de erros cometidos por essa abordagem. Por utilizarem uma metodologia
+automática de rotulação, o próprio conjunto de dados acaba possuindo erros do
+tipo I e II. Os falsos positivos acontecem quando o algoritmo proposto encontra
+um comentário com ``/s'', mas não é sarcástico. Esse tipo de erro pode
+acontecer, por exemplo, quando alguém não conhece essa anotação, quando alguém
+está referenciando a anotação (como para avisar que um outro usuário esqueceu de
+colocá-la ou explicando/perguntando seu significado), quando se utiliza a
+\textit{tag} de \textit{HTML} \texttt{<s>...</s>}. Os falsos negativos
+acontecem, por sua vez, nos comentários que são sarcásticos, mas não utilizam a
+marcação. Isso acontece principalmente por dois motivos: o usuário não conhecer
+a convenção de se utilizar ``/s'' ou por achar que seu sarcasmo é óbvio o
+suficiente para que ele não precise utilizar.
+
+Como forma de minimizar esses erros, os autores propõem algumas filtragens.
+Algumas delas são bastante padrões como remover URLs e limitar os caracteres aos
+da tabela ASCII. Outro filtro é remover os comentários que aparecem após um
+comentário sarcástico na árvore de comentários (pois os autores afirmam que
+esses comentários são extremamente ruidosos). Além disso, os autores apenas
+coletam dados de usuários que estão cientes do uso de ``/s'', verificando se
+eles já utilizaram a notação anteriormente. Eles também lidam com os falsos
+positivos mantendo apenas os comentários que contém a notação ``/s'' no final do
+comentário.
+
+Esses filtros são, então, testados manualmente utilizando uma amostragem de
+$1000$ comentários ($500$ sarcásticos e $500$ não sarcásticos). Os autores
+demonstram seu procedimento resultou em uma taxa de $1.0\%$ de falsos positivos
+e $2.0\%$ de falsos negativos. Por fim, vale dizer que os autores, por motivos
+óbvios, removem as anotações ``/s'' dos comentários.
+
 \section{Código e ferramentas}%
 \label{sec:codigo_e_ferramentas}
 
