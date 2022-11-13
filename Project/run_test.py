@@ -1,6 +1,5 @@
 # Python Standard Libraries
 import argparse
-import math
 
 # Third Party Libraries
 import pandas as pd

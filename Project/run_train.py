@@ -1,6 +1,5 @@
 # Python Standard Libraries
 import argparse
-import math
 from typing import Tuple
 
 # Third Party Libraries
