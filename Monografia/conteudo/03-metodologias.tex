@@ -229,5 +229,37 @@ e $2.0\%$ de falsos negativos. Por fim, vale dizer que os autores, por motivos
 \section{Código e ferramentas}%
 \label{sec:codigo_e_ferramentas}
 
+Essa seção comenta um pouco sobre as ferramentas utilizadas e o
+código fonte\footnote{disponível em
+\href{https://github.com/Giatroo/TCC/tree/main/Project}{https://github.com/Giatroo/TCC/tree/main/Project}}.
 
+As duas principais ferramentas utilizadas foram evidentemente o modelo
+DeBERTa, disponibilizado em
+\href{https://huggingface.co/docs/transformers/model_doc/deberta}{HuggingFace}
+e o conjunto de dados SARC disponibilizado em
+\href{https://nlp.cs.princeton.edu/SARC/}{SARC}.
 
+Para fazer o \textit{download} e preprocessamento do conjunto de dados, os
+arquivos \texttt{dataset\_downloader.py}, \texttt{dataset\_unhasher.py} e
+\texttt{download\_and\_preprocess\_data.py} são utilizados, todos escritos na
+linguagem de programação \texttt{Python}, assim como o projeto em sua
+totalidade. O arquivo \texttt{download\_and\_prerocess\_data.py} é um executável
+que utiliza as variáveis globais definidas em \texttt{global\_vars.json} para
+definir o caminho onde ficarão os arquivos do conjunto de dados (por padrão,
+ficam na pasta \texttt{SARC\_dataset}). Há também o arquivo
+\texttt{preloaded\_dataset\_downloader.py}, que baixa o conjunto de dados já
+preprocessados e prontos para serem utilizados pelo projeto.
+
+Para fazer o treinamento de um modelo, utiliza-se o arquivo
+\texttt{run\_train.py}, que recebe o nome do modelo e outros parâmetros de
+treinamento. Ao final do treinamento, o modelo é salvo utilizando o nome passado
+como entrada para o executável.
+
+Para testar um modelo, utiliza-se o arquivo \texttt{run\_test.py}, que recebe o
+nome de um modelo e realiza seu teste no conjunto de dados de teste. Ao final do
+testes as métricas são salvas, assim como as predições do modelo.
+
+Por fim, o arquivo \texttt{baseline\_model.py} é utilizado para fazer a
+comparação dos modelos de arquitetura \textit{transformers} com um modelo mais
+clássico de \textit{machine learning} que utiliza Bag-of-Words. Dessa forma,
+pode-se comparar a eficácia desses modelos.
