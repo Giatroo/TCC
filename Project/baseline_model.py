@@ -1,11 +1,11 @@
 # Third Party Libraries
-import SARC_dataset.model_io as model_io
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
 # Project Libraries
 from dataframes_loader import DataFramesLoader
+from model_io import ModelIO
 from predictions_evaluator import PredictionsEvaluator
 
 df_loader = DataFramesLoader()
@@ -52,6 +52,7 @@ def fit_predict(model, vectorizer):
     vectorizer_name = vectorizer.__class__.__name__
     name = f"{model_name}_{vectorizer_name}"
     print(f"Saving metrics for {name}...")
+    model_io = ModelIO(True)
     model_io.save_model_metrics(metrics, name)
 
 
