@@ -37,6 +37,9 @@ Project/.vscode/*
 Project/venv/*
 Project/models/*
 Project/evaluations/*
+Project/logs/*
+Project/predictions/*
+Project/backup/*
 Materials/*
 private/*
 .vscode/*
