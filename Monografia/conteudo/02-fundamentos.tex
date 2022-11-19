@@ -15,12 +15,6 @@ de que sarcasmo é um dito ácido que pode ou não ser expresso por meio de uma
 ironia e essa, por sua vez, pode ou não ser utilizada para
 ofender.~\cite{dicio_sarc, dicio_irony}
 
-(R. Giora, On Irony and Negation)
-
-(H. Paul Grice. 1975. Logic and Conversation)
-
-(Irony and Sarcasm: Corpus Generation and Analysis Using Crowdsourcin)
-
 O termo \textbf{detecção de sarcasmo} refere-se à determinação de se há ou não
 sarcasmo em uma porção de texto verbal. E o termo \textbf{detecção automática de
 sarcasmo} refere-se a resolução (ou tentativa de) resolver o problema mencionado
@@ -203,8 +197,6 @@ Comece com a função
   f\paren{\xii[x]{i}} = 1~~\forall i
 \end{equation}
 
-% transformar os enums em tabelas:
-
 Como ela sempre considera a entrada como positiva, então os únicos casos
 existentes serão de verdadeiros e falsos positivos. Logo:
 \[
@@ -238,6 +230,17 @@ e
 
 Portanto, como a função nunca tenta marcar uma instância como positiva, ela
 nunca acerta os verdadeiros positivos e comete $100\%$ de erro.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=1]{Res/precision_recall.png}
+\caption{Imagem ilustrando os conceitos de precisão e revocação. No centro,
+estão os elementos preditos como positivos ($\hat{y_i}=1$). Na esquerda
+(representados por círculos), estão os elementos verdadeiros ($y_i=1$). Na
+direita (representados por cruzes), estão os elementos falsos ($y_i=0$). Imagem
+retirada de \cite{bernadofbbraga:2017:precisao_revocacao}.}
+\label{precision_recall.png}
+\end{figure}
 
 \paragraph{Métrica $F_1$}%
 \label{par:metrica_f_1_}
@@ -419,7 +422,16 @@ quantas vezes a palavra ``\textit{the}'' aparece, e assim por diante. Se a
 palavra ``Lucas'' for lida, então será adicionado um à última posição do vetor,
 que é utilizado para contar qualquer palavra que não é uma das outras 511.
 
-(imagem ilustrando BOW)
+\begin{figure}[h]
+\centering
+\includegraphics[scale=1.3]{Res/bow-image.png}
+\caption{Na esquerda, o texto e na direita o vetor criado pelo algoritmo
+\textit{bag-of-words} para representar o texto. Imagem retirada de
+\cite{zheng-casari:2018:feature-engineering}.}
+\label{bow-image.png}
+\end{figure}
+
+
 
 \cite{reyes:2012:from-humor} exploram quatro grupos de características dentro de
 um contexto mais geral de detecção de humor e ironia. Esses grupos são:
@@ -806,7 +818,14 @@ utilizar uma função de ativação do tipo \textit{softmax} em sua saída:
 
 onde $w_j$ é a $j$-ésima linha de uma matriz de pesos $W$.
 
-(imagem RNN)
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.24]{Res/rnn.png}
+\caption{Imagem representativa de uma RNN. Na esquerda a representação compacta
+e na direita a representação expandida. Imagem retirada de
+\cite{radhakrishnan:2017:introduction-rnn}.}
+\label{rnn.png}
+\end{figure}
 
 Utilizando esse tipo de rede neural, \cite{cho-etal:2014:rnn-encoder-decoder}
 propõem uma nova arquitetura chamada de \textit{RNN Encoder-Decoder}, que
@@ -817,7 +836,13 @@ sua vez, é passado como entrada para uma segunda etapa de decodificação, que
 produz uma nova sequência $y$. No caso de tradução de texto, a sequência $x$ é o
 texto a ser traduzido e a sequência $y$ é o texto após tradução.
 
-(imagem RNN E-D)
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.6]{Res/rnn-ed.jpg}
+\caption{Representação de uma \textit{RNN Encoder-Decoder}. Imagem retirada de
+\cite{cho-etal:2014:rnn-encoder-decoder}.}
+\label{rnn-ed.jpg}
+\end{figure}
 
 Diferentemente de \ref{eq:rnn}, o estado escondido do decodificador, $s_t$, não
 é uma função da entrada, mas sim do contexto gerado pelo codificador e também
@@ -893,9 +918,8 @@ conectada que é treinada juntamente com o restante do modelo.
 Para resumir antes de prosseguir, o codificador itera sobre os valores da
 sequência de entrada $x=\paren{\seq{x}{T_x}}$ e gera uma sequência
 $h=\paren{\seq{h}{X_T}}$ que representa aquela entrada, mas codificada através
-da equação \ref{eq:rnn} (no artigo original, os autores na verdade utilizam uma
-BiRNN, mas por propósitos didáticos, isso foi abstraído - COLOCAR ISSO COMO
-FOOTNOTE).
+da equação \ref{eq:rnn}\footnote{No artigo original, os autores na verdade
+utilizam uma BiRNN, mas por propósitos didáticos, isso foi abstraído.}.
 
 Na arquitetura comum de um \textit{encoder-decoder}, os valores de $h$ são
 utilizados diretamente para gerar a saída. Entretanto,
@@ -912,6 +936,14 @@ são os trabalhos que utilizam, adaptam e incrementam o mecanismo de atenção.
 \cite{galassi:2021:attention-in-nlp} fazem uma revisão de diversos mecanismos de
 atenção utilizados na literatura e propõem um modelo genérico que engloba grande
 parte dos trabalhos que fazem uso desse mecanismo.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{Res/attention-img1.jpg}
+\caption{Um modelo geral de mecanismos de atenção. Imagem retirada de
+\cite{galassi:2021:attention-in-nlp}.}
+\label{attention-img1.jpg}
+\end{figure}
 
 \subsection{\textit{Transformers}}%
 \label{sub:transformers}
@@ -956,7 +988,23 @@ infinito. Dessa forma, portanto, o modelo consegue o mesmo resultado dos modelos
 anteriores, mas com uma arquitetura que pode ser paralelizada para alcançar uma
 velocidade de processamento maior.
 
-(img transformer)
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.6]{Res/transformers-img1.jpg}
+\caption{A arquitetura do modelo \textit{transformer}. Na esquerda, o
+codificador. Ele recebe as \textit{embeddings} de entrada, as preprocessa
+somando-as com \textit{embeddings} de codificação posicional e envia isso como
+entrada para $N$ cabeças de atenção, que enviarão seu resultado para o
+decodificador. Na direita, o decodificador. Ele recebe as \textit{embeddings} da
+saída anterior ao \textit{token} que se deseja produzir e as preprocessa
+somando-as com \textit{embeddings} de codificação posicional e envia isso como
+entrada para $N$ cabeças de atenção, que recebe também como entrada os
+\textit{embeddings} do codificador. Ao final, o resultado é enviado para uma
+camada linear, que transforma a saída em um único vetor que é enviado ara uma
+camada \textit{softmax}, que retorna uma distribuição de probabilidades. Imagem
+retirada de \cite{vaswani-etal:2017:attention-is-all-you-need}.}
+\label{transformers-img1.jpg}
+\end{figure}
 
 O mecanismo de atenção do transformer é um pouco diferente e é chamado de
 \textit{scaled dot-product attention} (do inglês, atenção de produto escalar
@@ -986,7 +1034,16 @@ saída única que pode ser processada pela próxima camada da rede neural. Essa
 camada cheia de cabeças recebe, portanto, o nome de atenção multi-cabeça (do
 inglês, \textit{multi-head attention}).
 
-(img atenção multi-cabeça)
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.6]{Res/transformers-img2.jpg}
+\caption{Na esquerda, a atenção de produto escalar escalado. Na direita, a
+atenção multi-cabeça, com várias camadas que podem ser executadas em paralelo.
+Imagem retirada de \cite{vaswani-etal:2017:attention-is-all-you-need}.}
+\label{transformers-img2.jpg}
+\end{figure}
+
+
 
 No codificador, $Q$, $K$ e $V$ são todas providas pelo próprio codificador (ou
 pela sequência de entrada, no cabeço da primeira camada). Já no decodificador,
@@ -996,7 +1053,7 @@ Dessa forma, a rede presta atenção na sequência de saída, mas levando como b
 a sequência de entrada.
 
 Por fim, é importante mencionar que, apesar de resolver o problema do
-processamento sequência anteriormente mencioado, os \textit{transformers} criam
+processamento sequência anteriormente mencionado, os \textit{transformers} criam
 um novo problema que é o de não representar adequadamente a característica
 sequêncial de suas entradas. Como não se utiliza RNNs, pode-se pensar em um
 \textit{transformer} como se fosse uma rede neural completamente conectada
