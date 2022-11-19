@@ -5,5 +5,468 @@
 \chapter{Avaliação Experimental e Discussão dos Resultados}%
 \label{cha:avaliacao_experimental_e_discussao_dos_resultados}
 
+\section{Configuração dos experimentos}%
+\label{sec:configuracao_dos_experimentos}
+
+Essa seção comenta um pouco sobre as ferramentas utilizadas e o
+código fonte\footnote{disponível em
+\href{https://github.com/Giatroo/TCC/tree/main/Project}{https://github.com/Giatroo/TCC/tree/main/Project}}.
+
+As duas principais ferramentas utilizadas foram evidentemente o modelo
+DeBERTa, disponibilizado em
+\href{https://huggingface.co/docs/transformers/model_doc/deberta}{HuggingFace}
+e o conjunto de dados SARC disponibilizado em
+\href{https://nlp.cs.princeton.edu/SARC/}{SARC}.
+
+Para fazer o \textit{download} e preprocessamento do conjunto de dados, os
+arquivos \texttt{dataset\_downloader.py}, \texttt{dataset\_unhasher.py} e
+\texttt{download\_and\_preprocess\_data.py} são utilizados, todos escritos na
+linguagem de programação \texttt{Python}, assim como o projeto em sua
+totalidade. O arquivo \texttt{download\_and\_prerocess\_data.py} é um executável
+que utiliza as variáveis globais definidas em \texttt{global\_vars.json} para
+definir o caminho onde ficarão os arquivos do conjunto de dados (por padrão,
+ficam na pasta \texttt{SARC\_dataset}). Há também o arquivo
+\texttt{preloaded\_dataset\_downloader.py}, que baixa o conjunto de dados já
+preprocessados e prontos para serem utilizados pelo projeto.
+
+Para fazer o treinamento de um modelo, utiliza-se o arquivo
+\texttt{run\_train.py}, que recebe o nome do modelo e outros parâmetros de
+treinamento. Ao final do treinamento, o modelo é salvo utilizando o nome passado
+como entrada para o executável.
+
+Para testar um modelo, utiliza-se o arquivo \texttt{run\_test.py}, que recebe o
+nome de um modelo e realiza seu teste no conjunto de dados de teste. Ao final do
+testes as métricas são salvas, assim como as predições do modelo.
+
+Por fim, o arquivo \texttt{baseline\_model.py} é utilizado para fazer a
+comparação dos modelos de arquitetura \textit{transformers} com um modelo mais
+clássico de \textit{machine learning} que utiliza Bag-of-Words. Dessa forma,
+pode-se comparar a eficácia desses modelos.
+
+\section{Resultados experimentais}%
+\label{sec:resultados_experimentais}
+
+Como já mencionado na sessão \ref{sec:configuracao_dos_experimentos}, os
+experimentos foram feitos utilizando os executáveis \texttt{run\_train.py} e
+\texttt{run\_test.py}. Os parâmetros utilizados por todos os modelos foram
+(\texttt{learning\_rate}) igual a $5.0\times 10^{-5}$, \texttt{epochs} igual a
+$2$ e \texttt{batch\_size} igual a $8$, que são os valores padrões do executável
+de treinamento.
+
+O conjunto de treinamento tem um total de $218362$ exemplos e o conjunto de
+testes tem um total de $54992$ exemplos. Totalizando $273354$ exemplos e uma
+separação de aproximadamente $80\%$ dos exemplos para treinamento e $20\%$ para
+testes.
+
+\begin{table}[h]
+\centering
+\caption{Métricas para os experimentos realizados. Métricas em negrito
+   representam o valor máximo obtido por qualquer modelo naquela métrica.}
+\label{tab:experiments}
+\begin{tabular}{c | c c c c}
+   \textbf{Modelo} & \textbf{Acurácia} & \textbf{Precisão} & \textbf{Revocação}
+                  & \textbf{F1} \\ \hline \hline
+   \texttt{NB bag-of-words} & 0.6020 & 0.6009 & 0.6071 & 0.6040 \\
+   \texttt{NB Tf-Idf} & 0.5944 & 0.5893 & 0.6226 & 0.6056 \\ \hline
+   \texttt{BERT} & 0.7202 & 0.7159 & 0.7301 & 0.7229 \\
+   \texttt{RoBERTa} & 0.7339 & \textbf{0.7412} & 0.7189 & 0.7299 \\
+   \texttt{DeBERTa-v3-small} & 0.7302 & 0.7220 & \textbf{0.7488} & \textbf{0.7351} \\
+   \texttt{DeBERTa-v3-base} & \textbf{0.7353} & 0.7365 & 0.7330 & 0.7348 \\ \hline
+\end{tabular}
+\end{table}
+
+A tabela \ref{tab:experiments} resume os resultados obtidos nos experimentos.
+Como é possível observar, há um salto de $12$ a $13$ pontos percentuais entre os
+modelos usados como base que utilizam os \textit{word embeddings}
+\textit{bag-of-words} e \textit{term frequency-inverse document frequency} em
+conjunto com um algoritmo clássico de aprendizado de máquina chamado de
+\textit{naive Bayes}.
+
+Além disso, é possível observer que, de fato, há uma leve melhora do modelo
+\texttt{BERT} para o modelo \texttt{RoBERTa}, que se propõe como uma versão
+melhorada do anterior, e do modelo \texttt{RoBERTa} para o modelo
+\texttt{DeBERTa}, também se propõe como uma versão melhor em relação ao
+anterior.
+
+Nota-se que com exceção à métrica de precisão, os modelos
+\texttt{DeBERTa-v3-small} e \texttt{DeBERTa-v3-base} possuem as pontuações nas
+métricas acurácia, revocação e F1. O modelo \texttt{RoBERTa} possui uma precisão
+consideravelmente melhor que os modelos \texttt{DeBERTa}, mas possui uma
+revocação consideravelmente pior, o que prejudicou sua acurácia e F1.
+
+\section{Avaliações adicionais}%
+\label{sec:avaliacoes_adicionais}
+
+Essa seção contém algumas avaliações adicionais dos modelos experimentados,
+conferindo as principais diferenças e concordâncias entre os modelos.
+
+\subsection{Comparação do modelo base com os modelos \texttt{transformers}}%
+\label{sub:comparacao_do_modelo_base_com_os_modelos_transformers}
+
+Observou-se que o modelo de base \textit{bag-of-words} cometeu um total de
+$9948$ erros no conjunto de dados de teste que não foram cometidos por nenhum
+dos modelos do tipo \texttt{transformers} (considerando os modelos
+\texttt{BERT}, \texttt{RoBERTa} e \texttt{DeBERTa-v3-base}). Isso é um total de
+$18.09\%$ aproximadamente do total de exemplos no conjunto de testes. Desses
+exemplos, aproximadamente $53\%$ são casos não-sarcásticos e $47\%$ são. Abaixo
+sequem quatro exemplos que foram classificados erroneamente pelo
+\textit{bag-of-words}, mas corretamente pelos três \texttt{transformers} citados
+acima. \jump
+
+\begin{center}
+\begin{tabular}{|c|}
+
+\hline
+
+\textbf{Comentário:} ``\textit{Who else thinks that javascript alert() is an} \\
+\textit{annoying, lazy, and ugly way to notify me of something on your site.}''
+\\
+
+\textit{Tradução livre:} Quem mais pensa que o \texttt{alert()} do javascript \\
+é uma forma irritante, preguiçosa e feita de notificar alguma coisa no seu
+site. \\\\
+
+\hline
+
+\\
+
+\textbf{Resposta:} ``\textit{It's a useful debugging tool}'' \\
+
+\textit{Tradução livre:} É uma ferramenta útil de depuração \\ \\
+
+
+Resposta \textbf{sarcástica}.
+
+\\ \hline
+
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|}
+
+\hline
+
+\textbf{Comentário:} ``\textit{Pilot 'congratulates' passengers for drinking}
+\textit{all alcohol on plane}'' \\
+\\
+
+\textbf{Tradução livre:} O piloto 'dá os parabéns' para passageiros por beber \\
+todo o álcool do avião \\\\
+
+\hline
+
+\\
+
+\textbf{Resposta:} ``\textit{good for the pilot because that means less alcohol} \\
+\textit{to weigh down the plane during landing}'' \\
+
+\textbf{Tradução livre:} bom para o piloto porque significa menos álcool para \\
+o avião pesar durante o pouso \\ \\
+
+Resposta \textbf{sarcástica}.
+
+\\ \hline
+
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|}
+
+\hline
+
+\textbf{Comentário} ``\textit{After being down 4-1, the Ducks climb all the way} \\
+\textit{back to win in overtime 5-4, taking a 3-0 series lead.}'' \\
+
+\textbf{Tradução livre:} Depois de ficarem atrás 4-1, os Ducks escalaram todo o \\
+caminho de volta para a vitória no \textit{overtime} por 5-4, levando a uma \\
+série de 3-0 de vantagem. \\\\
+
+\hline
+
+\\
+
+\textbf{Resposta:} ``\textit{SUBSCRIBE}'' \\
+
+\textbf{Tradução livre:} INSCREVA-SE \\ \\
+
+Resposta \textbf{não sarcástica}.
+
+\\ \hline
+
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|}
+
+\hline
+
+\textbf{Comentário} ``\textit{``I'm 'X' and I'm not offended!''} '' \\
+
+\textbf{Tradução livre:} ``Eu sou 'X' e eu não estou ofendido!'' \\ \\
+
+\hline
+
+\\
+
+\textbf{Resposta:} ``\textit{Even if the majority of people are offended by something,} \\
+\textit{that in itself does not make that behavior unacceptable.}'' \\
+
+\textbf{Tradução livre:} Mesmo se a maioria das pessoas se sentem ofendidas por \\
+algo, isso por si só não faz o comportamento ser inaceitável. \\ \\
+
+Resposta \textbf{não sarcástica}.
+
+\\ \hline
+
+\end{tabular}
+\end{center}
+
+\subsection{Comparação do modelo \texttt{DeBERTa} com os modelos \texttt{BERT} e
+\texttt{RoBERTa}}%
+\label{sub:comparacao_do_modelo_deberta_com_os_modelos_bert_e_roberta}
+
+Observou-se que o modelo de base \texttt{DeBERTa-v3-base} acertou $1865$
+exemplos que tanto o modelo \texttt{BERT} quanto o modelo \texttt{RoBERTa}
+erraram. Isso é um total de $3.39\%$ do conjunto de dados de teste, o que está
+em linha com o visto na tabela \ref{tab:experiments}. Desses acertos, $53,5\%$
+foram em casos sarcásticos e $46,5\%$ em casos não sarcásticos. Abaixo sequem
+quatro exemplos que foram classificados corretamente pelo
+\texttt{DeBERTa-v3-base} e incorretamente por ambos \texttt{BERT} e
+\texttt{RoBERTa}. \jump
+
+\begin{center}
+\begin{tabular}{|c|}
+
+\hline
+
+\textbf{Comentário} ``\textit{Not the best way of asking someone out, dude.} \\
+
+\textbf{Tradução livre:} Não é a melhor forma de convidar alguém para sair,
+cara. \\ \\
+
+\hline
+
+\\
+
+\textbf{Resposta:} ``\textit{He said "a little"; he knows better than to ask for
+too} \\
+\textit{much right off the bat.} \\
+
+\textbf{Tradução livre:} Ele disse "um pouco"; ele sabe que não deve pedir demais \\
+logo de cara. \\ \\
+
+Resposta \textbf{sarcástica}.
+
+\\ \hline
+
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|}
+
+\hline
+
+\textbf{Comentário} ``\textit{Christopher Nolan and Sofia Coppola urge fans to
+watch} \\
+\textit{films in cinemas, not on streaming services.} \\
+
+\textbf{Tradução livre:} Christopher nolan e Sofia Coppola insistem aos fãs que
+assistam \\
+filmes em cinemas, não serviços de \textit{streaming}. \\ \\
+
+\hline
+
+\\
+
+\textbf{Resposta:} ``\textit{Are they gonna get us a babysitter?} \\
+
+\textbf{Tradução livre:} Eles vão nos arranjar uma babá? \\ \\
+
+Resposta \textbf{sarcástica}.
+
+\\ \hline
+
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|}
+
+\hline
+
+\textbf{Comentário} ``\textit{Nearly one in three separated UK mothers think} \\
+\textit{fathers should have no say in their children's lives}'' \\
+
+\textbf{Tradução livre:} Aproximadamente uma em três mãe solteiras no Reino Unido\\
+acham que os pais não deveriam opinar na vida dos seus filhos \\ \\
+
+\hline
+
+\\
+
+\textbf{Resposta:} ``\textit{I should thank God every day that my ex got an abortion.} \\
+
+\textbf{Tradução livre:} Eu deveria agradecer a Deus todos dias que minha ex abortou. \\ \\
+
+Resposta \textbf{não sarcástica}.
+
+\\ \hline
+
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|}
+
+\hline
+
+\textbf{Comentário} ``\textit{BREAKING: Hurricane Matthew to bypass North Carolina due to HB2} \\
+\textit{fathers should have no say in their children's lives}'' \\
+
+\textbf{Tradução livre:} URGENTE: Furação Matthew contornará a Carolina do Norte \\
+devido à HB2\footnote{HB2 foi um projeto de lei da Carolina do Norte que força
+pessoas a utilizarem os banheiros do sexos correspondentes à sua certidão de
+nascimento.}. \\ \\
+
+\hline
+
+\\
+
+\textbf{Resposta:} ``\textit{Guys stop... it wasnt funny the first 80 times the
+joke was made....} \\
+
+\textbf{Tradução livre:} Gente para... não foi engraçado nas primeiras 80 vezes
+\\
+que a piada foi feita.... \\ \\
+
+Resposta \textbf{não sarcástica}.
+
+\\ \hline
+
+\end{tabular}
+\end{center}
+
+\subsection{Comparação dos modelos \texttt{DeBERTa-v3-small} e
+\texttt{DeBERTa-v3-base}}%
+\label{sub:comparacao_dos_modelos_deberta-v3-small_e-deberta-v3-base}
+
+Por fim, compara-se o modelo pequeno e base do \texttt{DeBERTa}. Em tese, o
+modelo maior é capaz de acertar mais e foi possível observar uma leve melhora do
+pequeno para o base. Houve um total de $3913$ exemplos acertados pelo base que
+foram errados pelo pequeno. Isso é aproximadamente $7\%$ dos dados de teste.
+Desses acertos, aproximadamente $60\%$ foram sarcásticos e $40\%$ foram não
+sarcásticos. Abaixo sequem exemplos que foram classificados incorretamente pelo
+modelo pequeno, mas corretamente pelo modelo base.
+
+\begin{center}
+\begin{tabular}{|c|}
+
+\hline
+
+\textbf{Comentário} ``\textit{Is it just me, or does the botched Ronaldo statue} \\
+\textit{look more like someone more local?}'' \\
+
+\textbf{Tradução livre:} Sou só eu, ou a estátua mal feita do Ronaldo parece \\
+com alguém mais local? \\ \\
+
+\hline
+
+\\
+
+\textbf{Resposta:} ``\textit{What do you mean botched?} \\
+
+\textbf{Tradução livre:} O que você quer dizer com mal feita? \\ \\
+
+Resposta \textbf{sarcástica}.
+
+\\ \hline
+
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|}
+
+\hline
+
+\textbf{Comentário} ``\textit{Being fit is a fascist aesthetic}'' \\
+
+\textbf{Tradução livre:} Estar em forma é uma estética fascista \\ \\
+
+\hline
+
+\\
+
+\textbf{Resposta:} ``\textit{The concentration camps where just a government} \\
+\textit{weight lost program gone awry} \\
+
+\textbf{Tradução livre:} Os campos de concentração eram apenas um programa do \\
+governo para perder peso que deu errado \\ \\
+
+Resposta \textbf{sarcástica}.
+
+\\ \hline
+
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|}
+
+\hline
+
+\textbf{Comentário} ``\textit{2 years of upgrades}'' \\
+
+\textbf{Tradução livre:} 2 anos de melhorias \\ \\
+
+\hline
+
+\\
+
+\textbf{Resposta:} ``\textit{Look at the last picture I think you left some shit} \\
+\textit{on the desk there in the left side}'' \\
+
+\textbf{Tradução livre:} Olha na última foto eu acho que você deixou alguma merda \\
+na mesa ali no lado esquerdo. \\ \\
+
+Resposta \textbf{não sarcástica}.
+
+\\ \hline
+
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|}
+
+\hline
+
+\textbf{Comentário} ``\textit{Cop Block founder Adeemo Freeman arrested on drug} \\
+\textit{trafficking charges}'' \\
+
+\textbf{Tradução livre:} Adeemo Freeman, fundador do Bloco Policial, é preso \\
+por tráfico de drogas \\ \\
+
+\hline
+
+\\
+
+\textbf{Resposta:} ``\textit{hahahahahahahahahahahahahahahahahaha}'' \\
+
+\textbf{Tradução livre:} hahahahahahahahahahahahahahahahahaha \\ \\
+
+Resposta \textbf{não sarcástica}.
+
+\\ \hline
+
+\end{tabular}
+\end{center}
+
+\section{Matrizes de atenção}%
+\label{sec:matrizes_de_atencao}
 
 
