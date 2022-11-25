@@ -181,16 +181,15 @@ receber sub-comentários (formando uma estrutura recursiva).
 \cite{khodak-etal:2017:sarc} em 2017 introduzem um \textit{corpus} de textos
 retirados do Reddit que recebeu o nome de SARC, uma sigla para
 \textit{Self-Annotated Reddit Corpus} (em tradução livre, ``corpus do Reddit
-auto-anotado''). Esse conjunto de dados revolucionou a detecção de sarcasmo,
-pois foi o primeiro a passar de um milhão de comentários sarcásticos (e mais de
-quinhentos milhões de comentários no total). Esse marco se deve ao fato de este
-conjunto de dados ser o primeiro a utilizar a estrutura de comentários do Reddit
-e rotular o sarcasmo automaticamente, com base em anotações dos próprios autores
-dos comentários.
+auto-anotado''). Esse conjunto de dados foi o primeiro a passar de um milhão de
+comentários sarcásticos (e mais de quinhentos milhões de comentários no total).
+Esse marco deve-se ao fato de este conjunto de dados ser o primeiro a utilizar a
+estrutura de comentários do Reddit e rotular o sarcasmo automaticamente, com
+base em anotações dos próprios autores dos comentários.
 
-Para rotular um comentário como sarcásticos, os autores utilizam o fato de que
-muitos usuários do Reddit utilizam a marcação \texttt{/s} em um comentário para
-denotar que estão sendo sarcásticos (de forma similar à \textit{hashtag}
+Para rotular um comentário como sarcástico, os autores utilizam o fato de que
+muitos usuários do Reddit utilizam a marcação ``\texttt{/s}'' em um comentário
+para denotar que estão sendo sarcásticos (de forma similar à \textit{hashtag}
 ``\textit{\#sarcasm}'' no Twitter)~(\cite{what-does-s-mean}). Dessa forma, todo
 comentário encontrado pelos autores com essa marcação é anotado como sendo
 sarcástico, enquanto comentários sem essa anotação são marcados como não
@@ -211,11 +210,11 @@ tipo I e II. Os falsos positivos acontecem quando o algoritmo proposto encontra
 um comentário com ``/s'', mas não é sarcástico. Esse tipo de erro pode
 acontecer, por exemplo, quando alguém não conhece essa anotação, quando alguém
 está referenciando a anotação (como para avisar que um outro usuário esqueceu de
-colocá-la ou explicando/perguntando seu significado), quando se utiliza a
+colocá-la ou explicando/perguntando seu significado) ou quando se utiliza a
 \textit{tag} de \textit{HTML} \texttt{<s>...</s>}. Os falsos negativos
 acontecem, por sua vez, nos comentários que são sarcásticos, mas não utilizam a
 marcação. Isso acontece principalmente por dois motivos: o usuário não conhecer
-a convenção de se utilizar ``/s'' ou por achar que seu sarcasmo é óbvio o
+a convenção de utilizar ``/s'' ou por achar que seu sarcasmo é óbvio o
 suficiente para que ele não precise utilizar.
 
 Como forma de minimizar esses erros, os autores propõem algumas filtragens.
@@ -234,3 +233,13 @@ demonstram seu procedimento resultou em uma taxa de $1.0\%$ de falsos positivos
 e $2.0\%$ de falsos negativos. Por fim, vale dizer que os autores, por motivos
 óbvios, removem as anotações ``/s'' dos comentários.
 
+Por fim, os autores disponibilizam várias versões de seu conjunto de dados. Para
+este trabalho, utilizou-se a versão balanceada, que é uma tabela na qual cada
+linha possui uma postagem e dois comentários referente-se àquela postagem, um
+sarcástico e o outro não sarcástico. Além disso, há informações sobre os
+usuários autores de cada um dos textos, datas de publicação e em qual
+\textit{subreddit} as postagens foram feitas.
+
+Os dados já são separados em treinamento e teste pelos próprios autores,
+contendo $109181$ instâncias de treinamento e $27496$ de teste (uma
+separação de aproximadamente $20\%$ do total dos dados).
