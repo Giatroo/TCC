@@ -21,22 +21,35 @@ e o conjunto de dados SARC disponibilizado em
 Para fazer o \textit{download} e preprocessamento do conjunto de dados, os
 arquivos \texttt{dataset\_downloader.py}, \texttt{dataset\_unhasher.py} e
 \texttt{download\_and\_preprocess\_data.py} são utilizados, todos escritos na
-linguagem de programação \texttt{Python}, assim como o projeto em sua
-totalidade. O arquivo \texttt{download\_and\_prerocess\_data.py} é um executável
-que utiliza as variáveis globais definidas em \texttt{global\_vars.json} para
-definir o caminho onde ficarão os arquivos do conjunto de dados (por padrão,
-ficam na pasta \texttt{SARC\_dataset}). Há também o arquivo
+linguagem de programação \texttt{Python}, assim como o restante do projeto. O
+arquivo \texttt{download\_and\_prerocess\_data.py} é um executável que utiliza
+as variáveis globais definidas em \texttt{global\_vars.json} para definir o
+caminho onde ficarão os arquivos do conjunto de dados (por padrão, ficam na
+pasta \texttt{SARC\_dataset}). Há também o arquivo
 \texttt{preloaded\_dataset\_downloader.py}, que baixa o conjunto de dados já
 preprocessados e prontos para serem utilizados pelo projeto.
 
-Para fazer o treinamento de um modelo, utiliza-se o arquivo
+No pré-processamentos dos dados, utiliza-se apenas os textos e rótulos,
+excluindo informações adicionais como data das postagens, nome dos usuários e
+tópico. Também filtram-se algumas linhas que possuem uma sequência de postagens
+maiores do que um, para garantir que cada linha tenha apenas uma postagem, duas
+respostas e seus rótulos. Ao final do arquivo \texttt{dataset\_unhasher.py},
+produz-se uma tabela com colunas \texttt{comment\_text}, que é o texto do
+comentário inicial feito em um determinado \textit{subreddit};
+\texttt{answer1\_text} e \texttt{answer2\_text} que são os textos de duas
+respostas àquele comentário inicial; e \texttt{answer1\_label} e
+\texttt{answer2\_label}, que são os rótulos de sarcasmo, com $0$ significando
+\textit{não-sarcasmo} e $1$ significando \textit{sarcasmo}.
+
+O treinamento de um modelo é feito utilizando-se o arquivo
 \texttt{run\_train.py}, que recebe o nome do modelo e outros parâmetros de
-treinamento. Ao final do treinamento, o modelo é salvo utilizando o nome passado
-como entrada para o executável.
+treinamento. O modelo é treinado utilizando a biblioteca \texttt{ktrain} e, ao
+final do treinamento, o modelo é salvo utilizando o nome passado como entrada
+para o executável.
 
 Para testar um modelo, utiliza-se o arquivo \texttt{run\_test.py}, que recebe o
-nome de um modelo e realiza seu teste no conjunto de dados de teste. Ao final do
-testes as métricas são salvas, assim como as predições do modelo.
+nome de um modelo e realiza seu teste no conjunto de dados de teste. Ao final
+dos testes as métricas são salvas, assim como as predições realizadas.
 
 Por fim, o arquivo \texttt{baseline\_model.py} é utilizado para fazer a
 comparação dos modelos de arquitetura \textit{transformers} com um modelo mais
