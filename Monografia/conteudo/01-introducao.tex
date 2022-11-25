@@ -2,19 +2,78 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Introduction}%
-\label{cha:introduction}
+\chapter{Introdução}%
+\label{cha:introducao}
 
-Sarcasm detection is an important aspect of many natural language processing
-(NLP) systems, with many implications in natural language understanding, dialog
-systems, and data mining. However, sarcasm detection is difficult because it is
-infrequent in many conversations and, many times, it is difficult even for
-humans to discern.
+Detecção automática de sarcasmo é um aspecto importante para muitos sistemas de
+processamento de linguagem natural (PLN), com implicações no entendimento de
+linguagens naturais, em sistemas de diálogo e em mineração de dados. Entretanto,
+detectar sarcasmo automaticamente é uma tarefa difícil pelo fato de sarcasmo
+acontecer raramente em diálogos e ser de difícil discernimento até mesmo para
+humanos.
 
-Many studies have been made in the area and many datasets have been proposed
-with either \textit{balanced} or \textit{unbalanced} data. Also many of these
-datasets use humans to annotate sarcastic statements.
+Computacionalmente, detecção de sarcasmo pode ser definida como uma
+classificação binária onde as duas classes são \textit{não sarcasmo} e
+\textit{sarcasmo}. Muitos trabalhos são feitos na área na tentativa de melhorar
+os resultados pre-existentes. Nesses trabalhos, várias abordagens são
+empregadas, várias características são criadas e vários conjuntos de dados são
+disponibilizados para comparação de resultados.
 
-In this paper, we use the Self-Annotated Reddit Corpus (SARC), which is a large
-corpus for sarcasm detection created using Reddit posts to get labels
-automatically, to train, evaluate, and compare many NLP models.
+Além disso, vários trabalhos recentemente utilizam uma arquitetura de redes
+neurais conhecida como \textit{transformer}. Elas superam suas antecessoras, as
+RNNs, ao permitir fácil paralelização das computações por utilizar
+exclusivamente mecanismos de atenção para capturar padrões no texto de entrada.
+Este trabalho propõe o uso de uma dessas redes neurais conhecida como DeBERTa.
+Publicada em 2020, essa rede tem mostrado ótimos resultados em diversas tarefas
+de PLN e ainda não foi testada no problema de detecção de sarcasmo.
+
+Para fazer esses testes, utiliza-se o conjunto de dados SARC, que contém dados
+retirados da rede social Reddit. Essa rede possui uma estrutura e cultura muito
+conveniente para a criação de um conjunto de dados voltados para a detecção de
+sarcasmo. Isso porque ela é dividida em grandes temas nos quais os usuários
+fazem postagens que podem receber comentários de outros usuários. Além disso, os
+usuários do Reddit possuem a cultura de marcar comentários sarcásticos com a
+anotação ``/s'', o que permitiu que o SARC fosse o primeiro conjunto de dados
+sarcásticos com mais de milhões de exemplos. Ademais, esse conjunto permite aos
+modelos que utilizem o contexto da postagem inicial para auxiliar na detecção de
+sarcasmo do comentário feito, o que é mais um motivo para sua escolha.
+
+Como objetivo desse trabalho, busca-se avaliar o desempenho do modelo DeBERTa no
+conjunto de dados SARC e compará-lo com um modelo de base e outros tipos de
+\textit{transformers}: o BERT e o RoBERTa, que são modelos mais consolidados os
+quais o DeBERTa busca aprimorar. Foi observado que, de fato, o DeBERTa supera
+os demais em várias métricas diferentes. Há uma sessão também comparando os
+erros cometidos por cada um dos modelos.
+
+Esse trabalho está dividindo em quatro capítulos, além da introdução. No
+capítulo dois, apresentam-se os fundamentos e definições relacionadas ao
+trabalho, além de fazer uma leve revisão de trabalhos impactantes na área. No
+capítulo três, mostram-se em mais detalhes o modelo DeBERTa e o conjunto de dados
+SARC. No capítulo quatro, apresentam-se os experimentos e seus resultados, com
+comparações adicionais entre os modelos que vão além das métricas de
+classificação. Por fim, o capítulo cinco apresenta a conclusão.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
