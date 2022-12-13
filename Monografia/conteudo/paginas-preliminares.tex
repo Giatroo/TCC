@@ -48,23 +48,54 @@
 \disablenewpage{\chapter*{Lista de Abreviaturas}}
 
 \begin{tabular}{rl}
-   CFT & Transformada contínua de Fourier (\emph{Continuous Fourier Transform})\\
-   DFT & Transformada discreta de Fourier (\emph{Discrete Fourier Transform})\\
-  EIIP & Potencial de interação elétron-íon (\emph{Electron-Ion Interaction Potentials})\\
-  STFT & Transformada de Fourier de tempo reduzido (\emph{Short-Time Fourier Transform})\\
-  ABNT & Associação Brasileira de Normas Técnicas\\
-   URL & Localizador Uniforme de Recursos (\emph{Uniform Resource Locator})\\
-   IME & Instituto de Matemática e Estatística\\
-   USP & Universidade de São Paulo
+PLN & Processamento de linguagem natural (\emph{Natural language processing})
+\\
+API & Interface de programação de aplicação (\emph{Application programming
+interface}) \\
+DT & Árvore de decisão (\emph{Decision tree}) \\
+RF & Floresta aleatória (\emph{Random forest}) \\
+SVM & - (\emph{Support vector machine}) \\
+NB & - (\emph{naive Bayes}) \\
+NN & Rede Neural (\emph{Neural Network}) \\
+LSTM & - (\emph{Long short-term memory}) \\
+RNN & Rede neural recorrente (\emph{Recurrent neural network}) \\
+CNN & Rede neural convolucional (\emph{Convolutional neural network}) \\
+DNN & Rede neural profunda (\emph{Deep neural network}) \\
+BoW & Sacola de palavras (\emph{Bag-of-words}) \\
+Tf-Idf & - (\emph{Term frequency-inverse document frequency}) \\
+SES & Suavização exponencial simples (\emph{Simple exponential smoothing}) \\
+MLM & Modelo de linguagem mascarada (\emph{Masked language model}) \\
+RTD & Detecção de símbolo substituído (\emph{Replaced token detection}) \\
+URL & Localizador Uniforme de Recursos (\emph{Uniform Resource Locator})\\
+ASCII & Código padrão americano para o intercâmbio de informação (\emph{American
+Standard} \\
+      & \emph{Code for Information Interchange}) \\
+IME & Instituto de Matemática e Estatística \\
+USP & Universidade de São Paulo
 \end{tabular}
+
+% Quebra de página manual
+\clearpage
 
 %\chapter*{Lista de Símbolos}
 \disablenewpage{\chapter*{Lista de Símbolos}}
 
 \begin{tabular}{rl}
-  $\omega$ & Frequência angular\\
-    $\psi$ & Função de análise \emph{wavelet}\\
-    $\Psi$ & Transformada de Fourier de $\psi$\\
+$X$ & Características de entrada\\
+$y$ & Rótulos de saída\\
+$\hat{y}$ & Rótulos preditos de saída\\
+$tp$ & Quantidade de verdadeiros positivos (\emph{True positives})\\
+$fp$ & Quantidade de falso positivos (\emph{False positives})\\
+$tn$ & Quantidade de verdadeiros negativos (\emph{True negatives})\\
+$fn$ & Quantidade de falso negativos (\emph{False negatives})\\
+$F_1$ & Métrica F1\\
+$\xii[x]{i}$ & $i$-ésimo exemplo de entrada\\
+$\xii[y]{i}$ & $i$-ésimo exemplo de saída\\
+$\text{exp}$ & função exponencial\\
+$Q$ & Consulta (\emph{query}) do mecanismo de atenção\\
+$K$ & Chave (\emph{key}) do mecanismo de atenção\\
+$V$ & Valor (\emph{value}) do mecanismo de atenção\\
+\texttt{<MASK>} & Símbolo para o \textit{token} especial de máscara\\
 \end{tabular}
 
 % Quebra de página manual
@@ -80,33 +111,8 @@
 %\listoftables
 \disablenewpage{\listoftables}
 
-% Esta lista é criada "automaticamente" pela package float quando
-% definimos o novo tipo de float "program" (em utils.tex)
-% Você pode escolher se quer ou não permitir a quebra de página
-%\listof{program}{\programlistname}
-\disablenewpage{\listof{program}{\programlistname}}
-
 % Sumário (obrigatório)
 \tableofcontents
 
 \egroup % Final de "raggedbottom"
-
-% Referências indiretas ("x", veja "y") para o índice remissivo (opcionais,
-% pois o índice é opcional). É comum colocar esses itens no final do documento,
-% junto com o comando \printindex, mas em alguns casos isso torna necessário
-% executar texindy (ou makeindex) mais de uma vez, então colocar aqui é melhor.
-\index{Inglês|see{Língua estrangeira}}
-\index{Figuras|see{Floats}}
-\index{Tabelas|see{Floats}}
-\index{Código-fonte|see{Floats}}
-\index{Subcaptions|see{Subfiguras}}
-\index{Sublegendas|see{Subfiguras}}
-\index{Equações|see{Modo Matemático}}
-\index{Fórmulas|see{Modo Matemático}}
-\index{Rodapé, notas|see{Notas de rodapé}}
-\index{Captions|see{Legendas}}
-\index{Versão original|see{Tese/Dissertação, versões}}
-\index{Versão corrigida|see{Tese/Dissertação, versões}}
-\index{Palavras estrangeiras|see{Língua estrangeira}}
-\index{Floats!Algoritmo|see{Floats, Ordem}}
 
