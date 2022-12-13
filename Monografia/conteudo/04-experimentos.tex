@@ -81,10 +81,10 @@ testes.
                   & \textbf{F1} \\ \hline \hline
    \texttt{NB bag-of-words} & 0.6020 & 0.6009 & 0.6071 & 0.6040 \\
    \texttt{NB Tf-Idf} & 0.5944 & 0.5893 & 0.6226 & 0.6056 \\ \hline
-   \texttt{BERT} & 0.7202 & 0.7159 & 0.7301 & 0.7229 \\
-   \texttt{RoBERTa} & 0.7339 & \textbf{0.7412} & 0.7189 & 0.7299 \\
-   \texttt{DeBERTa-v3-small} & 0.7302 & 0.7220 & \textbf{0.7488} & \textbf{0.7351} \\
-   \texttt{DeBERTa-v3-base} & \textbf{0.7353} & 0.7365 & 0.7330 & 0.7348 \\ \hline
+   \texttt{bert-base-uncased} & 0.7202 & 0.7159 & 0.7301 & 0.7229 \\
+   \texttt{roberta-base} & 0.7339 & \textbf{0.7412} & 0.7189 & 0.7299 \\
+   \texttt{deberta-v3-small} & 0.7302 & 0.7220 & \textbf{0.7488} & \textbf{0.7351} \\
+   \texttt{deberta-v3-base} & \textbf{0.7353} & 0.7365 & 0.7330 & 0.7348 \\ \hline
 \end{tabular}
 \end{table}
 
@@ -95,17 +95,17 @@ modelos usados como base que utilizam os \textit{word embeddings}
 conjunto com um algoritmo clássico de aprendizado de máquina chamado de
 \textit{naive Bayes}.
 
-Além disso, é possível observer que, de fato, há uma leve melhora do modelo
-\texttt{BERT} para o modelo \texttt{RoBERTa}, que se propõe como uma versão
-melhorada do anterior, e do modelo \texttt{RoBERTa} para o modelo
-\texttt{DeBERTa}, também se propõe como uma versão melhor em relação ao
-anterior.
+Além disso, é possível observer que, de fato, há uma leve melhora do modelo BERT
+para o modelo RoBERTa, que se propõe como uma versão melhorada do anterior, e do
+modelo RoBERTa para o modelo DeBERTa, também se propõe como uma versão melhor em
+relação ao anterior.
 
-Nota-se que com exceção à métrica de precisão, os modelos
-\texttt{DeBERTa-v3-small} e \texttt{DeBERTa-v3-base} possuem as pontuações nas
-métricas acurácia, revocação e F1. O modelo \texttt{RoBERTa} possui uma precisão
-consideravelmente melhor que os modelos \texttt{DeBERTa}, mas possui uma
-revocação consideravelmente pior, o que prejudicou sua acurácia e F1.
+Nota-se que com exceção à métrica de precisão, os modelos DeBERTa-v3-small e
+DeBERTa-v3-base possuem as pontuações nas métricas acurácia, revocação e F1. O
+modelo RoBERTa possui uma precisão consideravelmente melhor que os modelos
+DeBERTa, mas possui uma revocação consideravelmente pior, o que prejudicou sua
+acurácia e F1.
+
 
 \section{Avaliações adicionais}%
 \label{sec:avaliacoes_adicionais}
@@ -113,13 +113,40 @@ revocação consideravelmente pior, o que prejudicou sua acurácia e F1.
 Essa seção contém algumas avaliações adicionais dos modelos experimentados,
 conferindo as principais diferenças e concordâncias entre os modelos.
 
+\subsection{Tempos de execução}%
+\label{sub:tempos_de_execucao}
+
+Abaixo segue uma tabela com os tempos de treinamento de cada um dos modelos.
+
+\begin{table}[h]
+\centering
+\caption{Tempo de treinamento para cada um dos modelos.}
+\label{tab:experiments}
+\begin{tabular}{c | c }
+   \textbf{Modelo} & \textbf{Tempo de Treinamento} \\ \hline \hline
+   \texttt{NB bag-of-words} & $22.53$s \\
+   \texttt{NB Tf-Idf} & $19.74$s \\ \hline
+   \texttt{bert-base-uncased} & $5545$s ($1.55$h) \\
+   \texttt{roberta-base} & $5673$s ($1.58$h) \\
+   \texttt{deberta-v3-small} & $7991$s ($2.22$h) \\
+   \texttt{deberta-v3-base} & $14482$s ($4.02$h) \\ \hline
+\end{tabular}
+\end{table}
+
+É notável que os modelos \textit{transformers} demoram muito mais do que os
+modelos de base. Além disso, nota-se também que o DeBERTaV3-small demora
+relativamente mais dos que as versões base do BERT e RoBERTa. A versão base, por
+sua vez, do DeBERTaV3 demora quase o dobro da versão pequena. Portanto,
+observa-se que, apesar dos melhores resultados, esse modelo leva mais tempo para
+ser treinado do que seus pares.
+
 \subsection{Comparação do modelo base com os modelos \texttt{transformers}}%
 \label{sub:comparacao_do_modelo_base_com_os_modelos_transformers}
 
 Observou-se que o modelo de base \textit{bag-of-words} cometeu um total de
 $9948$ erros no conjunto de dados de teste que não foram cometidos por nenhum
 dos modelos do tipo \texttt{transformers} (considerando os modelos
-\texttt{BERT}, \texttt{RoBERTa} e \texttt{DeBERTa-v3-base}). Isso é um total de
+BERT, RoBERTa e DeBERTa-v3-base). Isso é um total de
 $18.09\%$ aproximadamente do total de exemplos no conjunto de testes. Desses
 exemplos, aproximadamente $53\%$ são casos não-sarcásticos e $47\%$ são. Abaixo
 sequem quatro exemplos que foram classificados erroneamente pelo
@@ -237,18 +264,16 @@ Resposta \textbf{não sarcástica}.
 \end{tabular}
 \end{center}
 
-\subsection{Comparação do modelo \texttt{DeBERTa} com os modelos \texttt{BERT} e
-\texttt{RoBERTa}}%
+\subsection{Comparação do modelo DeBERTa com os modelos BERT e RoBERTa}%
 \label{sub:comparacao_do_modelo_deberta_com_os_modelos_bert_e_roberta}
 
-Observou-se que o modelo de base \texttt{DeBERTa-v3-base} acertou $1865$
-exemplos que tanto o modelo \texttt{BERT} quanto o modelo \texttt{RoBERTa}
-erraram. Isso é um total de $3.39\%$ do conjunto de dados de teste, o que está
-em linha com o visto na tabela \ref{tab:experiments}. Desses acertos, $53,5\%$
-foram em casos sarcásticos e $46,5\%$ em casos não sarcásticos. Abaixo sequem
-quatro exemplos que foram classificados corretamente pelo
-\texttt{DeBERTa-v3-base} e incorretamente por ambos \texttt{BERT} e
-\texttt{RoBERTa}. \jump
+Observou-se que o modelo de base DeBERTa-v3-base acertou $1865$ exemplos que
+tanto o modelo BERT quanto o modelo RoBERTa erraram. Isso é um total de $3.39\%$
+do conjunto de dados de teste, o que está em linha com o visto na tabela
+\ref{tab:experiments}. Desses acertos, $53,5\%$ foram em casos sarcásticos e
+$46,5\%$ em casos não sarcásticos. Abaixo sequem quatro exemplos que foram
+classificados corretamente pelo DeBERTa-v3-base e incorretamente por ambos BERT
+e RoBERTa. \jump
 
 \begin{center}
 \begin{tabular}{|c|}
@@ -363,11 +388,10 @@ Resposta \textbf{não sarcástica}.
 \end{tabular}
 \end{center}
 
-\subsection{Comparação dos modelos \texttt{DeBERTa-v3-small} e
-\texttt{DeBERTa-v3-base}}%
+\subsection{Comparação dos modelos DeBERTa-v3-small e DeBERTa-v3-base}%
 \label{sub:comparacao_dos_modelos_deberta-v3-small_e-deberta-v3-base}
 
-Por fim, compara-se o modelo pequeno e base do \texttt{DeBERTa}. Em tese, o
+Por fim, compara-se o modelo pequeno e base do DeBERTa. Em tese, o
 modelo maior é capaz de acertar mais e foi possível observar uma leve melhora do
 pequeno para o base. Houve um total de $3913$ exemplos acertados pelo base que
 foram errados pelo pequeno. Isso é aproximadamente $7\%$ dos dados de teste.
