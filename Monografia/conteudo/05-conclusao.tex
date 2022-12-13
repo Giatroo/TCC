@@ -5,4 +5,56 @@
 \chapter{Conclusão}%
 \label{cha:conclusao}
 
+Este trabalho teve por objetivo avaliar se o modelo DeBERTa consegue uma melhora
+em relação a outros modelos similares como o BERT e o RoBERTa na tarefa de
+detecção automática de sarcasmo.
+
+Para tanto, o conjunto de dados SARC foi utilizado. Este conjunto foi o primeiro
+conjunto de dados voltado à detecção de sarcasmo verbal em textos com mais de um
+milhão de instâncias sarcásticas. Esses dados foram retirados da rede social
+Reddit, que possui uma estrutura e cultura que favorecem a criação automática
+desse tipo de conjunto de dados. Os autores do conjunto utilizam a estrutura de
+comentários e respostas da rede social para obter informações contextuais que
+podem ser utilizadas pelos modelos na determinação de sarcasmo. Além disso, ele
+se favorece da cultura que os usuários do Reddit têm de colocar a anotação
+``/s'' ao final de respostas sarcásticas para rotular automaticamente as
+respostas em sarcásticas e não sarcásticas.
+
+No SARC, alguns modelos foram utilizados em comparação ao DeBERTa. Dois modelos
+de base foram utilizados. Eles são o \textit{bag-of-words} e o \textit{term
+frequency-invert document frequency}, que são métodos de aprendizado mais
+clássicos e que não fazem o uso de \textit{deep learning}. Em comparação a eles,
+três modelos \textit{transformers} foram utilizados. Dois deles são o
+BERT e o RoBERTa. O BERT é um dos primeiros modelos do tipo \textit{transformer}
+a ser utilizado amplamente em várias aplicações e ter métricas
+significativamente melhores do que os modelos do \textit{estado-da-arte}
+anteriores. O RoBERTa, por sua vez, se propõe como uma melhora do BERT. Por fim,
+duas versões do modelo DeBERTa são comparadas com os modelos anteriores.
+
+O DeBERTa se propõe como uma versão melhorada dos outros dois modelos citados
+anteriormente. Isso porque, ao contrário dos outros dois, não soma logo no
+início de suas computações as codificações (\textit{embeddings}) das palavras em
+si e das posições relativas entre essas palavras. O DeBERTa utiliza, ao invés
+disso, três matrizes de atenções diferentes, uma que possui atenções de palavras
+para palavras, outra de palavras para posições e uma última de posições para
+palavras. Dessa forma, os autores do modelo afirmam que, apesar de mais lento,
+possui melhores métricas do que os anteriores.
+
+Ao aplicar os modelos citados anteriormente no conjunto de dados SARC,
+percebe-se que, de fato, as duas versões do modelo DeBERTa possuem métricas
+melhores do que os modelos anteriores. Foram testadas as versões
+\texttt{deberta-v3-small} e \texttt{deberta-v3-base}. Ambas possuem acurácia,
+precisão, revocação e métrica F1 melhores do que o BERT. Além disso, ambas
+possuem revocação e F1 melhores do que o RoBERTa. Porém, o RoBERTa possui
+precisão melhor do que ambas as versões do DeBERTa e apenas a versão
+\texttt{base} possui acurácia melhor do que o RoBERTa. Já em comparação com os
+dois modelos de base, os modelos \textit{transformers} possuem uma melhora
+significativa de aproximadamente $12$ pontos percentuais.
+
+Além disso, é observado que os tempos de treinamento do DeBERTa são relativamente
+maiores do que os do BERT e RoBERTa, pelo fato de se precisar muito mais
+computações pelo mecanismo de atenção do DeBERTa.
+
+Portanto, conclui-se que realmente o modelo DeBERTa consegue um melhor resultado
+em relação aos seus pares apesar de exigir mais tempo de treinamento.
 
