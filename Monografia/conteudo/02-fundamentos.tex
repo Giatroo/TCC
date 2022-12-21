@@ -17,7 +17,7 @@ ofender.~\cite{dicio_sarc, dicio_irony}
 
 O termo \textbf{detecção de sarcasmo} refere-se à determinação de se há ou não
 sarcasmo em uma porção de texto verbal. E o termo \textbf{detecção automática de
-sarcasmo} refere-se a resolução (ou tentativa de) resolver o problema mencionado
+sarcasmo} refere-se à resolução (ou tentativa de) do problema mencionado
 utilizando métodos computacionais que automatizam essa decisão.
 Computacionalmente, podemos definir esse problema como uma \textbf{classificação
 binária} de texto, termo explicado mais a frente.
@@ -168,7 +168,7 @@ Definida como:
 \texttt{Precisão} = \dfrac{tp}{tp+fp}
 \]
 
-é a taxa de verdadeiros positivos em relação todas as instâncias preditas como
+é a taxa de verdadeiros positivos em relação a todas as instâncias preditas como
 positivas. Portanto, é a fração entre todas as instâncias previstas como
 positivas e as instâncias que realmente eram positivas. Ela pune o modelo quando
 ele comete erros do tipo 1, ou seja, quando classifica valores demais como
@@ -246,7 +246,7 @@ retirada de \cite{bernadofbbraga:2017:precisao_revocacao}.}
 \label{par:metrica_f_1_}
 
 Por esses e outros motivos, é interessante agregar a precisão e revocação em um
-único valor, que permite fácil comparação entre dois modelos. É possível
+único valor, que permite fácil comparação entre as duas métricas. É possível
 utilizar uma média simples desses dois valores, mas é muito mais comum a
 utilização da métrica $F_1$ (ou, do inglês, $F_1$ \textit{score}).
 
@@ -307,7 +307,7 @@ casos ($76\%$) são irônicos e apenas 4797 ($24\%$) são não irônicos.
 
 Então, dado uma sequência ``\textit{as * as a *}'', os autores utilizam
 mecanismos de busca na rede como a API do Google para distinguir entre três
-casos: os casos em que essa sequência nunca foi usada como ``\textit{about}'';
+casos: os casos em que essa sequência nunca foi usada com ``\textit{about}'';
 aqueles que já foram, mas não frequentemente; e aqueles que são frequentemente
 usados com essa marcação. Segundo os próprios autores, essas três categorias
 fornecem, respectivamente, evidencia fraca contra ironia, evidencia fraca a
@@ -382,14 +382,14 @@ frase seria classificada como sarcástica em sua primeira abordagem.
 Em sua segunda abordagem, os autores utilizam novamente algoritmos de
 \textit{POS Tagging} pré-criados para achar as classes morfológicas e sintáticas
 de palavras em \textit{tweets} que começam com interjeições, como \textit{wow},
-\textit{oh}, \textit{wow}, \textit{aha}, \textit{yay}, \textit{yeah},
-\textit{nah}, etc. Em seu algoritmo, eles classificam como sarcásticos os textos
-que começam por interjeições e possuem um adjetivo ou advérbio imediatamente
-após a interjeição, ou então possuem, em alguma posição após a interjeição, ou um
-advérbio seguido de adjetivo ou um adjetivo seguido de um substantivo ou um
-advérbio seguido de um verbo. Essa abordagem é bastante interessante, pois ela é
-bastante simples e, ainda assim, consegue um ótimo resultado de 0.90 $F_1$ no
-subconjunto de \textit{tweets} marcado com a hashtag \textit{sarcasm}.
+\textit{oh}, \textit{aha}, \textit{yay}, \textit{yeah}, \textit{nah}, etc. Em
+seu algoritmo, eles classificam como sarcásticos os textos que começam por
+interjeições e possuem um adjetivo ou advérbio imediatamente após a interjeição,
+ou então possuem, em alguma posição após a interjeição, ou um advérbio seguido
+de adjetivo ou um adjetivo seguido de um substantivo ou um advérbio seguido de
+um verbo. Essa abordagem é bastante interessante, pois ela é bastante simples e,
+ainda assim, consegue um ótimo resultado de 0.90 $F_1$ no subconjunto de
+\textit{tweets} marcado com a hashtag \textit{sarcasm}.
 
 \subsection{Conjuntos de Características}%
 \label{sub:conjuntos-de-caracteristicas}
@@ -405,8 +405,8 @@ características possíveis de se utilizar.
 Como dito anteriormente, ao criar a matriz de exemplos de entrada $X$, cada
 coluna representa uma característica do texto. Dessa forma, o texto fica
 agregado em um conjunto de valores numéricos que são acessíveis para a máquina
-utilizar e comparar. Ao invés de se comparar dois texto distintos com números de
-caracteres e palavras diferentes, utiliza-se um algoritmo para extrair
+utilizar e comparar. Ao invés de se comparar dois textos distintos com números
+de caracteres e palavras diferentes, utiliza-se um algoritmo para extrair
 características (do inglês, \textit{features}) comuns entre os textos e
 compará-los por meio dessas características.
 
@@ -435,7 +435,7 @@ que é utilizado para contar qualquer palavra que não é uma das outras 511.
 
 \cite{reyes:2012:from-humor} exploram quatro grupos de características dentro de
 um contexto mais geral de detecção de humor e ironia. Esses grupos são:
-ambiguidade, através dos níveis estrutural, morfossintático e semântico;
+ambiguidade, através dos níveis estruturais, morfossintático e semântico;
 polaridade, através de palavras que possuam semântica positiva ou negativa;
 imprevisibilidade, através de desbalanceamentos contextuais entre o significado
 literal das palavras; e os cenários emocionais, através das emoções passadas por
@@ -477,7 +477,7 @@ fim, os \textit{ps-grams} criam uma sequência de rótulos de positividade basea
 nos \textit{s-grams}. Por exemplo, ``Hoje chovendo'' seria rotulado como
 ``pos-neg'' (positivo e negativo).
 
-\cite{barbieri:2014:modelling-sarcasm}, por sua vez, criar um dos conjuntos mais
+\cite{barbieri:2014:modelling-sarcasm}, por sua vez, criam um dos conjuntos mais
 completos de características, com setes grupos. Esses grupos são: frequência,
 que mede o quão comum é cada palavra utilizada no texto; escrito-falado (da
 tradução literal de \textit{written-spoken}, utilizado pelos autores em seu
@@ -545,7 +545,7 @@ aplicações se espera ter de resultado.
 Em abordagens clássicas utilizando aprendizado de máquina, muitos trabalhos se
 baseiam em modelos bem conhecidos e estudados como \textit{decision trees} (DT),
 \textit{random forecasts} (RF), \textit{support vector machines} (SVM),
-\textit{naive Bayes} (NB) e \textit{Neural Networks}
+\textit{naive Bayes} (NB) e \textit{neural networks}
 (NN)~(\cite{yaghoobian:2021:sarcasm-detection-comparative-study}). Esses modelos
 são utilizados em várias áreas nas quais se aplica o aprendizado de máquina e
 são aplicados por muitos autores sem colocar seu foco principal em modificar o
@@ -601,12 +601,12 @@ de amostragens'') e consiste em fazer amostragens nos dados originais de forma a
 criar $N$ conjuntos da dados balanceados. Cada um desses sub-conjuntos de dados
 é então usado para treinar pequenos classificadores, que consistem da segunda
 parte: a \textit{classifier-ensemble strategy} (em tradução livre, ``estratégia
-de conjunto de classificadores''). Nessa etapa, cada os classificadores de cada
+de conjunto de classificadores''). Nessa etapa, os classificadores de cada
 sub-conjunto de dados não necessariamente são os mesmos. Os autores empregam
 três tipos de classificadores (sendo que, em teoria, pode-se utilizar mais) e,
 para cada sub-conjunto, escolhem um classificador aleatório para ser treinado.
 Por fim, a terceira etapa serve para juntar cada uma das classificações em uma
-única e é chamada de \textit{weighted voting strategy} (em tradução livre,
+única saída e é chamada de \textit{weighted voting strategy} (em tradução livre,
 ``estratégia de voto ponderado''). Nessa última estratégia, as decisões de cada
 classificador são ponderadas por uma medida de entropia da informação e, dessa
 forma, unidas para resultar em uma última decisão de se o texto é ou não
@@ -654,7 +654,7 @@ interesse. Entretanto, muitos outros trabalhos partem de outra abordagem, que é
 utilizar informações além do texto para se determinar se um texto é ou não
 sarcástico, chamadas de contexto.
 
-\cite{wallace-etal:2014:ironic-context} mostram em seu artigo que humanos obtém
+\cite{wallace-etal:2014:ironic-context} mostram em seu artigo que humanos obtêm
 melhores resultados para detectar se um texto é ou não sarcástico quando eles
 recebem contexto além do texto original. Em seu trabalho, eles exploram a rede
 social Reddit e pedem para seres humanos decidirem se uma postagem nessa rede é
@@ -663,23 +663,23 @@ pedir por contexto quando estiver em dúvida e os autores, então, apresentam qu
 era o tópico em que a postagem estava inserida e uma lista de outras postagens
 do mesmo usuário.
 
-Eles então mostram que serem humanos acertam consistentemente mais quando obtém
+Eles então mostram que serem humanos acertam consistentemente mais quando obtêm
 esse contexto extra, além de ficarem mais confiantes em sua decisão. Não só
 isso, mas os autores também mostram que um modelo \textit{bag-of-words} costuma
 errar nesses casos em que humanos precisam de contexto extra. Portanto, os
 autores argumentam que máquinas provavelmente também precisam de contexto extra
 para conseguir melhores resultados. Nos anos seguintes, muitos outros autores
-criaram modelos que utilizam o contexto de uma postagem e provam empiricamente
-que o contexto pode ajudar.
+criam modelos que utilizam o contexto de uma postagem e provam empiricamente que
+o contexto pode ajudar.
 
 Há muitas formas de se adicionar informações extras referentes ao contexto.
 \cite{hazarika-etal:2018:cascade} criam um método para criar representar
-\textit{embeddings} de usuários, que capturam o estilo de descrita e
+\textit{embeddings} de usuários, que capturam o estilo de escrita e
 personalidade para criar uma representação que pode ser utilizada em adição ao
 texto escrito por aquele usuário.
 
 \cite{kolchinski-potts:2018:representing-social-media-users} exploram outra
-forma de se criar \textit{embeddings} para os usuário de uma rede social. Para
+forma de se criar \textit{embeddings} para os usuários de uma rede social. Para
 cada autor nos dados de treinamento, ele criam um vetor de 15 valores
 randômicos. Então esses vetores são passados como entrada para um modelo de rede
 neural recorrente (RNN) bidirecional e são atualizados durante o treinamento,
@@ -711,7 +711,7 @@ outros \textit{tweets} com a mesma \textit{hashtag} do de interesse apenas
 atrapalha.
 
 \cite{ghosh:2018:sarcasm-conversation-context} também utilizam contexto da
-conversa em conjunto com LSTMs e mostram que ao adicionar a postagem que foi
+conversa em conjunto com LSTMs e mostram que adicionar a postagem que foi
 respondida pela postagem de interesse melhora os resultados. Eles utilizam
 vários conjuntos de dados e várias formas diferentes de LSTMs, assim, eles
 testam diversas maneiras de se acoplar o comentário anterior ao de interesse e
@@ -806,7 +806,7 @@ sigmoide ou tão complexa quanto uma unidade \textit{long short-term memory}
 
 A RNN, então, consegue aprender uma distribuição de probabilidade com base na
 sequência de entrada ao ser treinada para predizer o próximo elemento da
-sequência. Portanto, ao receber uma sequência $x=\paren{\seq{x}''{t-1}}$, ela
+sequência. Portanto, ao receber uma sequência $x=\paren{\seq{x}{t-1}}$, ela
 consegue retornar a probabilidade do próximo elemento da sequência ser $j$ ao
 utilizar uma função de ativação do tipo \textit{softmax} em sua saída:
 
@@ -877,8 +877,8 @@ sequência de saída).
 \cite{cho-etal:2014:rnn-encoder-decoder} criando um mecanismo que mais tarde
 ficaria conhecido como \textbf{mecanismo de atenção}.
 
-Primeiramente, eles o fato de que o vetor $c$ é fixo em todas as iterações de
-cálculo do novo estado escondido. Cada $s_i$ é uma função de um vetor de
+Primeiramente, eles mudam o fato de que o vetor $c$ é fixo em todas as iterações
+de cálculo do novo estado escondido. Cada $s_i$ é uma função de um vetor de
 contexto $c_i$:
 
 \begin{equation}
@@ -969,7 +969,7 @@ atenção é chamado de \textit{self-attention} (em tradução literal,
 Nele, todos os elementos da sequência de entrada podem ser processados ao mesmo
 tempo pelo codificador e os de saída pelo decodificador.  Entretanto, suponha
 que se quer prever o elemento $y_i$ da sequência de saída.  Nesse caso, o
-\textit{transformer} recebera a sequência $x$ e a sequência correta de saída
+\textit{transformer} receberá a sequência $x$ e a sequência correta de saída
 $y$, mas os elementos $y_j$ com $j\geq i$ são mascarados para simular uma RNN,
 que não tem acesso a esses valores (e também limitar a trivialidade que seria
 predizer o elemento $y_i$ com esse elemento dado como entrada para o modelo).
@@ -994,13 +994,13 @@ velocidade de processamento maior.
 \caption{A arquitetura do modelo \textit{transformer}. Na esquerda, o
 codificador. Ele recebe as \textit{embeddings} de entrada, as preprocessa
 somando-as com \textit{embeddings} de codificação posicional e envia isso como
-entrada para $N$ cabeças de atenção, que enviarão seu resultado para o
+entrada para $N$ cabeças de atenção, que enviam seu resultado para o
 decodificador. Na direita, o decodificador. Ele recebe as \textit{embeddings} da
 saída anterior ao \textit{token} que se deseja produzir e as preprocessa
 somando-as com \textit{embeddings} de codificação posicional e envia isso como
 entrada para $N$ cabeças de atenção, que recebe também como entrada os
 \textit{embeddings} do codificador. Ao final, o resultado é enviado para uma
-camada linear, que transforma a saída em um único vetor que é enviado ara uma
+camada linear, que transforma a saída em um único vetor que é enviado para uma
 camada \textit{softmax}, que retorna uma distribuição de probabilidades. Imagem
 retirada de \cite{vaswani-etal:2017:attention-is-all-you-need}.}
 \label{transformers-img1.jpg}
@@ -1046,15 +1046,15 @@ Imagem retirada de \cite{vaswani-etal:2017:attention-is-all-you-need}.}
 
 
 No codificador, $Q$, $K$ e $V$ são todas providas pelo próprio codificador (ou
-pela sequência de entrada, no cabeço da primeira camada). Já no decodificador,
+pela sequência de entrada, no começo da primeira camada). Já no decodificador,
 os valores de $Q$ e $K$ são providos pelo codificador e os valores $V$ são
 criados pelo próprio decodificador com base na sequência esperada de saída.
 Dessa forma, a rede presta atenção na sequência de saída, mas levando como base
 a sequência de entrada.
 
 Por fim, é importante mencionar que, apesar de resolver o problema do
-processamento sequência anteriormente mencionado, os \textit{transformers} criam
-um novo problema que é o de não representar adequadamente a característica
+processamento sequêncial anteriormente mencionado, os \textit{transformers}
+criam um novo problema que é o de não representar adequadamente a característica
 sequêncial de suas entradas. Como não se utiliza RNNs, pode-se pensar em um
 \textit{transformer} como se fosse uma rede neural completamente conectada
 (DNN). Esse tipo de rede não é bom em saber que existe relação entre o elemento
@@ -1073,7 +1073,7 @@ no assunto.
 \label{sub:bert}
 
 Para finalizar o capítulo, falar-se-á de um dos modelos de redes
-\textit{transformers} que é vastamente aplicado em problemas de NLP e que é uma
+\textit{transformers} que é vastamente aplicado em problemas de PLN e que é uma
 das bases para o modelo explorado nesse trabalho. Este \textit{transformer} é o
 BERT, que é uma sigla para \textit{Bidirectional Encoder Representations from
 Transformers} (em tradução livre, ``representações de codificação bidirecional

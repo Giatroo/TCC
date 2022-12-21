@@ -9,14 +9,13 @@ Este capítulo abordará os principais recursos utilizados na experimentação c
 modelo DeBERTa na tarefa de detecção automática de sarcasmo. Inicialmente,
 falar-se-á um pouco sobre o modelo em si e como ele aborda alguns dos problemas
 anteriormente encontrados na literatura. Depois, abordar-se-á o conjunto de
-dados utilizado nos experimentos. Por fim, discutir-se-á o código em si e as
-ferramentas pré-existentes que foram utilizadas neste trabalho.
+dados utilizado nos experimentos.
 
 \section{DeBERTa}%
 \label{sec:deberta}
 
 O modelo DeBERTa foi criado por um grupo de pesquisadores da Microsoft e
-publicado em 2021 (~\cite{he-etal:2020:deberta}). Seu nome é uma sigla que
+publicado em 2020 (~\cite{he-etal:2020:deberta}). Seu nome é uma sigla que
 significa ``\textit{Decoding-Enhanced BERT with Disentangled Attention}'' (em
 tradução livre, ``BERT com decodificação melhorada por atenção decomposta'').
 Como o nome já sugere, o DeBERTa foi criado com o modelo
@@ -27,7 +26,7 @@ que propõe melhorias para o BERT.
 Suas principais contribuições para a área são duas: \textit{disentangled
 attention} (em tradução livre, ``atenção decomposta'') e \textit{enhanced mask
 decoder} (em tradução livre, ``decodificador de máscara
-melhorado'')~\footnote{Assim como alguns outros termos utilizados nessa
+melhorado'')\footnote{Assim como alguns outros termos utilizados nessa
 monografia, optou-se por não traduzir \textit{disentangled attention}
 e \textit{enhanced mask decoder} pelo fato de serem termos muito novos na
 literatura e não terem uma tradução canônica para o português.}.
@@ -62,20 +61,19 @@ e $j$ prestam entre si (essa relação é simétrica) é calculada pelo produto
 \end{split}
 \end{equation}
 
-Portanto, no caso em que as informações relativas ao conteúdo e posição dos
-elementos, a atenção total entre $i$ e $j$ pode ser calculada como quatro outras
+Portanto, a atenção total entre $i$ e $j$ pode ser calculada como quatro outras
 atenções: conteúdo-para-conteúdo, conteúdo-para-posição, posição-para-conteúdo e
 posição-para-posição. Em seu artigo, os autores argumentam que apenas as três
 primeiras atenções são realmente úteis e, portanto, descartam o caso de atenção
 entre posições relativas.
 
-Vale a notar que os autores fazem uma leve mudança de nomenclatura em seu
-artigo. Enquanto originalmente,
-\cite{vaswani-etal:2017:attention-is-all-you-need} chamam de atenção o resultado
-da equação \ref{eq:self-attention}. \cite{he-etal:2020:deberta} chamam de
-atenção apenas o resultado da multiplicação das consultas, $Q$, pelas chaves
-$K$. Para fazer uma comparação, no modelo de \textit{self-attention} original,
-tem-se:
+Vale notar que os autores fazem uma leve mudança de nomenclatura em seu artigo.
+Enquanto originalmente, \cite{vaswani-etal:2017:attention-is-all-you-need}
+chamam de atenção o resultado da equação \ref{eq:self-attention}.
+\cite{he-etal:2020:deberta} chamam de atenção apenas o resultado da
+multiplicação das consultas, $Q$, pelas chaves $K$. Para fazer uma comparação,
+no modelo de \textit{self-attention} original, tem-se:
+
 \[
 Q=HW_q,~K=HW_k,~V=HW_v,~A=\dfrac{QK^{T}}{\sqrt{d}}
 \]
@@ -105,9 +103,9 @@ $K^{c}_j$ é a $j$-ésima linha de $K_c$ e $\delta(i,j)$ é uma função que dá
 distância relativa entre $i$ e $j$ (para mais detalhes, ler o artigo original).
 
 Com essa nova forma de calcular a atenção, os autores conseguem dividir as rotas
-utilizadas pela informação de forma que o modelo consiga ter aceso a informação
+utilizadas pela informação de forma que o modelo consiga ter acesso à informação
 das posições relativas e conteúdos do texto de forma ``limpa'', sem ser por meio
-de uma soma como feito em trabalhos anteriores.
+de uma soma como feito em modelos anteriores.
 
 Por fim, a segunda contribuição desse modelo é a \textit{enhanced mask decoder},
 que é quase uma consequência direta da primeira contribuição mencionada
@@ -140,7 +138,7 @@ ELECTRA.
 
 O ELECTRA é um modelo que utiliza uma proposta de trocar o \textit{masked
 language model} (MLM) utilizado pelo BERT (\ref{sub:bert}) e demais modelos que
-o têm o referência (como RoBERTa e DeBERTa) por um novo modelo chamado de
+o têm como referência (como RoBERTa e DeBERTa) por um novo modelo chamado de
 \textit{replaced token detection} (RTD) (do inglês, detecção de símbolo
 substituído). Nesse tipo de modelagem, ao invés de substituir alguns
 \textit{tokens} aleatoriamente por um símbolo especial \texttt{<MASK>}, troca-se
@@ -169,7 +167,7 @@ rotulados. Muitos trabalhos na literatura utilizam o Twitter (ver
 \ref{cha:fundamentos_e_trabalhos_relacionados}), mas há vários trabalhos que,
 mais recentemente, têm utilizado o Reddit.
 
-Esta é uma rede social baseada em comunidades. Cada comunidade é chamada de
+Essa é uma rede social baseada em comunidades. Cada comunidade é chamada de
 \textit{subreddit}, e, muitas vezes, referencia-se a elas por tópicos, pois o
 nome do \textit{subreddit} define o tipo de publicações que os usuários fazem
 dentro dele. Por exemplo, em \texttt{gaming} as pessoas falam sobre jogos, em
@@ -229,13 +227,13 @@ comentário.
 
 Esses filtros são, então, testados manualmente utilizando uma amostragem de
 $1000$ comentários ($500$ sarcásticos e $500$ não sarcásticos). Os autores
-demonstram seu procedimento resultou em uma taxa de $1.0\%$ de falsos positivos
-e $2.0\%$ de falsos negativos. Por fim, vale dizer que os autores, por motivos
-óbvios, removem as anotações ``/s'' dos comentários.
+demonstram que seu procedimento resultou em uma taxa de $1.0\%$ de falsos
+positivos e $2.0\%$ de falsos negativos. Por fim, vale dizer que os autores, por
+motivos óbvios, removem as anotações ``/s'' dos comentários.
 
-Por fim, os autores disponibilizam várias versões de seu conjunto de dados. Para
-este trabalho, utilizou-se a versão balanceada, que é uma tabela na qual cada
-linha possui uma postagem e dois comentários referente-se àquela postagem, um
+Os autores disponibilizam várias versões de seu conjunto de dados. Para este
+trabalho, utilizou-se a versão balanceada, que é uma tabela na qual cada linha
+possui uma postagem e dois comentários referente-se àquela postagem, um
 sarcástico e o outro não sarcástico. Além disso, há informações sobre os
 usuários autores de cada um dos textos, datas de publicação e em qual
 \textit{subreddit} as postagens foram feitas.
