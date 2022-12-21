@@ -62,7 +62,7 @@ pode-se comparar a eficácia desses modelos.
 Como já mencionado na sessão \ref{sec:configuracao_dos_experimentos}, os
 experimentos foram feitos utilizando os executáveis \texttt{run\_train.py} e
 \texttt{run\_test.py}. Os parâmetros utilizados por todos os modelos foram
-(\texttt{learning\_rate}) igual a $5.0\times 10^{-5}$, \texttt{epochs} igual a
+\texttt{learning\_rate} igual a $5.0\times 10^{-5}$, \texttt{epochs} igual a
 $2$ e \texttt{batch\_size} igual a $8$, que são os valores padrões do executável
 de treinamento.
 
@@ -100,11 +100,10 @@ para o modelo RoBERTa, que se propõe como uma versão melhorada do anterior, e 
 modelo RoBERTa para o modelo DeBERTa, também se propõe como uma versão melhor em
 relação ao anterior.
 
-Nota-se que com exceção à métrica de precisão, os modelos DeBERTa-v3-small e
-DeBERTa-v3-base possuem as pontuações nas métricas acurácia, revocação e F1. O
-modelo RoBERTa possui uma precisão consideravelmente melhor que os modelos
-DeBERTa, mas possui uma revocação consideravelmente pior, o que prejudicou sua
-acurácia e F1.
+Nota-se que, com exceção da métrica de precisão, os modelos DeBERTa-v3-small e
+DeBERTa-v3-base possuem as melhores pontuações. O modelo RoBERTa possui uma
+precisão consideravelmente melhor que os modelos DeBERTa, mas possui uma
+revocação consideravelmente pior, o que prejudicou sua acurácia e F1.
 
 
 \section{Avaliações adicionais}%
@@ -121,7 +120,7 @@ Abaixo segue uma tabela com os tempos de treinamento de cada um dos modelos.
 \begin{table}[h]
 \centering
 \caption{Tempo de treinamento para cada um dos modelos.}
-\label{tab:experiments}
+\label{tab:experiments_times}
 \begin{tabular}{c | c }
    \textbf{Modelo} & \textbf{Tempo de Treinamento} \\ \hline \hline
    \texttt{NB bag-of-words} & $22.53$s \\
@@ -135,7 +134,7 @@ Abaixo segue uma tabela com os tempos de treinamento de cada um dos modelos.
 
 É notável que os modelos \textit{transformers} demoram muito mais do que os
 modelos de base. Além disso, nota-se também que o DeBERTaV3-small demora
-relativamente mais dos que as versões base do BERT e RoBERTa. A versão base, por
+relativamente mais do que as versões base do BERT e RoBERTa. A versão base, por
 sua vez, do DeBERTaV3 demora quase o dobro da versão pequena. Portanto,
 observa-se que, apesar dos melhores resultados, esse modelo leva mais tempo para
 ser treinado do que seus pares.
@@ -149,7 +148,7 @@ dos modelos do tipo \texttt{transformers} (considerando os modelos
 BERT, RoBERTa e DeBERTa-v3-base). Isso é um total de
 $18.09\%$ aproximadamente do total de exemplos no conjunto de testes. Desses
 exemplos, aproximadamente $53\%$ são casos não-sarcásticos e $47\%$ são. Abaixo
-sequem quatro exemplos que foram classificados erroneamente pelo
+seguem quatro exemplos que foram classificados erroneamente pelo
 \textit{bag-of-words}, mas corretamente pelos três \texttt{transformers} citados
 acima. \jump
 
@@ -163,7 +162,7 @@ acima. \jump
 \\
 
 \textit{Tradução livre:} Quem mais pensa que o \texttt{alert()} do javascript \\
-é uma forma irritante, preguiçosa e feita de notificar alguma coisa no seu
+é uma forma irritante, preguiçosa e feia de notificar alguma coisa no seu
 site. \\\\
 
 \hline
@@ -270,8 +269,8 @@ Resposta \textbf{não sarcástica}.
 Observou-se que o modelo de base DeBERTa-v3-base acertou $1865$ exemplos que
 tanto o modelo BERT quanto o modelo RoBERTa erraram. Isso é um total de $3.39\%$
 do conjunto de dados de teste, o que está em linha com o visto na tabela
-\ref{tab:experiments}. Desses acertos, $53,5\%$ foram em casos sarcásticos e
-$46,5\%$ em casos não sarcásticos. Abaixo sequem quatro exemplos que foram
+\ref{tab:experiments}. Desses acertos, $53.5\%$ foram em casos sarcásticos e
+$46.5\%$ em casos não sarcásticos. Abaixo seguem quatro exemplos que foram
 classificados corretamente pelo DeBERTa-v3-base e incorretamente por ambos BERT
 e RoBERTa. \jump
 
@@ -312,7 +311,7 @@ Resposta \textbf{sarcástica}.
 watch} \\
 \textit{films in cinemas, not on streaming services.} \\
 
-\textbf{Tradução livre:} Christopher nolan e Sofia Coppola insistem aos fãs que
+\textbf{Tradução livre:} Christopher Nolan e Sofia Coppola insistem aos fãs que
 assistam \\
 filmes em cinemas, não serviços de \textit{streaming}. \\ \\
 
@@ -366,9 +365,7 @@ Resposta \textbf{não sarcástica}.
 \textit{fathers should have no say in their children's lives}'' \\
 
 \textbf{Tradução livre:} URGENTE: Furação Matthew contornará a Carolina do Norte \\
-devido à HB2\footnote{HB2 foi um projeto de lei da Carolina do Norte que força
-pessoas a utilizarem os banheiros do sexos correspondentes à sua certidão de
-nascimento.}. \\ \\
+devido à HB2. \\ \\
 
 \hline
 
@@ -396,7 +393,7 @@ modelo maior é capaz de acertar mais e foi possível observar uma leve melhora 
 pequeno para o base. Houve um total de $3913$ exemplos acertados pelo base que
 foram errados pelo pequeno. Isso é aproximadamente $7\%$ dos dados de teste.
 Desses acertos, aproximadamente $60\%$ foram sarcásticos e $40\%$ foram não
-sarcásticos. Abaixo sequem exemplos que foram classificados incorretamente pelo
+sarcásticos. Abaixo seguem exemplos que foram classificados incorretamente pelo
 modelo pequeno, mas corretamente pelo modelo base.
 
 \begin{center}
@@ -502,8 +499,4 @@ Resposta \textbf{não sarcástica}.
 
 \end{tabular}
 \end{center}
-
-\section{Matrizes de atenção}%
-\label{sec:matrizes_de_atencao}
-
 
