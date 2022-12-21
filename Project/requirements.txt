@@ -11,4 +11,4 @@ ipykernel==6.15.0
 ipywidgets==7.7.0
 ktrain==0.31.9
 keras==2.10.0
-tensorflow==2.10.0
+tensorflow==2.10.1
