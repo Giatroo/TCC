@@ -29,7 +29,7 @@ pasta \texttt{SARC\_dataset}). Há também o arquivo
 \texttt{preloaded\_dataset\_downloader.py}, que baixa o conjunto de dados já
 preprocessados e prontos para serem utilizados pelo projeto.
 
-No pré-processamentos dos dados, utiliza-se apenas os textos e rótulos,
+No pré-processamento dos dados, utiliza-se apenas os textos e rótulos,
 excluindo informações adicionais como data das postagens, nome dos usuários e
 tópico. Também filtram-se algumas linhas que possuem uma sequência de postagens
 maiores do que um, para garantir que cada linha tenha apenas uma postagem, duas
@@ -59,7 +59,7 @@ pode-se comparar a eficácia desses modelos.
 \section{Resultados experimentais}%
 \label{sec:resultados_experimentais}
 
-Como já mencionado na sessão \ref{sec:configuracao_dos_experimentos}, os
+Como já mencionado na seção \ref{sec:configuracao_dos_experimentos}, os
 experimentos foram feitos utilizando os executáveis \texttt{run\_train.py} e
 \texttt{run\_test.py}. Os parâmetros utilizados por todos os modelos foram
 \texttt{learning\_rate} igual a $5.0\times 10^{-5}$, \texttt{epochs} igual a
@@ -95,10 +95,11 @@ modelos usados como base que utilizam os \textit{word embeddings}
 conjunto com um algoritmo clássico de aprendizado de máquina chamado de
 \textit{naive Bayes}.
 
-Além disso, é possível observer que, de fato, há uma leve melhora do modelo BERT
-para o modelo RoBERTa, que se propõe como uma versão melhorada do anterior, e do
-modelo RoBERTa para o modelo DeBERTa, também se propõe como uma versão melhor em
-relação ao anterior.
+Além disso, é possível observer que, de fato, o modelo RoBERTa possui uma leve
+melhora em relação ao BERT e o DeBERTa, uma leve melhora em relação ao RoBERTa.
+Isso parece fazer sentido, uma vez que o DeBERTa surgiu propondo-se como uma
+versão melhorada do RoBERTa, e este surgiu propondo-se como uma versão melhorada
+do BERT.
 
 Nota-se que, com exceção da métrica de precisão, os modelos DeBERTa-v3-small e
 DeBERTa-v3-base possuem as melhores pontuações. O modelo RoBERTa possui uma
@@ -362,7 +363,6 @@ Resposta \textbf{não sarcástica}.
 \hline
 
 \textbf{Comentário} ``\textit{BREAKING: Hurricane Matthew to bypass North Carolina due to HB2} \\
-\textit{fathers should have no say in their children's lives}'' \\
 
 \textbf{Tradução livre:} URGENTE: Furação Matthew contornará a Carolina do Norte \\
 devido à HB2. \\ \\

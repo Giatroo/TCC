@@ -151,7 +151,7 @@ significativos na efetividade do modelo.
 Além disso, nesse novo modelo, os autores melhoram o modelo ELECTRA ao propor
 uma nova forma de treinamento chamada de \textit{gradient-disentangled embedding
 sharing} (em tradução livre, \textit{compartilhamento de representação com
-gradiente desagradado}). Os autores argumentam que o compartilhamento das
+gradiente desemaranhado}). Os autores argumentam que o compartilhamento das
 \textit{embeddings} entre o gerador e discriminador é bastante prejudicial para
 a tarefa que ambos pretendem realizar, pois o gerador deseja representar
 palavras com semânticas similares de forma próxima, enquanto o discriminador
@@ -174,7 +174,7 @@ dentro dele. Por exemplo, em \texttt{gaming} as pessoas falam sobre jogos, em
 \texttt{datascience} as pessoas falam sobre ciência de dados (os nomes
 geralmente são bastante autoexplicativos). Além disso, cada postagem feita em um
 \textit{subreddit} pode receber comentários e cada comentário, por sua vez, pode
-receber sub-comentários (formando uma estrutura recursiva).
+receber sub-comentários (formando uma estrutura aninhada).
 
 \cite{khodak-etal:2017:sarc} em 2017 introduzem um \textit{corpus} de textos
 retirados do Reddit que recebeu o nome de SARC, uma sigla para
@@ -233,10 +233,10 @@ motivos óbvios, removem as anotações ``/s'' dos comentários.
 
 Os autores disponibilizam várias versões de seu conjunto de dados. Para este
 trabalho, utilizou-se a versão balanceada, que é uma tabela na qual cada linha
-possui uma postagem e dois comentários referente-se àquela postagem, um
-sarcástico e o outro não sarcástico. Além disso, há informações sobre os
-usuários autores de cada um dos textos, datas de publicação e em qual
-\textit{subreddit} as postagens foram feitas.
+possui uma postagem e dois comentários referentes àquela postagem, um sarcástico
+e o outro não sarcástico. Além disso, há informações sobre os usuários autores
+de cada um dos textos, datas de publicação e em qual \textit{subreddit} as
+postagens foram feitas.
 
 Os dados já são separados em treinamento e teste pelos próprios autores,
 contendo $109181$ instâncias de treinamento e $27496$ de teste (uma

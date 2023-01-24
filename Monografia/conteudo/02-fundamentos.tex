@@ -13,7 +13,7 @@ ofender, enquanto \textbf{ironia} é a ação de dizer o oposto do que se deseja
 expressar. Ainda segundo ele, a diferença entre esses dois termos se dá no fato
 de que sarcasmo é um dito ácido que pode ou não ser expresso por meio de uma
 ironia e essa, por sua vez, pode ou não ser utilizada para
-ofender.~\cite{dicio_sarc, dicio_irony}
+ofender.~\citep{dicio_sarc, dicio_irony}
 
 O termo \textbf{detecção de sarcasmo} refere-se à determinação de se há ou não
 sarcasmo em uma porção de texto verbal. E o termo \textbf{detecção automática de
@@ -34,7 +34,7 @@ que vontade de ir para a escola.}''). Além disso, o contexto tende a importar
 muito. Muitas características externas ao texto podem servir para descriminar se
 uma pessoa está ou não sendo sarcástica. Entre alguns exemplos estão intonação,
 locutor, interlocutor, conhecimento prévio sobre a fala, tempo e espaço em que
-se fala e elementos não verbais.~\cite{wallace-etal:2014:ironic-context}
+se fala e elementos não verbais.~\citep{wallace-etal:2014:ironic-context}
 
 \section{Classificação binárias}%
 \label{sec:classificacao_binarias}
@@ -82,7 +82,7 @@ quais não se sabe de antemão se são ou não sarcásticos. Esses novos dados s
 em muitos casos, chamados de \textit{dados de teste}.
 
 Vale a pena, entretanto, mencionar que os dados de treinamento geralmente são
-divididos em duas ou três partições que são chamadas de \textit{dados de
+divididos em duas ou três partes que são chamadas de \textit{dados de
 treinamento}, \textit{dados de validação} e \textit{dados de teste}. Essa
 nomenclatura pode ser um pouco confusa, pois os termos acabam se repetindo.
 Portanto, daqui em diante se utilizará \textit{dados rotulados} para os dados
@@ -439,7 +439,7 @@ ambiguidade, através dos níveis estruturais, morfossintático e semântico;
 polaridade, através de palavras que possuam semântica positiva ou negativa;
 imprevisibilidade, através de desbalanceamentos contextuais entre o significado
 literal das palavras; e os cenários emocionais, através das emoções passadas por
-cada palavras.
+cada palavra.
 
 \cite{liebrecht:2013:perfect-solution} utilizam uni-, bi- e trigramas como
 características do texto. Um n-grama é uma sequência de n palavras do texto.
@@ -500,7 +500,7 @@ possíveis que uma palavra pode ter.
 \cite{joshi:2015:context-incongruity} propõem uma nova abordagem baseada em uma
 teoria linguística chamada de incongruência de contexto. Eles se baseiam no fato
 de que o tempo para um ser humano processar um texto sarcástico depende do grau
-de incongruência presente nele e criam características o que chamam de
+de incongruência presente nele e criam características que chamam de
 incongruências explícitas e implícitas. A primeira é caracterizada por palavras
 de sentimentos opostos e a segunda é caracterizada por frases de sentimento
 implícito, que não se pode detectar através de uma única palavra.
@@ -529,7 +529,7 @@ listagem mais vasta dos trabalhos correlacionados, recomenda-se a leitura dos
 trabalhos de \cite{joshi:2017:sarcasm-detection-survey} e
 \cite{yaghoobian:2021:sarcasm-detection-comparative-study}.
 
-Dentro do campos do algoritmos de aprendizado supervisionado estão os algoritmos
+Dentro do campo do algoritmos de aprendizado supervisionado estão os algoritmos
 de classificação, que como dito anteriormente, trata-se de achar uma função $f$
 que mapeie bem os exemplos $X$ em seus respectivos rótulos $y$. A matriz $X$
 contém diversas características extraídas do texto, como as exploradas em
@@ -544,7 +544,7 @@ aplicações se espera ter de resultado.
 
 Em abordagens clássicas utilizando aprendizado de máquina, muitos trabalhos se
 baseiam em modelos bem conhecidos e estudados como \textit{decision trees} (DT),
-\textit{random forecasts} (RF), \textit{support vector machines} (SVM),
+\textit{random forests} (RF), \textit{support vector machines} (SVM),
 \textit{naive Bayes} (NB) e \textit{neural networks}
 (NN)~(\cite{yaghoobian:2021:sarcasm-detection-comparative-study}). Esses modelos
 são utilizados em várias áreas nas quais se aplica o aprendizado de máquina e
@@ -612,7 +612,7 @@ classificador são ponderadas por uma medida de entropia da informação e, dess
 forma, unidas para resultar em uma última decisão de se o texto é ou não
 sarcástico.
 
-Além do modelos de aprendizado tidos como mais ``clássicos'', modelos de
+Além dos modelos de aprendizado tidos como mais ``clássicos'', modelos de
 aprendizado profundo (ou seja, aqueles que utilizam grandes redes neurais)
 também foram utilizados. Esse tipo de modelo costuma resultar em melhores
 métricas, mas também exige uma quantidade muito grande de dados. Isso por muitas
@@ -634,7 +634,7 @@ propostas pelos times utilizam modelos baseados em aprendizado profundo. Eles
 fazem principalmente o uso de redes do tipo LSTMs, CNNs e DNNs. Além disso, é
 presente o uso de \textit{word embeddings} como o GloVe, que retratam cada uma
 das palavras presentes em um texto como vetores reais nos quais palavras de
-sentidos parecidos possuem vetores parecidos.
+sentidos parecidos são representadas por vetores parecidos.
 
 A tarefa proposta pela SemEval-2018 era dividida em duas sub-tarefas. A primeira
 era uma detecção de sarcasmo comum, onde bastava o modelo distinguir entre
@@ -673,7 +673,7 @@ criam modelos que utilizam o contexto de uma postagem e provam empiricamente que
 o contexto pode ajudar.
 
 Há muitas formas de se adicionar informações extras referentes ao contexto.
-\cite{hazarika-etal:2018:cascade} criam um método para criar representar
+\cite{hazarika-etal:2018:cascade} criam um método para representar
 \textit{embeddings} de usuários, que capturam o estilo de escrita e
 personalidade para criar uma representação que pode ser utilizada em adição ao
 texto escrito por aquele usuário.
@@ -1025,7 +1025,7 @@ Nela, os valores $Q$, $K$ e $V$ são matrizes que representam respectivamente
 aplicada um número $h$ de vezes na mesma entrada, mas resultando em consultas,
 chaves e valores diferentes. Isso pois um tipo de atenção pode relacionar
 elementos que sejam das mesmas classes sintáticas e replicar o comportamento de
-alguns dos métodos de regras vistos na sessão
+alguns dos métodos de regras vistos na seção
 \ref{sub:abordagens_baseados_em_regras}, enquanto outras atenções podem
 olhar para a semântica de termos relacionados.
 
@@ -1053,9 +1053,9 @@ Dessa forma, a rede presta atenção na sequência de saída, mas levando como b
 a sequência de entrada.
 
 Por fim, é importante mencionar que, apesar de resolver o problema do
-processamento sequêncial anteriormente mencionado, os \textit{transformers}
+processamento sequencial anteriormente mencionado, os \textit{transformers}
 criam um novo problema que é o de não representar adequadamente a característica
-sequêncial de suas entradas. Como não se utiliza RNNs, pode-se pensar em um
+sequencial de suas entradas. Como não se utiliza RNNs, pode-se pensar em um
 \textit{transformer} como se fosse uma rede neural completamente conectada
 (DNN). Esse tipo de rede não é bom em saber que existe relação entre o elemento
 $x_1$ e $x_2$ e que, essa relação é uma métrica com o dobro de valor para $x_1$
@@ -1079,13 +1079,13 @@ BERT, que é uma sigla para \textit{Bidirectional Encoder Representations from
 Transformers} (em tradução livre, ``representações de codificação bidirecional
 de \textit{transformers}'')~(\cite{devlin-etal:2018:bert}).
 
-A principal inovação desse modelo é que ele torna o treinamento bidirecional
-através de um objetivo de treinamento denominado \textit{masked language model}
-(MLM) (do inglês, modelo de linguagem mascarada). Nesse tipo de treinamento,
-alguns dos \textit{tokens} da sequência de entrada são aleatoriamente
-mascarados (isto é, trocados por um \textit{token} específico \texttt{<MASK>}) e
-a tarefa alvo do treinamento é justamente identificar quais eram as palavras
-originais, antes de serem mascaradas.
+A principal inovação desse modelo é que ele possui seu treinamento através de
+uma metodologia denominada \textit{masked language model} (MLM) (do inglês,
+modelo de linguagem mascarada. Nesse tipo de treinamento, alguns dos
+\textit{tokens} da sequência de entrada são aleatoriamente mascarados (isto é,
+trocados por um \textit{token} específico \texttt{<MASK>}) e a tarefa alvo do
+treinamento é justamente identificar quais eram as palavras originais, antes de
+serem mascaradas.
 
 Isso faz com que o modelo possa utilizar o contexto bidirecionalmente, ou seja,
 observar as palavras ao redor da palavra alvo para predizê-la. Por exemplo, na
@@ -1093,7 +1093,10 @@ frase ``A roda do meu \texttt{<MASK>} quebrou novamente'', as palavras ``roda''
 e ``quebrou'' são importantes para supor que \texttt{<MASK>} corresponde à
 palavra ``carro'' ou algum automóvel similar. De forma análoga, o modelo
 BERT pode utilizar essas palavras ao redor da palavra mascarada para estimar
-qual palavra ela era originalmente.
+qual palavra ela era originalmente. Além disso, esse tipo de treinamento é não
+supervisionado, o que significa que não preciso de conjuntos de dados
+manualmente anotados, possibilitando usar todo tipo de texto disponível na
+\textit{internet}.
 
 As aplicações desse modelo são vastas, mas para o escopo deste trabalho, basta
 saber que ele pode ser utilizado também na detecção automática de sarcasmo
